@@ -31,7 +31,7 @@ async def logo_make(_,message):
         )
     text = await message.reply("`ᴍᴀᴋɪɴɢ ʏᴏᴜʀ ʟᴏɢᴏ`")
         
-    else:
+    if not replied:
         try:
             randc = random.choice(LOGOES)
             logo = Image.open(io.BytesIO(requests.get(randc).content))

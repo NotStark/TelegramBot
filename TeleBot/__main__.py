@@ -67,7 +67,7 @@ async def main():
     try:
         await app.send_photo(f"@{config.SUPPORT_CHAT}",
                              photo=config.START_IMG,
-                             caption=strings.SUPPORT_SEND_MSG.format(BOT_NAME, pyrover))
+                             caption=SUPPORT_SEND_MSG.format(BOT_NAME, pyrover))
     except Exception as e:
         LOG.print(f"[bold red] {e}")
         LOG.print("[bold red]ʙᴏᴛ ɪꜱɴ'ᴛ ᴀʙʟᴇ ᴛᴏ ꜱᴇɴᴅ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ @{config.SUPPORT_CHAT}!")

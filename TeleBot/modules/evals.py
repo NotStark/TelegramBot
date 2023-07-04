@@ -3,6 +3,8 @@ from datetime import datetime
 from TeleBot import app
 from pyrogram import filters, enums
 from config import DEV_USERS
+import sys
+import io
 
 async def aexec(code, client, message):
     exec(

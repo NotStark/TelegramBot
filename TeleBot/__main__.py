@@ -28,6 +28,14 @@ SUPPORT_SEND_MSG = """
 """
 
 
+LOG_MSG = "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬▬▬▬▬▬▬▬▬▬▬●\n"
+LOG_MSG += "ʙᴏᴛ sᴛᴀʀᴛɪɴɢ ...... \n\n"
+LOG_MSG += "⊙ ᴀ ᴘᴏᴡᴇʀғᴜʟ ᴘʏʀᴏɢʀᴀᴍ ʙᴀsᴇᴅ ᴍᴀɴᴀɢᴇᴍᴇɴᴛ \n\n"
+LOG_MSG += "⊙ ᴘʀᴏɪᴇᴄᴛ ᴍᴀɪɴᴛᴀɪɴᴇᴅ ʙʏ : ʜᴛᴛᴘs://ɢɪᴛʜᴜʙ.ᴄᴏᴍ/NᴏᴛSᴛᴀʀᴋ\n\n"
+LOG_MSG += "⊙ ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ:\n"
+LOG_MSG+= "  @The_Only_God\n"
+LOG_MSG += "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬▬▬▬▬▬▬▬▬▬▬●"
+
 async def main():
     global HELPABLE
     os.system("clear")

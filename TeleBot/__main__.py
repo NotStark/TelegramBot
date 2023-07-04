@@ -5,7 +5,6 @@ import config
 import strings
 import importlib
 from pyrogram import idle
-from TeleBot.helpers.misc import paginate_modules
 from TeleBot import (
     BOT_NAME,  
     app,
@@ -19,6 +18,15 @@ from TeleBot.modules import ALL_MODULES
 
 HELPABLE = {}
 loop = asyncio.get_event_loop()
+
+SUPPORT_SEND_MSG = """
+🥀 {} ɪs ᴀʟɪᴠᴇ ʙᴀʙʏ...
+┏•❅────✧❅✦❅✧────❅•┓
+  **★ ʙᴏᴛ ᴠᴇʀsɪᴏɴ :** `1.0`
+  **★ ᴩʏʀᴏɢʀᴀᴍ :** `{}`
+┗•❅────✧❅✦❅✧────❅•┛
+"""
+
 
 async def main():
     global HELPABLE

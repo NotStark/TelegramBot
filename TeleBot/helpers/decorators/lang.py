@@ -1,4 +1,4 @@
-from string import get_string
+from strings import get_string
 from pyrogram.types import Message
 from functools import wraps
 from TeleBot.mongo.lang_db import get_lang

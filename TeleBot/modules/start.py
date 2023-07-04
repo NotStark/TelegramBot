@@ -1,0 +1,58 @@
+import time
+import config
+from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME
+from TeleBot.helpers.custom_filter import command
+from TeleBot.helpers.functions import get_readable_time
+from strings import get_command
+from pyrogram.enums import ChatType
+from TeleBot.helpers.decorators.lang import language
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+
+
+START_COMMAND = get_command("START_COMMAND")
+
+@app.on_message(command(START_COMMAND))
+@language
+async def _start(client, message, strings):
+    uptime = await get_readable_time((time.time() - StartTime))
+    chat_id = message.chat.id
+    args = message.text.split()
+    if message.chat.type == ChatType.PRIVATE:
+        if len(args) >= 2:
+            pass
+        else:
+            first_name = message.from_user.first_name
+            await app.send_photo(
+                chat_id,
+                photo=config.START_IMG,
+                caption=strings.start1.format(first_name, BOT_NAME, uptime),
+                reply_markup=InlineKeyboardMarkup(
+                    [
+                        [
+                            InlineKeyboardButton(
+                                text=strings.btn1,
+                                url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+                            ),
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                text=strings.btn2, callback_data="explore_cb"
+                            ),
+                            InlineKeyboardButton(
+                                text=strings.btn3, callback_data="Friday_stats"
+                            ),
+                        ],
+                        [
+                            InlineKeyboardButton(
+                                text = strings.btn4, callback_data="help_back"
+                            )
+                        ],
+                    ]
+                ),
+            )
+
+    else:
+        await message.reply_photo(
+            config.START_IMG,
+            caption=strings.start2.format(uptime),
+        )

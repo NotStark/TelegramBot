@@ -2,7 +2,6 @@ import os
 import asyncio
 import uvloop
 import config
-import strings
 import importlib
 from pyrogram import idle
 from TeleBot import (

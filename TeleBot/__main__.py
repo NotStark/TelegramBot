@@ -40,7 +40,7 @@ async def main():
     global HELPABLE
     os.system("clear")
     LOG.print(Table(show_header=True, header_style="bold yellow")
-              .add_column(strings.LOG_MSG))
+              .add_column(LOG_MSG))
     LOG.print('[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...')
     LOG.print("ꜰᴏᴜɴᴅ {} ᴍᴏᴅᴜʟᴇꜱ\n".format(len(ALL_MODULES)))
     

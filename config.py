@@ -1,3 +1,4 @@
+import random
 from os import getenv
 from dotenv import load_dotenv
 
@@ -15,17 +16,22 @@ DEV_USERS = list(map(int, getenv("DEV_USERS", "6246327578").split()))
 SUDO_USERS = list(map(int, getenv("SUDO_USERS", "0").split()))
 ARQ_API_KEY = getenv('ARQ_API_KEY', 'QXVXTN-JORXPR-DVQAYY-VCTDAC-ARQ')
 DONATION_LINK = getenv('DONATION_LINK', 'https://t.me/TheStark')
-START_IMG = getenv('START_IMG')
-HELP_IMG = getenv('HELP_IMG')
+START_IMG = getenv('START_IMG', '').split()
+HELP_IMG = getenv('HELP_IMG', '')
+HANDLERS = getenv("HANDLERS", ". /").split()
 
 
 if not START_IMG:
     START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"
-
+else:
+    START_IMG = random.choice(START_IMG)
+        
 if not HELP_IMG:
     HELP_IMG = "https://i.pinimg.com/564x/81/fd/c2/81fdc237881418f01147ecc367c594f7.jpg"
+else:
+    HELP_IMG = random.choice(HELP_IMG)
 
 if OWNER_ID not in DEV_USERS:
     DEV_USERS.append(OWNER_ID)
 
-HANDLERS = getenv("HANDLERS", ". /").split()
+

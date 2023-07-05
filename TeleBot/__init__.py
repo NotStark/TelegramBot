@@ -36,13 +36,6 @@ loop = asyncio.get_event_loop()
 app = Client (name = "TeleBot",api_id = config.API_ID,api_hash = config.API_HASH,bot_token = config.BOT_TOKEN,app_version = "1.0", parse_mode = ParseMode.MARKDOWN)
 # --- VARS ---
 
-import sys
-import subprocess
-
-def restart_bot():
-    script = sys.argv[0]
-    subprocess.Popen([sys.executable, script])
-    sys.exit()
 
 
 async def init():
@@ -57,7 +50,7 @@ async def init():
         if str(e) == "database is locked" and os.name == "posix":
             LOG.print("[bold red]Session file is locked. Trying to kill blocking process...")
             subprocess.run(["fuser", "-k", "TeleBot.session"])
-            restart_bot()
+            os.system(f"kill -9 {os.getpid()} && tmux && python3 -m TeleBot")
         raise
     except Exception as e:
         LOG.print(f"[bold red]{e}")

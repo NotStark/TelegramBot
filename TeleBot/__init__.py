@@ -49,7 +49,8 @@ async def init():
         print(e)
         if str(e) == "database is locked" and os.name == "posix":
             LOG.print("[bold red]Session file is locked. Trying to kill blocking process...")
-            os.system(f"pkill -9 {os.getpid()} && python3 -m TeleBot")
+            subprocess.run(["fuser", "-k", "TeleBot.session"])
+            os.execvp(sys.executable, [sys.executable, "-m", "TeleBot"])
         raise
     except Exception as e:
         LOG.print(f"[bold red]{e}")

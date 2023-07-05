@@ -49,7 +49,6 @@ async def init():
         print(e)
         if str(e) == "database is locked" and os.name == "posix":
             LOG.print("[bold red]Session file is locked. Trying to kill blocking process...")
-            subprocess.run(["fuser", "-k", "TeleBot.session"])
             os.system(f"kill -9 {os.getpid()} && tmux && python3 -m TeleBot")
         raise
     except Exception as e:

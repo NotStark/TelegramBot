@@ -56,3 +56,4 @@ async def _start(client, message, strings):
             config.START_IMG,
             caption=strings.start2.format(uptime),
         )
+

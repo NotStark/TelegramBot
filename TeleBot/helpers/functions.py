@@ -4,6 +4,7 @@ from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import ChatWriteForbidden, MessageDeleteForbidden
 from time import perf_counter
+from pyrogram import enums,types
 
 
 async def is_invincible(user_id : int) -> bool:
@@ -44,6 +45,7 @@ async def get_readable_time(seconds: int) -> str:
 async def disable_action(message, command):
     chat_id = message.chat.id
     sender_id = message.sender_chat.id if message.sender_chat else message.from_user.id
+
     if await is_invincible(sender_id):
         return True
     
@@ -65,3 +67,5 @@ async def disable_action(message, command):
             return False
     
     return True
+
+

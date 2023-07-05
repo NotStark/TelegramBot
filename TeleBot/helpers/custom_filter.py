@@ -40,3 +40,4 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = H
         return False
 
     return filters.create(handler, "CommandFilter", commands=commands, prefixes=prefixes)
+

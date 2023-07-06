@@ -32,7 +32,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
                 EqInlineKeyboardButton(
                     x,
                     callback_data="{}_module({},{})".format(
-                        prefix, chat, x )
+                        prefix, chat, x 
                     ),
                 )
                 for x in module_dict.keys()

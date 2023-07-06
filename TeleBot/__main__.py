@@ -4,7 +4,14 @@ import uvloop
 import config
 import importlib
 from pyrogram import idle
-from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES, HELPABLE
+from TeleBot import (
+    BOT_NAME, 
+    app, 
+    LOG, 
+    CMD_LIST, 
+    DISABLE_ENABLE_MODULES, 
+    HELPABLE
+  )
 from rich.table import Table
 from pyrogram import __version__ as pyrover
 from TeleBot.modules import ALL_MODULES
@@ -30,7 +37,7 @@ LOG_MSG += "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬�
 
 
 async def main():
-    global HELPABLE
+    global HELPABLE , DISABLE_ENABLE_MODULES
     os.system("clear")
     LOG.print(Table(show_header=True, header_style="bold yellow").add_column(LOG_MSG))
     LOG.print("[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...")
@@ -43,7 +50,11 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__] = {"help" : module.__help__ , "alt_names" : getattr(module, "__alt_names__", [])}
+                HELPABLE[module.__mod_name__] = {
+                    "help": module.__help__,
+                    "alt_names": module.__mod_name__.lower().replace(" ", "_")
+                    + getattr(module, "__alt_names__", []),
+                }
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,
@@ -66,7 +77,6 @@ async def main():
         )
 
     await idle()
-
 
 
 if __name__ == "__main__":

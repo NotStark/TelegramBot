@@ -84,7 +84,7 @@ def admins_stuff(permission: Any = None, bot: bool = False):
                     await answer(txt, alert)
                 return
 
-            await handle_exception(client, update, chat_id, alert, lang)
+            await handle_exception(func , client, update, chat_id, alert, lang)
 
         return wrapper
 

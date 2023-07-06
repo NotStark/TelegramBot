@@ -66,7 +66,7 @@ def admins_stuff(permission: Any = None, bot: bool = False):
             if chat_type == ChatType.PRIVATE:
                 await answer(lang.other7, alert)
                 return
-            if not await is_user_admin(chat_id, user_id, permission=permission):
+            if user and not await is_user_admin(chat_id, user_id, permission=permission):
                 if permission is None:
                     txt = lang.other2.format(chat_title)
                     await answer(txt, alert)

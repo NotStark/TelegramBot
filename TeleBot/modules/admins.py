@@ -1,16 +1,31 @@
 from TeleBot import app, BOT_ID
 from pathlib import Path
 from TeleBot.core.custom_filter import command
+from strings import get_command
 from pyrogram import filters, errors
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
 from TeleBot.core.functions import get_admins, connected
 from TeleBot.core.decorators.log import loggable
-from TeleBot.core.decorators.chat_status import admins_stuff
+from TeleBot.core.decorators.chat_status import (
+    admins_stuff,
+    is_user_admin,
+    is_bot_admin,
+)
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ChatPrivileges
-from pyrogram.enums import ChatMemberStatus, ChatMembersFilter
+from pyrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 from pyrogram.raw.functions.channels import SetStickers
 from pyrogram.raw.types import InputStickerSetShortName
+
+PROMOTE_COMMAND = get_command("PROMOTE_COMMAND")
+DEMOTE_COMMAND = get_command("DEMOTE_COMMAND")
+GROUP_COMMANDS = get_command("GROUP_COMMANDS")
+GROUP_COMMANDS2 = get_command("GROUP_COMMANDS2")
+TITLE_COMMAND = get_command("TITLE_COMMAND")
+BOT_COMMAND = get_command("BOT_COMMAND")
+SET_STICKERS = get_command("SET_STICKERS")
+INVITELINK_COMMAND = get_command("INVITELINK_COMMAND")
+ADMINLIST_COMMAND = get_command("ADMINLIST_COMMAND")
 
 
 async def get_chat_privileges(client, status, chat_id):
@@ -51,7 +66,7 @@ async def get_chat_privileges(client, status, chat_id):
     return PROMOTE_DICT[status]
 
 
-@app.on_message(command(commands="promote"))
+@app.on_message(command(commands=PROMOTE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 async def _promote(client, message, lang):
     chat_id = message.chat.id
@@ -181,7 +196,7 @@ async def demote_func(client, message, user_id, from_user, lang):
     )
 
 
-@app.on_message(command("demote"))
+@app.on_message(command(DEMOTE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 @loggable
 async def _demote(client, message, lang):
@@ -210,14 +225,7 @@ async def _demoteCb(client, query, lang):
     return await demote_func(client, query.message, user_id, query.from_user)
 
 
-@app.on_message(
-    command(
-        [
-            "setgtitle",
-            "setgdesc",
-        ]
-    )
-)
+@app.on_message(command(GROUP_COMMANDS))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def _group_cmds(client, message, lang):
@@ -246,7 +254,7 @@ async def _group_cmds(client, message, lang):
         return lang.admin20.format(desc, user)
 
 
-@app.on_message(command(["setgpic", "delgpic"]))
+@app.on_message(command(GROUP_COMMANDS2))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def _group_cmds2(client, message, lang):
@@ -273,7 +281,7 @@ async def _group_cmds2(client, message, lang):
         return lang.admin26.format(user)
 
 
-@app.on_message(command("title"))
+@app.on_message(command(TITLE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 @loggable
 async def _title(client, message, lang):
@@ -308,12 +316,12 @@ async def _title(client, message, lang):
     )
 
 
-@app.on_message(command("bots"))
+@app.on_message(command(BOT_COMMAND))
 @language
 async def _botlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat_id = await connected(message, user_id, lang)
-    if not chat_id:
+    chat_id = await connected(message, user_id, lang, need_admin=True)
+    if chat_id is False:
         chat = message.chat
     else:
         chat = await client.get_chat(chat_id)
@@ -324,18 +332,16 @@ async def _botlist(client, message, lang):
     await repl.edit({header})
 
 
-@app.on_message(command("set_stickers"))
+@app.on_message(command(SET_STICKERS))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def set_sticker(client, message, lang):
     replied = message.reply_to_message
-    admin = message.from_user.mention if message.from_user else 'Anon'
+    admin = message.from_user.mention if message.from_user else "Anon"
     chat = message.chat
     if replied:
         if not replied.sticker:
-            await message.reply(
-                lang.admin38
-            )
+            await message.reply(lang.admin38)
             return
         stickers = message.reply_to_message.sticker.set_name
         try:
@@ -345,18 +351,129 @@ async def set_sticker(client, message, lang):
                     stickerset=InputStickerSetShortName(short_name=stickers),
                 )
             )
-            await message.reply_text(
-                lang.admin39.format(chat.title)
-            )
-            return lang.admin42.format(stickers,admin)
+            await message.reply_text(lang.admin39.format(chat.title))
+            return lang.admin42.format(stickers, admin)
         except errors.BadRequest as ee:
             if ee.MESSAGE == "PARTICIPANTS_TOO_FEW":
-                await message.reply_text(
-                    lang.admin40
-                )
+                await message.reply_text(lang.admin40)
                 return
     else:
-        await message.reply(
-            lang.admin41
-        )
+        await message.reply(lang.admin41)
         return
+
+
+@app.on_message(command(commands=(INVITELINK_COMMAND)))
+@language
+async def _invitelink(client, message, lang):
+    user_id = message.from_user.id if message.from_user else None
+    chat_id = await connected(message, user_id, lang, need_admin=True)
+    if chat_id is False:
+        chat = message.chat
+    else:
+        chat = await client.get_chat(chat_id)
+    if message.chat.username:
+        await message.reply_text(f"https://t.me/{message.chat.username}")
+
+    elif message.chat.type in [ChatType.SUPERGROUP, ChatType.CHANNEL]:
+        if not await is_user_admin(chat_id):
+            return await message.reply(lang.other2.format(chat.title))
+        if await is_bot_admin(chat_id, "can_invite_users"):
+            link = await client.export_chat_invite_link(chat_id)
+            await message.reply_text(link)
+        else:
+            await message.reply_text(lang.admin43)
+    else:
+        await message.reply_text(lang.admin44)
+
+
+@app.on_message(command(ADMINLIST_COMMAND))
+@language
+async def _adminlist(client, message, lang):
+    user_id = message.from_user.id if message.from_user else None
+    chat_id = await connected(message, user_id, lang)
+    if chat_id is False:
+        chat = message.chat
+    else:
+        chat = await client.get_chat(chat_id)
+    repl = await message.reply(lang.admin45)
+    administrators = []
+    async for m in client.get_chat_members(
+        chat.id, filter=ChatMembersFilter.ADMINISTRATORS
+    ):
+        if m.user.is_bot:
+            pass
+        else:
+            administrators.append(m)
+    text = lang.admin46.format(chat.title)
+    custom_admin_list = {}
+    normal_admin_list = []
+    for admin in administrators:
+        user = admin.user
+        status = admin.status
+        custom_title = admin.custom_title
+        if user.is_deleted:
+            name = "☠ ᴅᴇʟᴇᴛᴇᴅ ᴀᴄᴄᴏᴜɴᴛ"
+        else:
+            name = f"{user.mention}"
+        if status == ChatMemberStatus.OWNER:
+            text += "\n 👑 ᴄʀᴇᴀᴛᴏʀ:"
+            text += f"\n • {name}\n"
+            if custom_title:
+                text += f" ┗━ {custom_title}\n"
+        if status == ChatMemberStatus.ADMINISTRATOR:
+            if custom_title:
+                try:
+                    custom_admin_list[custom_title].append(name)
+                except KeyError:
+                    custom_admin_list.update({custom_title: [name]})
+            else:
+                normal_admin_list.append(name)
+    text += "\n🔱 ᴀᴅᴍɪɴs:"
+    for admin in normal_admin_list:
+        text += f"\n • {admin}"
+    for admin_group in custom_admin_list.copy():
+        if len(custom_admin_list[admin_group]) == 1:
+            text += f"\n • {custom_admin_list[admin_group][0]} | {admin_group} "
+
+            custom_admin_list.pop(admin_group)
+    text += "\n"
+    for admin_group, value in custom_admin_list.items():
+        text += f"\n🚨 {admin_group} "
+        for admin in value:
+            text += f"\n • {admin}"
+        text += "\n"
+    try:
+        await repl.edit_text(text)
+    except errors.BadRequest:
+        return
+
+
+__commands__ = (
+    PROMOTE_COMMAND
+    + DEMOTE_COMMAND
+    + GROUP_COMMANDS
+    + GROUP_COMMANDS2
+    + TITLE_COMMAND
+    + BOT_COMMAND
+    + SET_STICKERS
+    + INVITELINK_COMMAND
+    + ADMINLIST_COMMAND
+)
+__mod_name__ = "ᴀᴅᴍɪɴꜱ 🛡️"
+
+__help__ = """
+**⸢ꜰᴏʀ ᴘʀᴏ ᴜꜱᴇʀꜱ⸥**
+
+「𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦」 :
+═───────◇───────═
+๏ /promote <ᴜsᴇʀ>: ᴘʀᴏᴍᴏᴛᴇ ᴀ ᴜsᴇʀ.
+๏ /demote <ᴜsᴇʀ> - ᴅᴇᴍᴏᴛᴇ ᴀ ᴜsᴇʀ.
+๏ /setgtitle <ᴛɪᴛʟᴇ> : ᴇᴅɪᴛ ᴛʜᴇ ɢʀᴏᴜᴘ ᴛɪᴛʟᴇ.
+๏ /setgpic <ʀᴇᴘʟʏ to image> : sᴇᴛ ᴛʜᴇ ɢʀᴏᴜᴘ ᴘʀᴏғɪʟᴇ ᴘʜᴏᴛᴏ.
+๏ /delgpic : ᴅᴇʟᴇᴛᴇ ᴛʜᴇ ɢʀᴏᴜᴘ ᴘʀᴏғɪʟᴇ ᴘʜᴏᴛᴏ.
+๏ /setgdesc <ᴛᴇxᴛ> : ᴇᴅɪᴛ ᴛʜᴇ ɢʀᴏᴜᴘ ᴅᴇsᴄʀɪᴘᴛɪᴏɴ.
+๏ /adminlist : ʟɪsᴛ ᴛʜᴇ ᴀᴅᴍɪɴs ᴏғ ᴛʜᴇ ᴄʜᴀᴛ.
+๏ /bots : ʟɪsᴛ ᴀʟʟ ᴛʜᴇ ʙᴏᴛs ᴏғ ᴛʜᴇ ᴄʜᴀᴛ.
+๏ /invitelink: ᴇxᴘᴏʀᴛ ᴛʜᴇ ᴄʜᴀᴛ ɪɴᴠɪᴛᴇ ʟɪɴᴋ.
+═───────◇───────═
+"""

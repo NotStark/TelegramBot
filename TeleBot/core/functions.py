@@ -77,6 +77,8 @@ async def disable_action(message, command):
 async def connected(message,user_id : int,lang , need_admin = True ):
     chat = message.chat
     if chat.type == enums.ChatType.PRIVATE :
+        if not user_id:
+            return False
         connected_chat = await get_connected_chat(user_id)
         if not connected_chat:
             return False

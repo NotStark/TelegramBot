@@ -1,1 +1,12 @@
 START_COMMAND : ['start']
+
+# Admin.py
+PROMOTE_COMMAND : ["promote"]
+DEMOTE_COMMAND : ["demote"]
+GROUP_COMMANDS : ["setgtitle","setgdesc"]
+GROUP_COMMANDS2 : ["setgpic", "delgpic"]
+TITLE_COMMAND : ["title"]
+BOT_COMMAND : ["bots"]
+SET_STICKERS : ["set_stickers"]
+INVITELINK_COMMAND : ["invitelink"]
+ADMINLIST_COMMAND : ["adminlist", "admins"]

@@ -41,6 +41,7 @@ async def paginate_modules(module_dict: Dict, prefix, chat=None, column_size: in
 
     calc = len(modules) % column_size
     if calc == 1 or calc == 2:
+        print(calc)
         pairs.append((modules[-1],))
     else:
         pairs += [[EqInlineKeyboardButton("Back", callback_data="help_back")]]

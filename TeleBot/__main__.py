@@ -3,14 +3,12 @@ import asyncio
 import uvloop
 import config
 import importlib
-from pyrogram import idle, filters
-from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES
+from pyrogram import idle
+from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES, HELPABLE
 from rich.table import Table
 from pyrogram import __version__ as pyrover
 from TeleBot.modules import ALL_MODULES
-from TeleBot.core.misc import paginate_modules
 
-HELPABLE = {}
 loop = asyncio.get_event_loop()
 
 SUPPORT_SEND_MSG = """
@@ -69,9 +67,7 @@ async def main():
 
     await idle()
 
-@app.on_message(filters.command("k"))
-async def _k(client , message):
-    print(HELPABLE)
+
 
 if __name__ == "__main__":
     uvloop.install()

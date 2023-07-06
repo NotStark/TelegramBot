@@ -16,24 +16,24 @@ async def paginate_modules(module_dict: Dict, prefix, chat=None, column_size: in
         modules = sorted(
             [
                 EqInlineKeyboardButton(
-                    mod_name.title(),
+                    x__mod_name__,
                     callback_data="{}_module({})".format(
-                        prefix, mod_name.lower()
+                        prefix, x.__mod_name__.lower()
                     ),
                 )
-                for mod_name in module_dict.keys()
+                for x in module_dict.keys()
             ]
         )
     else:
         modules = sorted(
             [
                 EqInlineKeyboardButton(
-                    mod_name.title(),
+                    x.__mod_name__.title(),
                     callback_data="{}_module({},{})".format(
-                        prefix, chat, mod_name.lower()
+                        prefix, chat, x.__mod_name__.lower()
                     ),
                 )
-                for mod_name in module_dict.keys()
+                for x in module_dict.values()
             ]
         )
     print(modules)

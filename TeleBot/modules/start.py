@@ -1,7 +1,7 @@
 import time
 import config
 import re
-from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME
+from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME, HELPABLE
 from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time
 from strings import get_command
@@ -10,7 +10,7 @@ from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.core.misc import paginate_modules
-from TeleBot.__main__ import HELPABLE
+
 
 
 START_COMMAND = get_command("START_COMMAND")
@@ -59,7 +59,7 @@ async def _start(client, message, strings):
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
-            # reply_markup=InlineKeyboardMarkup(btn)
+            reply_markup=InlineKeyboardMarkup(await paginate_modules(HELPABLE,prefix="help"))
         )
 
 

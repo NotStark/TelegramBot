@@ -17,7 +17,7 @@ START_COMMAND = get_command("START_COMMAND")
 
 @app.on_message(command(START_COMMAND))
 @language
-async def _start(client, message, strings)
+async def _start(client, message, strings):
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()

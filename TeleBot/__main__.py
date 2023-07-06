@@ -52,8 +52,7 @@ async def main():
             if hasattr(module, "__help__") and module.__help__:
                 HELPABLE[module.__mod_name__] = {
                     "help": module.__help__,
-                    "alt_names": module.__mod_name__.lower().replace(" ", "_")
-                    + getattr(module, "__alt_names__", []),
+                    "alt_names": getattr(module, "__alt_names__", []).append(module.__mod_name__.lower().replace(" ", "_")),
                 }
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {

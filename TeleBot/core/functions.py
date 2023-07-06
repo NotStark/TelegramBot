@@ -74,7 +74,7 @@ async def disable_action(message, command):
     return True
 
 
-async def connected(message,user_id : int,need_admin = True):
+async def connected(message,user_id : int,lang , need_admin = True ):
     chat = message.chat
     if chat.type == enums.ChatType.PRIVATE :
         connected_chat = await get_connected_chat(user_id)
@@ -83,13 +83,13 @@ async def connected(message,user_id : int,need_admin = True):
         if need_admin is True:
             if await is_invincible(user_id) or user_id in await get_admins(chat.id):
                 return connected_chat
-            await message.reply("ʏᴏᴜ ᴍᴜꜱᴛ ʙᴇ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘ!")
+            await message.reply(lang.admin34)
         else:
             if await is_connection_allowed(connected_chat):
                 return connected_chat
             else:
                 if not await is_invincible(user_id):
-                    await message.reply(f"ᴛʜᴇ ɢʀᴏᴜᴘ ᴄʜᴀɴɢᴇᴅ ᴛʜᴇ ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀɪɢʜᴛꜱ ᴏʀ ʏᴏᴜ ᴀʀᴇ ɴᴏ ʟᴏɴɢᴇʀ ᴀɴ ᴀᴅᴍɪɴ.\nɪ'ᴠᴇ ᴅɪꜱᴄᴏɴɴᴇᴄᴛᴇᴅ ʏᴏᴜ")
+                    await message.reply(lang.admin35)
                     await disconnect_chat(user_id)
                 else:
                     return connected_chat

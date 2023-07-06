@@ -5,7 +5,7 @@ from pyrogram import  filters
 from TeleBot.core.functions import disable_action
 
 
-def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = HANDLERS, disable: bool = True):
+def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = HANDLERS, disable: bool = True ):
     commands = commands if isinstance(commands, list) else [commands]
     prefixes = prefixes if isinstance(prefixes, list) else [prefixes]
 

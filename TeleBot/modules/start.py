@@ -1,12 +1,16 @@
 import time
 import config
+import re
 from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME
 from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time
 from strings import get_command
 from pyrogram.enums import ChatType
+from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from TeleBot.core.misc import paginate_modules
+from TeleBot.__main__ import HELPABLE
 
 
 START_COMMAND = get_command("START_COMMAND")
@@ -55,5 +59,11 @@ async def _start(client, message, strings):
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
+            reply_markup=InlineKeyboardMarkup(await paginate_modules(HELPABLE,prefix="help"))
         )
 
+
+@app.on_callback_query(filters.regex(r"help_(.*?)"))
+async def help_button(_,query):    
+    mod_match = re.match(r"help_module\((.+?)\)", query.data)
+    print(mod_match)

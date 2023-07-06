@@ -1,4 +1,5 @@
 import config
+import re
 from TeleBot import app
 from typing import Callable, Union
 from pyrogram import Client
@@ -113,3 +114,20 @@ async def handle_exception(func: Callable,client : Client, update : Union[types.
         else:
             await update.answer(txt,show_alert=True)
         raise e
+    
+
+async def remove_markdown(text: str) -> str:
+    patterns = [
+        r'\*\*(.*?)\*\*',  
+        r'__(.*?)__',      
+        r'\*(.*?)\*',      
+        r'_(.*?)_',       
+        r'`(.*?)`',        
+        r'\[(.*?)\]\((.*?)\)', 
+        r'~~(.*?)~~',      
+        r'\[(.*?)\]\[(.*?)\]',  
+        r'\!\[(.*?)\]\((.*?)\)',  
+    ]
+    for pattern in patterns:
+        text = re.sub(pattern, r'\1', text)
+    return text

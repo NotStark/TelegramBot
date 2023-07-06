@@ -28,31 +28,30 @@ async def is_user_admin(chat_id: int, user_id: int, permission: Any = None) -> b
 
 
 async def do_admins_stuff(message: Message, lang: dict, permission: Any = None, check_bot: bool = False) -> Tuple[bool, int]:
-    chat = message.chat
     user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
 
     if chat.type == ChatType.PRIVATE:
         chat_id = await get_connected_chat(user_id)
         if not chat_id:
             await message.reply(lang.other1)
-            return False, 0
-        chat_title = (await app.get_chat(chat_id)).title
+            return False,None
+        chat = await app.get_chat(chat_id)
     else:
+        chat = message.chat
         chat_id = chat.id
-        chat_title = chat.title
 
     if not await is_user_admin(chat_id, user_id, permission=permission):
         if permission is None:
-            await message.reply(lang.other2.format(chat_title))
+            await message.reply(lang.other2.format(chat.title))
         else:
-            await message.reply(lang.other3.format(permission, chat_title))
-        return False, 0
+            await message.reply(lang.other3.format(permission, chat.title))
+        return False,None
 
     if check_bot and not await is_bot_admin(chat_id, permission=permission):
         if permission is None:
-            await message.reply(lang.other4.format(chat_title))
+            await message.reply(lang.other4.format(chat.title))
         else:
-            await message.reply(lang.other5.format(permission, chat_title))
-        return False, 0
+            await message.reply(lang.other5.format(permission, chat.title))
+        return False,None
 
     return True, chat_id

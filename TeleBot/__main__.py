@@ -35,7 +35,7 @@ async def main():
     LOG.print(Table(show_header=True, header_style="bold yellow").add_column(LOG_MSG))
     LOG.print("[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...")
     LOG.print("ꜰᴏᴜɴᴅ {} ᴍᴏᴅᴜʟᴇꜱ\n".format(len(ALL_MODULES)))
-
+    
     for module_name in ALL_MODULES:
         module = importlib.import_module("TeleBot.modules." + module_name)
         print(dir(module))
@@ -44,7 +44,7 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__] = {"help" : module.__help__ , "alt_names" : getattr(module, "__alt_names__", [])}
+                HELPABLE[module.__mod_name__] = module
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,

@@ -18,6 +18,7 @@ START_COMMAND = get_command("START_COMMAND")
 @app.on_message(command(START_COMMAND))
 @language
 async def _start(client, message, strings):
+    print(HELPABLE)
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
@@ -56,12 +57,10 @@ async def _start(client, message, strings):
             )
 
     else:
-        btn = await paginate_modules(HELPABLE,prefix="help")
-        print(btn)
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
-            reply_markup=InlineKeyboardMarkup(btn)
+            # reply_markup=InlineKeyboardMarkup(btn)
         )
 
 

@@ -3,7 +3,7 @@ import asyncio
 import uvloop
 import config
 import importlib
-from pyrogram import idle
+from pyrogram import idle, filters
 from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES
 from rich.table import Table
 from pyrogram import __version__ as pyrover
@@ -32,6 +32,7 @@ LOG_MSG += "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬�
 
 
 async def main():
+    global HELPABLE
     os.system("clear")
     LOG.print(Table(show_header=True, header_style="bold yellow").add_column(LOG_MSG))
     LOG.print("[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...")
@@ -68,6 +69,9 @@ async def main():
 
     await idle()
 
+@app.on_message(filters.command("k"))
+async def _k(client , message):
+    print(HELPABLE)
 
 if __name__ == "__main__":
     uvloop.install()

@@ -1,5 +1,5 @@
 
-__mod_name__ = "ban 🛡️"
+__mod_name__ = "ʙᴀɴ 🛡️"
 
 __alt_names__ = ["admins", "admin", "administrator"]
 

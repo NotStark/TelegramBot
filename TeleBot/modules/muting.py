@@ -1,4 +1,4 @@
-__mod_name__ = "muting 🛡️"
+__mod_name__ = "ᴍᴜᴛɪɴɢ"
 
 __alt_names__ = ["admins", "admin", "administrator"]
 

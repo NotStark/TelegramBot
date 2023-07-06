@@ -1,4 +1,4 @@
-__mod_name__ = "pin 🛡️"
+__mod_name__ = "ᴘɪɴ"
 
 __alt_names__ = ["admins", "admin", "administrator"]
 

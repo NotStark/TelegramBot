@@ -56,10 +56,12 @@ async def _start(client, message, strings):
             )
 
     else:
+        btn = await paginate_modules(HELPABLE,prefix="help")
+        print(btn)
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
-            reply_markup=InlineKeyboardMarkup(await paginate_modules(HELPABLE,prefix="help"))
+            reply_markup=InlineKeyboardMarkup(btn)
         )
 
 

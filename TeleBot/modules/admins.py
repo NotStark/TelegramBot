@@ -107,12 +107,13 @@ async def _promote(client, message, lang):
 @language
 @loggable
 async def _promotecb(client, query, lang):
-    status,user_id,from_user_id , chat_id = query.data.split('_')[1:] 
+    status, user_id, from_user_id , chat_id = query.data.split('_')[1:] 
     from_user = query.from_user 
     if from_user.id != int(from_user_id):
         await query.answer(lang.other6,show_alert=True)
         return
     user = await client.get_chat_member(int(chat_id),int(user_id))
+    print(user , chat_id , user_id)
     await query.message.delete()
     for statuss in ["normal","full","low","mid"] :
         if statuss == status :

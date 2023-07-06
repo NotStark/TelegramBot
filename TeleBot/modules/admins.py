@@ -104,6 +104,7 @@ async def _promote(client, message, lang):
 
 
 @app.on_callback_query(filters.regex('^promote_'))
+@language
 @loggable
 async def _promotecb(client, query, lang):
     status,user_id,from_user_id , chat_id = query.data.split('_')[1:] 

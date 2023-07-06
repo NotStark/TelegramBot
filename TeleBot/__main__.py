@@ -8,6 +8,7 @@ from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES
 from rich.table import Table
 from pyrogram import __version__ as pyrover
 from TeleBot.modules import ALL_MODULES
+from TeleBot.core.misc import paginate_modules
 
 HELPABLE = {}
 loop = asyncio.get_event_loop()
@@ -56,7 +57,7 @@ async def main():
                 }
 
         LOG.print(f"✨ [bold cyan]ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ʟᴏᴀᴅᴇᴅ: [green]{module_name}.py")
-
+    print(await paginate_modules(HELPABLE))
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
     try:

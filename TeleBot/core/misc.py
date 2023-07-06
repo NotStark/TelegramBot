@@ -11,29 +11,29 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
     def __gt__(self, other):
         return self.text > other.text
 
-def paginate_modules(module_dict: Dict, prefix, chat=None, column_size: int = 3) -> List:
+async def paginate_modules(module_dict: Dict, prefix, chat=None, column_size: int = 3) -> List:
     if not chat:
         modules = sorted(
             [
                 EqInlineKeyboardButton(
-                    x.__mod_name__,
+                    mod_name.title(),
                     callback_data="{}_module({})".format(
-                        prefix, x.__mod_name__.lower()
+                        prefix, mod_name.lower()
                     ),
                 )
-                for x in module_dict.values()
+                for mod_name in module_dict.keys()
             ]
         )
     else:
         modules = sorted(
             [
                 EqInlineKeyboardButton(
-                    x.__mod_name__,
+                    mod_name.title(),
                     callback_data="{}_module({},{})".format(
-                        prefix, chat, x.__mod_name__.lower()
+                        prefix, chat, mod_name.lower()
                     ),
                 )
-                for x in module_dict.values()
+                for mod_name in module_dict.keys()
             ]
         )
 

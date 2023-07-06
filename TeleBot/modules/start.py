@@ -1,11 +1,11 @@
 import time
 import config
 from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME
-from TeleBot.helpers.custom_filter import command
-from TeleBot.helpers.functions import get_readable_time
+from TeleBot.core.custom_filter import command
+from TeleBot.core.functions import get_readable_time
 from strings import get_command
 from pyrogram.enums import ChatType
-from TeleBot.helpers.decorators.lang import language
+from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 

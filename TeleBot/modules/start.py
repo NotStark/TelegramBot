@@ -66,4 +66,6 @@ async def _start(client, message, strings):
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 async def help_button(_,query):    
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
-    print(mod_match[1])
+    module = mod_match[1]
+    print(module)
+    print(HELPABLE[module])

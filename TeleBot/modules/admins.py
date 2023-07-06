@@ -461,6 +461,8 @@ __commands__ = (
 )
 __mod_name__ = "ᴀᴅᴍɪɴꜱ 🛡️"
 
+__alt_names__ = ["admins", "admin", "administrator"]
+
 __help__ = """
 **⸢ꜰᴏʀ ᴘʀᴏ ᴜꜱᴇʀꜱ⸥**
 

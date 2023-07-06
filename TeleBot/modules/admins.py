@@ -51,6 +51,7 @@ async def get_chat_privileges(client,message,status):
 @language
 async def _promote(client,message, lang):
     x , chat_id = await do_admins_stuff(message,lang, permission= "can_promote_members" , check_bot= True)
+    print(x,chat_id)
     if x is False:
         return
     user_id = await extract_user_id(message)

@@ -50,7 +50,8 @@ async def main():
         
         if hasattr(module, "__mod_name__")  and module.__mod_name__:
             if hasattr(module,"__help__") and module.__help__:
-                HELPABLE[module.__mod_name__] = module.__help__
+                HELPABLE[module.__mod_name__.lower()] = module.__help__
+                print(HELPABLE)
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {"module" : module.__mod_name__, "commands" : commands}
             

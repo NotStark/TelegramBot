@@ -12,8 +12,8 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.core.misc import paginate_modules
 
 
-
 START_COMMAND = get_command("START_COMMAND")
+
 
 @app.on_message(command(START_COMMAND))
 @language
@@ -48,7 +48,7 @@ async def _start(client, message, strings):
                         ],
                         [
                             InlineKeyboardButton(
-                                text = strings.btn4, callback_data="help_back"
+                                text=strings.btn4, callback_data="help_back"
                             )
                         ],
                     ]
@@ -59,13 +59,26 @@ async def _start(client, message, strings):
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
-            reply_markup=InlineKeyboardMarkup(paginate_modules(HELPABLE,prefix="help"))
+            reply_markup=InlineKeyboardMarkup(
+                paginate_modules(HELPABLE, prefix="help")
+            ),
         )
 
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
-async def help_button(_,query):    
+async def help_button(_, query):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
-    module = mod_match[1]
-    print(module)
-    print(HELPABLE[module])
+    if mod_match:
+        module = mod_match[1]
+        text = (
+                "» **ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs ꜰᴏʀ** **{}** :\n".format(
+                    module
+                )
+                + HELPABLE[module]['help']
+            )
+        await query.message.edit_caption(
+                text,               
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton(text="ʙᴀᴄᴋ", callback_data="help_back")]]
+                ),
+            )

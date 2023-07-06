@@ -16,8 +16,8 @@ async def is_bot_admin(chat_id: int, permission: Any = None) -> bool:
 
 
 async def is_user_admin(chat_id: int, user_id: int, permission: Any = None) -> bool:
-    print(chat_id,user_id)
     if await is_invincible(user_id) or user_id == chat_id:
+        print("tru h")
         return True
     elif permission is None and user_id in await get_admins(chat_id):
         return True

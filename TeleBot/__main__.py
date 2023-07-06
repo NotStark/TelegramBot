@@ -32,7 +32,6 @@ LOG_MSG += "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬�
 
 
 async def main():
-    global HELPABLE
     os.system("clear")
     LOG.print(Table(show_header=True, header_style="bold yellow").add_column(LOG_MSG))
     LOG.print("[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...")
@@ -45,11 +44,7 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__.lower()] = {
-                    "help": module.__help__,
-                    "alt_names": module.__alt_names__,
-                }
-
+                HELPABLE[module.__mod_name__] = module
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,
@@ -57,7 +52,6 @@ async def main():
                 }
 
         LOG.print(f"✨ [bold cyan]ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ʟᴏᴀᴅᴇᴅ: [green]{module_name}.py")
-    print(HELPABLE)
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
     try:

@@ -36,6 +36,8 @@ loop = asyncio.get_event_loop()
 app = Client (name = "TeleBot",api_id = config.API_ID,api_hash = config.API_HASH,bot_token = config.BOT_TOKEN,app_version = "1.0", parse_mode = ParseMode.MARKDOWN)
 # --- VARS ---
 
+
+
 async def init():
     global BOT_NAME,BOT_USERNAME,BOT_ID
     global OWNER_USERNAME, MENTION_BOT

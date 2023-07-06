@@ -18,7 +18,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
         modules = sorted(
             [
                 EqInlineKeyboardButton(
-                    x.__mod_name__,
+                    x,
                     callback_data="{}_module({})".format(
                         prefix, x
                     ),

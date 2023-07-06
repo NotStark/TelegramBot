@@ -59,7 +59,7 @@ async def _start(client, message, strings):
         await message.reply_photo(
             config.START_IMG,
             caption=strings.start2.format(uptime),
-            reply_markup=InlineKeyboardMarkup(await paginate_modules(HELPABLE,prefix="help"))
+            reply_markup=InlineKeyboardMarkup(paginate_modules(HELPABLE,prefix="help"))
         )
 
 

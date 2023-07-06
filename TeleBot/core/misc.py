@@ -36,7 +36,7 @@ async def paginate_modules(module_dict: Dict, prefix, chat=None, column_size: in
                 for mod_name in module_dict.keys()
             ]
         )
-
+    print(modules)
     pairs = [modules[i * column_size: (i + 1) * column_size] for i in range((len(modules) + column_size - 1) // column_size)]
 
     calc = len(modules) % column_size

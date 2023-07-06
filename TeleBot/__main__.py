@@ -57,7 +57,7 @@ async def main():
                 }
 
         LOG.print(f"✨ [bold cyan]ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ʟᴏᴀᴅᴇᴅ: [green]{module_name}.py")
-    print(await paginate_modules(HELPABLE))
+    print(await paginate_modules(HELPABLE,prefix="help"))
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
     try:

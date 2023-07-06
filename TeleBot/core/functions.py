@@ -5,6 +5,7 @@ from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import ChatWriteForbidden, MessageDeleteForbidden
 from time import perf_counter
 from pyrogram import enums,types
+from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed, disconnect_chat
 
 
 async def is_invincible(user_id : int) -> bool:
@@ -69,3 +70,25 @@ async def disable_action(message, command):
     return True
 
 
+async def connected(message,user_id : int,need_admin = True):
+    chat = message.chat
+    if chat.type == enums.ChatType.PRIVATE :
+        connected_chat = await get_connected_chat(user_id)
+        if not connected_chat:
+            return False
+        if need_admin is True:
+            if await is_invincible(user_id) or user_id in await get_admins(chat.id):
+                return connected_chat
+            await message.reply("ʏᴏᴜ ᴍᴜꜱᴛ ʙᴇ ᴀɴ ᴀᴅᴍɪɴ ɪɴ ᴛʜᴇ ᴄᴏɴɴᴇᴄᴛᴇᴅ ɢʀᴏᴜᴘ!")
+        else:
+            if await is_connection_allowed(connected_chat):
+                return connected_chat
+            else:
+                if not await is_invincible(user_id):
+                    await message.reply(f"ᴛʜᴇ ɢʀᴏᴜᴘ ᴄʜᴀɴɢᴇᴅ ᴛʜᴇ ᴄᴏɴɴᴇᴄᴛɪᴏɴ ʀɪɢʜᴛꜱ ᴏʀ ʏᴏᴜ ᴀʀᴇ ɴᴏ ʟᴏɴɢᴇʀ ᴀɴ ᴀᴅᴍɪɴ.\nɪ'ᴠᴇ ᴅɪꜱᴄᴏɴɴᴇᴄᴛᴇᴅ ʏᴏᴜ")
+                    await disconnect_chat(user_id)
+                else:
+                    return connected_chat
+    else:
+        return False
+    

@@ -6,7 +6,7 @@ from pyrogram.enums import ChatType
 from TeleBot.helpers.functions import disable_action
 
 
-def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = HANDLERS, disable: bool = True, group_only : bool  = False):
+def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = HANDLERS, disable: bool = True):
     commands = commands if isinstance(commands, list) else [commands]
     prefixes = prefixes if isinstance(prefixes, list) else [prefixes]
 
@@ -25,10 +25,6 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = H
             command = match.group(1)
             args = text[match.end():].strip().split()
             message.command = [command] + args
-            
-            if group_only and message.chat.type == ChatType.PRIVATE:
-                await message.reply("ᴛʜɪꜱ ᴄᴏᴍᴍᴀɴᴅ ᴡᴀꜱ ᴍᴀᴅᴇ ᴜᴘ ꜰᴏʀ ɢʀᴏᴜᴘ ɴᴏᴛ ꜰᴏʀ ᴘʀɪᴠᴀᴛᴇ")
-                return False
             
             if disable :
                 result = await disable_action(message, command)

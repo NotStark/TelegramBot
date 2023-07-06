@@ -2,7 +2,7 @@ from typing import Any, Tuple
 from pyrogram.types import Message
 from pyrogram.enums import ChatType
 from TeleBot import app, BOT_ID
-from TeleBot.helpers.functions import get_admins, is_invincible
+from TeleBot.core.functions import get_admins, is_invincible
 from TeleBot.mongo.connection_db import get_connected_chat
 
 

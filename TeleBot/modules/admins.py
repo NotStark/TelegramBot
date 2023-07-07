@@ -1,6 +1,6 @@
 from TeleBot import app, BOT_ID
 from pathlib import Path
-from TeleBot.core.custom_filter import command
+from TeleBot.core import custom_filter 
 from strings import get_command
 from pyrogram import filters, errors
 from TeleBot.core.decorators.lang import language
@@ -63,7 +63,7 @@ async def get_chat_privileges(client, status, chat_id):
     return PROMOTE_DICT[status]
 
 
-@app.on_message(command(commands=PROMOTE_COMMAND))
+@app.on_message(custom_filter.command(commands=PROMOTE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 async def _promote(client, message, lang):
     chat_id = message.chat.id
@@ -193,7 +193,7 @@ async def demote_func(client, message, user_id, from_user, lang):
     )
 
 
-@app.on_message(command(DEMOTE_COMMAND))
+@app.on_message(custom_filter.command(DEMOTE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 @loggable
 async def _demote(client, message, lang):
@@ -222,7 +222,7 @@ async def _demoteCb(client, query, lang):
     return await demote_func(client, query.message, user_id, query.from_user)
 
 
-@app.on_message(command(GROUP_COMMANDS))
+@app.on_message(custom_filter.command(GROUP_COMMANDS))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def _group_cmds(client, message, lang):
@@ -251,7 +251,7 @@ async def _group_cmds(client, message, lang):
         return lang.admin20.format(desc, user)
 
 
-@app.on_message(command(GROUP_COMMANDS2))
+@app.on_message(custom_filter.command(GROUP_COMMANDS2))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def _group_cmds2(client, message, lang):
@@ -278,7 +278,7 @@ async def _group_cmds2(client, message, lang):
         return lang.admin26.format(user)
 
 
-@app.on_message(command(TITLE_COMMAND))
+@app.on_message(custom_filter.command(TITLE_COMMAND))
 @admins_stuff("can_promote_members", bot=True)
 @loggable
 async def _title(client, message, lang):
@@ -313,7 +313,7 @@ async def _title(client, message, lang):
     )
 
 
-@app.on_message(command(BOT_COMMAND))
+@app.on_message(custom_filter.command(BOT_COMMAND))
 @language
 async def _botlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
@@ -327,7 +327,7 @@ async def _botlist(client, message, lang):
     await repl.edit({header})
 
 
-@app.on_message(command(SET_STICKERS))
+@app.on_message(custom_filter.command(SET_STICKERS))
 @admins_stuff("can_change_info", bot=True)
 @loggable
 async def set_sticker(client, message, lang):
@@ -357,7 +357,7 @@ async def set_sticker(client, message, lang):
         return
 
 
-@app.on_message(command(commands=(INVITELINK_COMMAND)))
+@app.on_message(custom_filter.command(commands=(INVITELINK_COMMAND)))
 @language
 async def _invitelink(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
@@ -380,7 +380,7 @@ async def _invitelink(client, message, lang):
         await message.reply_text(lang.admin44)
 
 
-@app.on_message(command(ADMINLIST_COMMAND))
+@app.on_message(custom_filter.command(ADMINLIST_COMMAND))
 @language
 async def _adminlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None

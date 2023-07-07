@@ -2,7 +2,7 @@ from strings import get_string
 from pyrogram.types import Message
 from functools import wraps
 from TeleBot.mongo.lang_db import get_lang
-from ..functions import handle_exception
+from TeleBot.core.functions import handle_exception
 
 
 def language(func):

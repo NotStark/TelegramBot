@@ -320,13 +320,9 @@ async def _title(client, message, lang):
 @language
 async def _botlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat_id = await connected(message, user_id, lang, need_admin=True)
-    if chat_id is None:
+    chat = await connected(message, user_id, lang, need_admin=True)
+    if chat is None:
         return
-    elif chat_id is False:
-        chat = message.chat
-    else:
-        chat = await client.get_chat(chat_id)
     repl = await message.reply(lang.admin36)
     header = lang.admin37.format(chat.title)
     async for m in client.get_chat_members(chat.id, filter=ChatMembersFilter.BOTS):
@@ -368,21 +364,18 @@ async def set_sticker(client, message, lang):
 @language
 async def _invitelink(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat_id = await connected(message, user_id, lang, need_admin=True)
-    if chat_id is None:
+    chat = await connected(message, user_id, lang, need_admin=True)
+    if not chat:
         return
-    elif chat_id is False:
-        chat = message.chat
-    else:
-        chat = await client.get_chat(chat_id)
+
     if message.chat.username:
         await message.reply_text(f"https://t.me/{message.chat.username}")
 
     elif message.chat.type in [ChatType.SUPERGROUP, ChatType.CHANNEL]:
-        if not await is_user_admin(chat_id):
+        if not await is_user_admin(chat.id):
             return await message.reply(lang.other2.format(chat.title))
-        if await is_bot_admin(chat_id, "can_invite_users"):
-            link = await client.export_chat_invite_link(chat_id)
+        if await is_bot_admin(chat.id, "can_invite_users"):
+            link = await client.export_chat_invite_link(chat.id)
             await message.reply_text(link)
         else:
             await message.reply_text(lang.admin43)
@@ -394,22 +387,17 @@ async def _invitelink(client, message, lang):
 @language
 async def _adminlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat_id = await connected(message, user_id, lang)
-    if chat_id is None:
+    chat = await connected(message, user_id, lang)
+    if chat is None:
         return
-    elif chat_id is False:
-        chat = message.chat
-    else:
-        chat = await client.get_chat(chat_id)
     repl = await message.reply(lang.admin45)
     administrators = []
     async for m in client.get_chat_members(
         chat.id, filter=ChatMembersFilter.ADMINISTRATORS
     ):
-        if m.user.is_bot:
-            pass
-        else:
+        if not m.user.is_bot:
             administrators.append(m)
+            
     text = lang.admin46.format(chat.title)
     custom_admin_list = {}
     normal_admin_list = []

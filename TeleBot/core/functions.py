@@ -9,6 +9,7 @@ from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import ChatWriteForbidden, MessageDeleteForbidden
 from time import perf_counter
 from pyrogram import enums, types
+from TeleBot.core.decorators.chat_status import is_user_admin
 from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed, disconnect_chat
 
 
@@ -74,33 +75,34 @@ async def disable_action(message, command):
     return True
 
 
-async def connected(message,user_id : int,lang , need_admin = True ):
-    chat = message.chat
-    if chat.type == enums.ChatType.PRIVATE :
-        if not user_id:
-            return None
+
+async def connected(message, user_id: int, lang, need_admin=True):
+    if message.chat.type == enums.ChatType.PRIVATE:
         connected_chat = await get_connected_chat(user_id)
         if not connected_chat:
             return None
-        if need_admin is True:
-            if await is_invincible(user_id) or user_id in await get_admins(chat.id):
-                return connected_chat
+
+        if need_admin and not await is_user_admin(connected_chat, user_id):
             await message.reply(lang.admin34)
             return None
-        else:
-            if await is_connection_allowed(connected_chat):
-                return connected_chat
-            else:
-                if not await is_invincible(user_id):
-                    await message.reply(lang.admin35)
-                    await disconnect_chat(user_id)
-                else:
-                    return connected_chat
-    else:
-        if need_admin and ( await is_invincible(user_id) or user_id in await get_admins(chat.id) or user_id == chat.id ) :
-            return chat.id
-        else:
+
+        chat = await app.get_chat(connected_chat)
+        if not await is_connection_allowed(connected_chat) and not await is_invincible(user_id):
+            await message.reply(lang.admin35)
+            await disconnect_chat(user_id)
             return None
+
+        return chat
+
+    elif need_admin and not await is_user_admin(user_id):
+        await message.reply(lang.admin34)
+        return None
+
+    return message.chat
+
+
+        
+        
     
 
 

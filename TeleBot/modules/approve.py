@@ -4,6 +4,7 @@ from strings import get_command
 from TeleBot.core.extractions import extract_user_id
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from TeleBot.mongo.approve_db import *
+from TeleBot.core.decorators.chat_status import is_user_admin
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.functions import get_admins, connected
@@ -21,13 +22,14 @@ DISAPPROVEALL_COMMAND = get_command("DISAPPROVEALL_COMMAND")
 @loggable
 async def _approve(client, message, lang):
     user = message.from_user if message.from_user else None
-    chat_id = await connected(message, user.id if user else user, lang, need_admin=True)
-    if chat_id is None:
+    chat = await connected(
+        message,
+        message.sender_chat.id if message.sender_chat else message.from_user.id,
+        lang,
+        need_admin=True,
+    )
+    if not chat:
         return
-    elif chat_id is False:
-        chat = message.chat
-    else:
-        chat = await client.get_chat(chat_id)
     user_id = await extract_user_id(message)
     if not user_id:
         await message.reply_text(lang.admin1)
@@ -37,45 +39,63 @@ async def _approve(client, message, lang):
     check_user = await is_approved(chat.id, user_id)
     member = await client.get_chat_member(chat.id, user_id)
     if check_user:
-        await message.reply_text(lang.approve2.format(member.user.mention,chat.title))
+        await message.reply_text(lang.approve2.format(member.user.mention, chat.title))
         return
     await approve_user(chat.id, user_id)
-    await message.reply_text(
-        lang.approve3.format(member.user.mention,chat.title)
-    )
-    return lang.approve16.format(member.user.mention,user.mention if user else 'Anon')
+    await message.reply_text(lang.approve3.format(member.user.mention, chat.title))
+    return lang.approve16.format(member.user.mention, user.mention if user else "Anon")
+
 
 @app.on_message(command(commands=DISAPPROVE_COMMAND))
 @language
+@loggable
 async def _disapprove(client, message, lang):
-    chat_id = message.chat.id
+    chat = await connected(
+        message,
+        message.sender_chat.id if message.sender_chat else message.from_user.id,
+        lang,
+        need_admin=True,
+    )
+    if not chat:
+        return
     user_id = await extract_user_id(message)
     if not user_id:
         await message.reply_text(lang.admin1)
 
-    if user_id in await get_admins(chat_id):
+    if user_id in await get_admins(chat.id):
         return await message.reply_text(lang.approve4)
-    check_user = await is_approved(chat_id, user_id)
-    member = await client.get_chat_member(chat_id, user_id)
+    check_user = await is_approved(chat.id, user_id)
+    member = await client.get_chat_member(chat.id, user_id)
     if not check_user:
-        return await message.reply_text(lang.approve5.format(member.user.mention))
-    await disapprove_user(chat_id, user_id)
+        await message.reply_text(lang.approve5.format(member.user.mention))
+        return
+    await disapprove_user(chat.id, user_id)
     await message.reply_text(
         lang.approve6.format(member.user.mention, message.chat.title)
     )
+    return lang.approve17.format(member.user.mention, message.from_user.mention if message.from_user else "Anon")
+
 
 
 @app.on_message(command(commands=APPROVED_COMMAND))
 @language
 async def _approvedlist(client, message, lang):
-    chat_id = message.chat.id
-    list1 = await approved_users(chat_id)
+    chat = await connected(
+        message,
+        message.sender_chat.id if message.sender_chat else message.from_user.id,
+        lang,
+        need_admin=True,
+    )
+    if not chat:
+        return
+    list1 = await approved_users(chat.id)
     if not list1:
-        return await message.reply_text(lang.approve7)
+        await message.reply_text(lang.approve7)
+        return
     text = lang.approve8
     for i in list1:
         try:
-            member = await client.get_chat_member(chat_id, int(i))
+            member = await client.get_chat_member(chat.id, int(i))
             text += f"⦾ {member.user.mention}\n"
         except:
             pass
@@ -85,15 +105,22 @@ async def _approvedlist(client, message, lang):
 @app.on_message(command(commands=APPROVAL_COMMAND))
 @language
 async def _approval(client, message, lang):
-    chat_id = message.chat.id
+    chat = await connected(
+        message,
+        message.sender_chat.id if message.sender_chat else message.from_user.id,
+        lang,
+        need_admin=True,
+    )
+    if not chat:
+        return
     user_id = await extract_user_id(message)
     if not user_id:
         return await message.reply_text(lang.admin1)
     try:
-        m = await client.get_chat_member(chat_id, user_id)
+        m = await client.get_chat_member(chat.id, user_id)
     except errors.BabRequest as e:
         return await message.reply(e.MESSAGE)
-    check_user = await is_approved(chat_id, user_id)
+    check_user = await is_approved(chat.id, user_id)
     if check_user:
         return await message.reply_text(lang.approve9.format(m.user.mention))
     return await message.reply_text(lang.approve10.format(m.user.mention))
@@ -102,18 +129,30 @@ async def _approval(client, message, lang):
 @app.on_message(command(commands=DISAPPROVEALL_COMMAND) & filters.group)
 @language
 async def _disappall(client, message, lang):
+    if not message.from_user:
+        return
     user_id = message.from_user.id
-    chat_id = message.chat.id
-    m = await client.get_chat_member(chat_id, user_id)
+    chat = await connected(message, user_id, lang, need_admin=True)
+    if not chat:
+        return
+    m = await client.get_chat_member(chat.id, user_id)
     if m.status != enums.ChatMemberStatus.OWNER:
         return await message.reply_text(lang.approve11)
-    list1 = await approved_users(chat_id)
+    list1 = await approved_users(chat.id)
     if list1 is None:
         return await message.reply_text(lang.approve12)
     btn = InlineKeyboardMarkup(
         [
-            [InlineKeyboardButton(lang.btn11, callback_data=f"unaproveall_{user_id}")],
-            [InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{user_id}")],
+            [
+                InlineKeyboardButton(
+                    lang.btn11, callback_data=f"unaproveall_{user_id}_{chat.id}"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    lang.btn9, callback_data=f"admin_close_{user_id}_{chat.id}"
+                )
+            ],
         ]
     )
     await message.reply_text(
@@ -124,13 +163,16 @@ async def _disappall(client, message, lang):
 
 @app.on_callback_query(filters.regex("^unaproveall_"))
 @language
+@loggable
 async def _unappall(client, query, lang):
     user_id = query.from_user.id
-    chat_id = query.message.chat.id
+    chat_id = int(query.data.split("_")[2])
     if user_id != int(query.data.split("_")[1]):
-        return await query.answer(lang.approve14, show_alert=True)
+        await query.answer(lang.approve14, show_alert=True)
+        return
     await disapprove_all(chat_id)
-    return await query.message.edit_text(lang.approve15)
+    await query.message.edit_text(lang.approve15)
+    return lang.approve18
 
 
 __commands__ = (

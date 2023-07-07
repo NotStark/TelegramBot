@@ -4,7 +4,6 @@ from strings import get_command
 from TeleBot.core.extractions import extract_user_id
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from TeleBot.mongo.approve_db import *
-from TeleBot.core.decorators.chat_status import is_user_admin
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.functions import get_admins, connected

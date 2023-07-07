@@ -59,21 +59,21 @@ async def main():
         LOG.print(f"✨ [bold cyan]ꜱᴜᴄᴄᴇꜱꜱꜰᴜʟʟʏ ʟᴏᴀᴅᴇᴅ: [green]{module_name}.py")
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
-    try:
-        media_type, media = await get_start_media()
-        caption = SUPPORT_SEND_MSG.format(BOT_NAME, v)
-        chat = f"@{config.SUPPORT_CHAT}"
-        await app.send_photo(
-            chat, photo=media, caption=caption
-        ) if media_type == "image" else await app.send_video(
-            chat, video=media, caption=caption
-        )
+    # try:
+    media_type, media = await get_start_media()
+    caption = SUPPORT_SEND_MSG.format(BOT_NAME, v)
+    chat = f"@{config.SUPPORT_CHAT}"
+    await app.send_photo(
+        chat, photo=media, caption=caption
+    ) if media_type == "image" else await app.send_video(
+        chat, video=media, caption=caption
+    )
 
-    except Exception as e:
-        LOG.print(f"[bold red] {e}")
-        LOG.print(
-            "[bold red]ʙᴏᴛ ɪꜱɴ'ᴛ ᴀʙʟᴇ ᴛᴏ ꜱᴇɴᴅ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ @{config.SUPPORT_CHAT}!"
-        )
+    # except Exception as e:
+    #     LOG.print(f"[bold red] {e}")
+    #     LOG.print(
+    #         "[bold red]ʙᴏᴛ ɪꜱɴ'ᴛ ᴀʙʟᴇ ᴛᴏ ꜱᴇɴᴅ ᴀ ᴍᴇꜱꜱᴀɢᴇ ᴛᴏ @{config.SUPPORT_CHAT}!"
+    #     )
 
     await idle()
 

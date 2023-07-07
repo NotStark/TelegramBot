@@ -64,7 +64,7 @@ async def main():
         caption = SUPPORT_SEND_MSG.format(BOT_NAME, v)
         chat = f"@{config.SUPPORT_CHAT}"
         await app.send_photo(
-            chat, photo=config.START_IMG, caption=caption
+            chat, photo=media, caption=caption
         ) if media_type == "image" else await app.send_video(
             chat, video=media, caption=caption
         )

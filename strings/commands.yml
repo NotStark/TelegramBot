@@ -12,3 +12,8 @@ INVITELINK_COMMAND : ["invitelink"]
 ADMINLIST_COMMAND : ["adminlist", "admins"]
 
 # Approve.py
+APPROVE_COMMAND : ["approve"]
+DISAPPROVE_COMMAND : ["disapprove"]
+APPROVED_COMMAND : ["approved"]
+APPROVAL_COMMAND : ["approval"]
+DISAPPROVEALL_COMMAND : ["disapproveall"]

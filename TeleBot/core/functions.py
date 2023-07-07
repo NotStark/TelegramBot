@@ -78,14 +78,15 @@ async def connected(message,user_id : int,lang , need_admin = True ):
     chat = message.chat
     if chat.type == enums.ChatType.PRIVATE :
         if not user_id:
-            return False
+            return None
         connected_chat = await get_connected_chat(user_id)
         if not connected_chat:
-            return False
+            return None
         if need_admin is True:
             if await is_invincible(user_id) or user_id in await get_admins(chat.id):
                 return connected_chat
             await message.reply(lang.admin34)
+            return None
         else:
             if await is_connection_allowed(connected_chat):
                 return connected_chat
@@ -96,7 +97,10 @@ async def connected(message,user_id : int,lang , need_admin = True ):
                 else:
                     return connected_chat
     else:
-        return False
+        if need_admin and ( await is_invincible(user_id) or user_id in await get_admins(chat.id) or user_id == chat.id ) :
+            return chat.id
+        else:
+            return None
     
 
 

@@ -321,7 +321,9 @@ async def _title(client, message, lang):
 async def _botlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
     chat_id = await connected(message, user_id, lang, need_admin=True)
-    if chat_id is False:
+    if chat_id is None:
+        return
+    elif chat_id is False:
         chat = message.chat
     else:
         chat = await client.get_chat(chat_id)
@@ -367,7 +369,9 @@ async def set_sticker(client, message, lang):
 async def _invitelink(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
     chat_id = await connected(message, user_id, lang, need_admin=True)
-    if chat_id is False:
+    if chat_id is None:
+        return
+    elif chat_id is False:
         chat = message.chat
     else:
         chat = await client.get_chat(chat_id)
@@ -391,7 +395,9 @@ async def _invitelink(client, message, lang):
 async def _adminlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
     chat_id = await connected(message, user_id, lang)
-    if chat_id is False:
+    if chat_id is None:
+        return
+    elif chat_id is False:
         chat = message.chat
     else:
         chat = await client.get_chat(chat_id)

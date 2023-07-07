@@ -4,17 +4,10 @@ import uvloop
 import config
 import importlib
 from pyrogram import idle
-from TeleBot import (
-    BOT_NAME, 
-    app, 
-    LOG, 
-    CMD_LIST, 
-    DISABLE_ENABLE_MODULES, 
-    HELPABLE
-  )
+from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES, HELPABLE
 from rich.table import Table
 from config import get_start_media
-from pyrogra import __version__ as v
+from pyrogram import __version__ as v
 from TeleBot.modules import ALL_MODULES
 
 loop = asyncio.get_event_loop()
@@ -38,7 +31,7 @@ LOG_MSG += "●▬▬▬▬▬▬▬▬▬▬▬▬๑۩ ʀᴏʙᴏᴛ ۩๑▬�
 
 
 async def main():
-    global HELPABLE , DISABLE_ENABLE_MODULES
+    global HELPABLE, DISABLE_ENABLE_MODULES
     os.system("clear")
     LOG.print(Table(show_header=True, header_style="bold yellow").add_column(LOG_MSG))
     LOG.print("[bold cyan]ʟᴏᴀᴅɪɴɢ ᴍᴏᴅᴜʟᴇꜱ...")
@@ -53,7 +46,9 @@ async def main():
             if hasattr(module, "__help__") and module.__help__:
                 HELPABLE[module.__mod_name__] = {
                     "help": module.__help__,
-                    "alt_names": getattr(module, "__alt_names__", []).append(module.__mod_name__.lower().replace(" ", "_")),
+                    "alt_names": getattr(module, "__alt_names__", []).append(
+                        module.__mod_name__.lower().replace(" ", "_")
+                    ),
                 }
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
@@ -65,10 +60,14 @@ async def main():
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
     try:
-        media_type , media = await get_start_media()
-        caption = SUPPORT_SEND_MSG.format(BOT_NAME,v)
+        media_type, media = await get_start_media()
+        caption = SUPPORT_SEND_MSG.format(BOT_NAME, v)
         chat = f"@{config.SUPPORT_CHAT}"
-        await app.send_photo(chat,photo=config.START_IMG,caption = caption) if media_type == "image" else await app.send_video(chat,video = media , caption = caption)
+        await app.send_photo(
+            chat, photo=config.START_IMG, caption=caption
+        ) if media_type == "image" else await app.send_video(
+            chat, video=media, caption=caption
+        )
 
     except Exception as e:
         LOG.print(f"[bold red] {e}")

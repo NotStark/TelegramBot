@@ -22,5 +22,5 @@ def loggable(func):
                     except errors.BadRequest as e:
                          await client.send_message(chat.id,f"**ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀɴɪɴɢ ᴡʜɪʟᴇ ʟᴏɢɢɪɴɢ:**\n{e.MESSAGE}\n\n**ᴜɴꜱᴇᴛᴛɪɴɢ ʟᴏɢ ᴄʜᴀɴɴᴇʟ...**")
                          await unset_log(chat.id)        
-            return await handle_exception(func, client, update, chat.id, alert, lang)
+            return result
         return log

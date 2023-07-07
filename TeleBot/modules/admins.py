@@ -8,7 +8,7 @@ from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
 from TeleBot.core.functions import get_admins, connected
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.decorators.chat_status import admins_stuff
-from TeleBot.core.user_manager import is_user_admin , is_bot_admin
+from TeleBot.core.functions import is_user_admin , is_bot_admin
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ChatPrivileges
 from pyrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 from pyrogram.raw.functions.channels import SetStickers

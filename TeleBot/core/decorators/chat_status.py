@@ -5,7 +5,7 @@ from pyrogram.enums import ChatType
 from functools import wraps
 from TeleBot.mongo.lang_db import get_chat_lang
 from pyrogram.errors import ChatWriteForbidden
-from ..user_manager import is_bot_admin , is_user_admin
+from ..functions import is_bot_admin , is_user_admin
 
 
 def admins_stuff(permission: Any = None, bot: bool = False):

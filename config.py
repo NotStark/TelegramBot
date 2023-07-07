@@ -31,6 +31,7 @@ def get_media_type(media):
     return "unknown" , None
 
 async def get_start_media():
+    global START_IMG
     if not START_IMG:
         START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"    
     else:
@@ -39,7 +40,8 @@ async def get_start_media():
     return media_type , media
 
     
-async def get_help_media():      
+async def get_help_media():
+    global HELP_IMG      
     if not HELP_IMG:
         HELP_IMG = "https://i.pinimg.com/564x/81/fd/c2/81fdc237881418f01147ecc367c594f7.jpg"
     else:

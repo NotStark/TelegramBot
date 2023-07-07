@@ -1,6 +1,7 @@
 import time
 import config
 import re
+from config import get_start_media , get_help_media
 from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME, HELPABLE
 from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time
@@ -12,6 +13,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.core.misc import paginate_modules
 
 
+
 START_COMMAND = get_command("START_COMMAND")
 
 
@@ -21,6 +23,7 @@ async def _start(client, message, strings):
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
+    media,type START = await get_start_media()
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
             pass

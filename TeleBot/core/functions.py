@@ -5,7 +5,7 @@ from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
 from time import perf_counter
 from pyrogram import enums 
-from TeleBot.core.decorators.chat_status import is_user_admin
+from .user_manager import is_user_admin
 from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed, disconnect_chat
 
 

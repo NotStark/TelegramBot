@@ -3,7 +3,7 @@ from pyrogram.types import Message
 from TeleBot import app, BOT_ID
 from pyrogram.enums import ChatType
 from functools import wraps
-from TeleBot.core.functions import get_admins, is_invincible
+from ..functions import get_admins, is_invincible
 from .lang import get_chat_lang
 from ..functions import remove_markdown, handle_exception
 

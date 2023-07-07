@@ -10,3 +10,5 @@ BOT_COMMAND : ["bots"]
 SET_STICKERS : ["set_stickers"]
 INVITELINK_COMMAND : ["invitelink"]
 ADMINLIST_COMMAND : ["adminlist", "admins"]
+
+# Approve.py

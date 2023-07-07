@@ -1,5 +1,5 @@
 from TeleBot.mongo import db
-
+from strings import get_string
 
 langdb = db.language
 langm = {}
@@ -22,3 +22,11 @@ async def set_lang(chat_id: int, lang: str):
     await langdb.update_one(
         {"chat_id": chat_id}, {"$set": {"lang": lang}}, upsert=True
     )
+
+
+async def get_chat_lang(chat_id: int):
+    try:
+        language = await get_lang(chat_id)
+    except:
+        language = "en"
+    return get_string(language)

@@ -3,27 +3,11 @@ from pyrogram.types import Message
 from TeleBot import app, BOT_ID
 from pyrogram.enums import ChatType
 from functools import wraps
-from TeleBot.core.decorators.lang import get_chat_lang
+from TeleBot.mongo.lang_db import get_chat_lang
 from TeleBot.core.functions import remove_markdown, get_admins, is_invincible
 from pyrogram.errors import ChatWriteForbidden
 
 
-async def handle_exception(func,client , update ,chat_id : int , alert : bool, lang):
-    try:
-        await func(client, update , lang)
-    except ChatWriteForbidden:
-        await app.leave_chat(chat_id)
-    except Exception as e:
-        txt = None
-        try:
-             txt = str(e.MESSAGE)
-        except AttributeError:
-            txt = str(e)
-        if alert is False:
-            await update.reply(txt)
-        else:
-            await update.answer(txt,show_alert=True)
-        raise e
     
 async def is_bot_admin(chat_id: int, permission: Any = None) -> bool:
     if permission is None and BOT_ID in await get_admins(chat_id):
@@ -103,7 +87,21 @@ def admins_stuff(permission: Any = None, bot: bool = False):
                     await answer(txt, alert)
                 return
 
-            await handle_exception(func, client, update, chat_id, alert, lang)
+            
+            try:
+                await func(client, update , lang)
+            except ChatWriteForbidden:
+                await app.leave_chat(chat_id)
+            except Exception as e:
+                try:
+                    txt = str(e.MESSAGE)
+                except AttributeError:
+                    txt = str(e)
+                if alert is False:
+                    await update.reply(txt)
+                else:
+                    await update.answer(txt,show_alert=True)
+                raise e
 
         return wrapper
 

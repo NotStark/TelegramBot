@@ -3,7 +3,6 @@ import datetime
 from pyrogram.types import CallbackQuery, InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram import errors
 from TeleBot.mongo.log_channel_db import get_log_channel,unset_log
-from .chat_status import handle_exception
 
 
 def loggable(func):

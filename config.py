@@ -1,4 +1,5 @@
 import random
+import mimetypes
 from os import getenv
 from dotenv import load_dotenv
 
@@ -35,6 +36,7 @@ async def get_start_media():
     else:
         START_IMG = random.choice(START_IMG)
     media_type , media = get_media_type(START_IMG)
+    return media_type , media
 
     
 async def get_help_media():      
@@ -43,6 +45,7 @@ async def get_help_media():
     else:
         HELP_IMG = random.choice(HELP_IMG)
     media_type , media = get_media_type(HELP_IMG)
+    return media_type, media
 
 if OWNER_ID not in DEV_USERS:
     DEV_USERS.append(OWNER_ID)

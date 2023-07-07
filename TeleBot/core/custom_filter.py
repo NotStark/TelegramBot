@@ -3,7 +3,6 @@ from config import HANDLERS
 from typing import Union, List
 from pyrogram import  filters
 from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
-from .functions import is_invincible
 from pyrogram.errors import MessageDeleteForbidden
 
 
@@ -63,3 +62,6 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = H
         return False
 
     return filters.create(handler, "CommandFilter", commands=commands, prefixes=prefixes)
+
+
+from .functions import is_invincible

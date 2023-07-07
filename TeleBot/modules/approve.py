@@ -3,7 +3,13 @@ from TeleBot import app
 from strings import get_command
 from TeleBot.core.extractions import extract_user_id
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from TeleBot.mongo.approve_db import *
+from TeleBot.mongo.approve_db import (
+    is_approved,
+    approve_user,
+    approved_users,
+    disapprove_all,
+    disapprove_user,
+)
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.functions import get_admins, connected
@@ -72,8 +78,9 @@ async def _disapprove(client, message, lang):
     await message.reply_text(
         lang.approve6.format(member.user.mention, message.chat.title)
     )
-    return lang.approve17.format(member.user.mention, message.from_user.mention if message.from_user else "Anon")
-
+    return lang.approve17.format(
+        member.user.mention, message.from_user.mention if message.from_user else "Anon"
+    )
 
 
 @app.on_message(command(commands=APPROVED_COMMAND))

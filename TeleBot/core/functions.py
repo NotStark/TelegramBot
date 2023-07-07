@@ -8,7 +8,7 @@ from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
 from pyrogram.errors import ChatWriteForbidden, MessageDeleteForbidden
 from time import perf_counter
-from pyrogram import enums, types
+from pyrogram import enums 
 from TeleBot.core.decorators.chat_status import is_user_admin
 from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed, disconnect_chat
 
@@ -101,28 +101,7 @@ async def connected(message, user_id: int, lang, need_admin=True):
     return message.chat
 
 
-        
-        
-    
-
-
-async def handle_exception(func: Callable,client : Client, update : Union[types.Message,types.CallbackQuery],chat_id : int , alert : bool, lang):
-    try:
-        await func(client, update , lang)
-    except ChatWriteForbidden:
-        await app.leave_chat(chat_id)
-    except Exception as e:
-        txt = None
-        try:
-             txt = str(e.MESSAGE)
-        except AttributeError:
-            txt = str(e)
-        if alert is False:
-            await update.reply(txt)
-        else:
-            await update.answer(txt,show_alert=True)
-        raise e
-    
+          
 
 async def remove_markdown(text: str) -> str:
     patterns = [

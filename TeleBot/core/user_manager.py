@@ -3,7 +3,7 @@ from typing import Any
 
 
 async def is_bot_admin(chat_id: int, permission: Any = None) -> bool:
-    from .functions import is_invincible , get_admins
+    from .functions import get_admins
     if permission is None and BOT_ID in await get_admins(chat_id):
         return True
     else:

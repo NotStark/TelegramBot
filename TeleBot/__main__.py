@@ -13,7 +13,8 @@ from TeleBot import (
     HELPABLE
   )
 from rich.table import Table
-from pyrogram import __version__ as pyrover
+from config import get_start_media
+from pyrogra import __version__ as v
 from TeleBot.modules import ALL_MODULES
 
 loop = asyncio.get_event_loop()
@@ -64,11 +65,11 @@ async def main():
     LOG.print(f"[bold red]​🇧​​🇴​​🇹​ ​🇸​​🇹​​🇦​​🇷​​🇹​​🇪​​🇩​ ​🇦​​🇸​ {BOT_NAME}!")
 
     try:
-        await app.send_photo(
-            f"@{config.SUPPORT_CHAT}",
-            photo=config.START_IMG,
-            caption=SUPPORT_SEND_MSG.format(BOT_NAME, pyrover),
-        )
+        media_type , media = await get_start_media()
+        caption = SUPPORT_SEND_MSG.format(BOT_NAME,v)
+        chat = f"@{config.SUPPORT_CHAT}"
+        await app.send_photo(chat,photo=config.START_IMG,caption = caption) if media_type == "image" else await app.send_video(chat,video = media , caption = caption)
+
     except Exception as e:
         LOG.print(f"[bold red] {e}")
         LOG.print(

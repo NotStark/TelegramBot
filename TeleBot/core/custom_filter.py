@@ -4,8 +4,7 @@ from typing import Union, List
 from pyrogram import  filters
 from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
 from pyrogram.errors import MessageDeleteForbidden
-
-
+from TeleBot.core import functions
 async def disable_action(message, command):
     chat_id = message.chat.id
     sender_id = message.sender_chat.id if message.sender_chat else message.from_user.id
@@ -64,4 +63,5 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = H
     return filters.create(handler, "CommandFilter", commands=commands, prefixes=prefixes)
 
 
-from .functions import is_invincible
+is_invincible = functions.is_invincible
+get_admins = functions.get_admins

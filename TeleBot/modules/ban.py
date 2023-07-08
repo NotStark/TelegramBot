@@ -3,9 +3,10 @@ from pyrogram import filters, enums
 from strings import get_command
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from TeleBot.core.extractions import extract_user_id
-from TeleBot.core.functions import is_invincible, until_date, get_admins
+from TeleBot.core.functions import is_invincible, until_date, get_admins, connected
 from TeleBot.core.extractions import extract_user_and_reason
 from TeleBot.core import custom_filter
+from pathlib import Path
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.decorators.lang import language
@@ -16,6 +17,7 @@ UNBAN_COMMAND = get_command("UNBAN_COMMAND")
 TBAN_COMMAND = get_command("TBAN_COMMAND")
 KICK_COMMAND = get_command("KICK_COMMAND")
 PUNCH_COMMAND = get_command("PUNCH_COMMAND")
+LISTBAN_COMMAND = get_command("LISTBAN_COMMAND")
 
 
 @app.on_message(custom_filter.command(commands=BAN_COMMAND))
@@ -266,13 +268,15 @@ async def _punch(client, message, lang):
         await message.reply_text(lang.admin1)
         return
     if user_id == BOT_ID:
-        return await message.reply(lang.ban13)
+        await message.reply(lang.ban13)
+        return
     if user_id in await get_admins(chat.id):
-        return await message.reply(lang.ban15)
+        await message.reply(lang.ban15)
+        return
 
     if await is_invincible(user_id):
-        return await message.reply(lang.ban16)
-
+        await message.reply(lang.ban16)
+        return
     member = await client.get_chat_member(chat.id, user_id)
     text = lang.ban17.format(
         member.user.mention, user_id, user.mention if user else "Anon"
@@ -302,17 +306,45 @@ async def _punch(client, message, lang):
 @admins_stuff("can_restrict_members", bot=True, user=False)
 @loggable
 async def _kickme(client, message, lang):
-    user_id = message.from_user.id
+    user = message.from_user
     chat_id = message.chat.id
     if user_id in await get_admins(chat_id):
-        return await message.reply(lang.other12)
+        await message.reply(lang.other12)
+        return
     if message.command[0] == "kickme":
-        await client.ban_chat_member(chat_id, user_id)
-        await client.unban_chat_member(chat_id, user_id)
+        await client.ban_chat_member(chat_id, user.id)
+        await client.unban_chat_member(chat_id, user.id)
         await message.reply_text(lang.ban19)
+        return lang.ban23.format(user.mention)
     if message.command[0] == "banme":
-        await client.ban_chat_member(chat_id, user_id)
+        await client.ban_chat_member(chat_id, user.id)
         await message.reply_text(lang.ban20)
+        return lang.ban24.format(user.mention)
+
+
+@app.on_message(custom_filter.command(commands=LISTBAN_COMMAND))
+@language
+async def _listbans(client, message, lang):
+    user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
+    chat = await connected(message, user_id, lang, need_admin=True)
+    if not chat:
+        return
+    txt = lang.ban25
+    async for m in client.get_chat_members(
+        chat.id, filter=enums.ChatMembersFilter.BANNED
+    ):
+        txt += f"\n• {m.user.first_name} ({m.user.id})"
+    if not txt:
+        await message.reply(lang.ban26.format(chat.title))
+    if len(txt) > 4096:
+        file = f"bannedlist{chat.id}.txt"
+        with open(file, "w+") as f:
+            f.write(txt)
+        await message.reply_document(file)
+        Path(file).unlink(missing_ok=True)
+       
+    else:
+        await message.reply(txt)
 
 
 __commands__ = (
@@ -322,8 +354,9 @@ __commands__ = (
     KICK_COMMAND + 
     PUNCH_COMMAND
    )
+
 __mod_name__ = "𝙱ᴀɴ"
-__alt_names__ = ['ban','bans','punch']
+__alt_names__ = ["ban", "bans", "punch"]
 
 __help__ = """
 **⸢sᴛʀɪɴɢ ᴀᴄᴛɪᴏɴs⸥**

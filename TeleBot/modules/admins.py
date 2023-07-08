@@ -242,7 +242,8 @@ async def _group_cmds(client, message, lang):
         return lang.admin16.format(title, user)
     if message.command[0] == "setgdesc":
         if len(message.command) < 2:
-            return await message.reply(lang.admin17)
+            await message.reply(lang.admin17)
+            return
         desc = message.text.split(maxsplit=1)[1]
         if len(desc) > 255:
             return await message.reply_text(lang.admin18)

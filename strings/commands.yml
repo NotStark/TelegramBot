@@ -25,3 +25,13 @@ TBAN_COMMAND : ["tban"]
 KICK_COMMAND : ["kick", "dkick", "skick", "punch"]
 PUNCH_COMMAND : ["kickme", "banme"]
 LISTBAN_COMMAND : ["listban"]
+
+# Connections.py
+ALLOWCONNECT_COMMAND : ["allowconnect"]
+CONNECTION_COMMAND : ["connection"]
+DISCONNECT_COMMAND  : ["disconnect"]
+HELPCONNECT_COMMAND : ["helpconnect"]
+CONNECT_COMMAND : ["connect"]
+
+# Zombies.py
+ZOMBIE_COMMAND : ["zombie","zombies"]

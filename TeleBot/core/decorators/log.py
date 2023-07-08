@@ -10,7 +10,6 @@ def loggable(func):
         async def log(client,update, lang):
             result = await func(client, update, lang)
             message =  update.message if isinstance(update,CallbackQuery) else update
-            alert = True if isinstance(update, CallbackQuery) else False
             chat = message.chat
             if result:
                 result += f"\n\n**ᴇᴠᴇɴ ꜱᴛᴀᴍᴘ** : {datetime.datetime.utcnow().strftime('%H:%M - %d-%m-%Y')}"

@@ -40,6 +40,7 @@ async def main():
     for module_name in ALL_MODULES:
         module = importlib.import_module("TeleBot.modules." + module_name)
         alt_names =  getattr(module, "__alt_names__", [])
+        print(alt_names)
         commands = getattr(module, "__commands__", [])
         CMD_LIST.extend(commands)
 

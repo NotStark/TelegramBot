@@ -37,6 +37,7 @@ async def get_start_media():
     else:
         START_IMG = random.choice(START_IMG)
     media_type , media = get_media_type(START_IMG)
+    print(media_type , media)
     return media_type , media
 
     

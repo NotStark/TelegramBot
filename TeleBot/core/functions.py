@@ -1,6 +1,8 @@
 import re
 import config
 import mimetypes
+import random
+from datetime import datetime , timedelta
 from TeleBot import app
 from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
@@ -177,3 +179,27 @@ async def get_help_media():
         HELP_IMG = random.choice(config.HELP_IMG)
     media_type , media = get_media_type(HELP_IMG)
     return media_type, media
+
+
+async def until_date(message, time_val,lang):
+    time_units = {"m": "minutes", "h": "hours", "d": "days", "w": "weeks"}
+    
+    try:
+        time_amount, time_unit = time_val
+    except (IndexError, ValueError):
+        await message.reply_text(lang.other9)
+        return None, None
+    
+    if time_unit not in time_units:
+        await message.reply_text(lang.other10)
+        return None,None
+    
+    if not time_amount.isdigit():
+        await message.reply_text(lang.other11)
+        return None,None
+    
+    time_amount = int(time_amount)
+    delta_unit = time_units[time_unit]
+    until = datetime.now() + timedelta(**{delta_unit: time_amount})
+      
+    return until,delta_unit

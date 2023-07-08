@@ -1,7 +1,8 @@
 import time
 import asyncio
 from strings import get_command
-from TeleBot import app, get_readable_time
+from TeleBot import app
+from TeleBot.core.functions import get_readable_time
 from pyrogram import filters,errors
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from TeleBot.core.decorators.chat_status import admins_stuff

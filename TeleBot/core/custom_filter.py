@@ -2,7 +2,7 @@ import re
 from config import HANDLERS
 from typing import Union, List
 from pyrogram import  filters
-
+from .functions import disable_action
 
 
 def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = HANDLERS, disable: bool = True ):

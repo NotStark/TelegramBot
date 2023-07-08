@@ -27,18 +27,16 @@ def load_commands():
 
 def load_langs():
     if "en" not in languages:
-        languages["en"] = DotMap(yaml.safe_load(
-            open("./strings/langs/en.yml")
-        ))
+        languages["en"] = DotMap(yaml.safe_load(open("./strings/langs/en.yml")))
 
     for filename in os.listdir("./strings/langs"):
         if filename.endswith(".yml"):
             language_name = filename[:-4]
             if language_name == "en":
                 continue
-            languages[language_name] = DotMap(yaml.safe_load(
-                open(os.path.join("./strings/langs", filename))
-            ))
+            languages[language_name] = DotMap(
+                yaml.safe_load(open(os.path.join("./strings/langs", filename)))
+            )
             for item in languages["en"]:
                 if item not in languages[language_name]:
                     languages[language_name][item] = languages["en"][item]

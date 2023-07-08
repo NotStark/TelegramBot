@@ -23,8 +23,7 @@ HANDLERS = getenv("HANDLERS", ". /").split()
 
 def get_media_type(media):
     mime_type, _ = mimetypes.guess_type(media)
-    print(mime_type)
-    if mime_type is not None:
+    if mime_type:
         if mime_type.startswith("image"):
             return "image" , media
         elif mime_type.startswith("video"):
@@ -37,7 +36,6 @@ async def get_start_media():
         START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"    
     else:
         START_IMG = random.choice(START_IMG)
-    print(START_IMG)
     media_type , media = get_media_type(START_IMG)
     return media_type , media
 

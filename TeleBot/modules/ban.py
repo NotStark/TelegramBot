@@ -79,11 +79,11 @@ async def unban_func(client, message, user_id, from_user, lang):
         await message.reply(lang.admin1)
         return
     if user_id == BOT_ID:
-        await message.reply("ʜᴏᴡ ᴡᴏᴜʟᴅ ɪ ᴜɴʙᴀɴ ᴍʏꜱᴇʟꜰ ɪꜰ ɪ ᴡᴀꜱ'ɴᴛ ʜᴇʀᴇ")
+        await message.reply(lang.ban21)
         return
     member = await client.get_chat_member(chat.id, user_id)
     if member.status != enums.ChatMemberStatus.BANNED:
-        await message.reply_text("ʙʀᴜʜ ᴛʜɪs ᴘᴇʀsᴏɴ ɪs ɴᴏᴛ ʙᴀɴɴᴇᴅ.")
+        await message.reply_text(lang.ban22)
         return
     text = lang.ban8.format(
         member.user.mention, user_id, from_user.mention if from_user else "Anon"
@@ -92,7 +92,7 @@ async def unban_func(client, message, user_id, from_user, lang):
         [
             [
                 InlineKeyboardButton(
-                    "• ᴄʟᴏsᴇ •",
+                    lang.btn9,
                     callback_data=f"admin_close_{from_user.id if from_user else 0}",
                 )
             ]

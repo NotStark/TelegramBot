@@ -36,6 +36,7 @@ async def get_start_media():
         START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"    
     else:
         START_IMG = random.choice(START_IMG)
+    print(START_IMG)
     media_type , media = get_media_type(START_IMG)
     return media_type , media
 

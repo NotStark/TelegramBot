@@ -6,7 +6,7 @@ import importlib
 from pyrogram import idle
 from TeleBot import BOT_NAME, app, LOG, CMD_LIST, DISABLE_ENABLE_MODULES, HELPABLE
 from rich.table import Table
-from config import get_start_media
+from TeleBot.core.functions import get_start_media
 from pyrogram import __version__ as v
 from TeleBot.modules import ALL_MODULES
 

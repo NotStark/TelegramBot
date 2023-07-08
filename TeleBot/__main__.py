@@ -61,6 +61,7 @@ async def main():
 
     try:
         media_type, media = await get_start_media()
+        print(media_type , media)
         caption = SUPPORT_SEND_MSG.format(BOT_NAME, v)
         chat = f"@{config.SUPPORT_CHAT}"
         await app.send_photo(

@@ -1,10 +1,9 @@
 import time
 import config
 import re
-from config import get_start_media, get_help_media
 from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME, HELPABLE
 from TeleBot.core.custom_filter import command
-from TeleBot.core.functions import get_readable_time
+from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
 from strings import get_command
 from pyrogram.enums import ChatType
 from pyrogram import filters

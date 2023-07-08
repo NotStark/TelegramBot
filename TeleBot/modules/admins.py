@@ -450,7 +450,7 @@ __commands__ = (
     + INVITELINK_COMMAND
     + ADMINLIST_COMMAND
 )
-__mod_name__ = "ᴀᴅᴍɪɴꜱ"
+__mod_name__ = "𝙰ᴅᴍɪɴꜱ"
 
 __alt_names__ = ["admins", "admin", "administrator"]
 

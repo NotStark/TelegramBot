@@ -23,6 +23,7 @@ async def _start(client, message, strings):
     chat_id = message.chat.id
     args = message.text.split()
     media_type, media = await get_start_media()
+    print(media_type, media)
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
             pass

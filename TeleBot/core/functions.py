@@ -1,5 +1,6 @@
 import re
 import config
+import mimetypes
 from TeleBot import app
 from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
@@ -147,3 +148,32 @@ async def disable_action(message, command):
             return False
     
     return True
+
+
+
+def get_media_type(media):
+    mime_type, _ = mimetypes.guess_type(media)
+    print(mime_type)
+    if mime_type:
+        if mime_type.startswith("image"):
+            return "image" , media
+        elif mime_type.startswith("video"):
+            return "video" , media
+    return "unknown" , None
+
+async def get_start_media():
+    if not config.START_IMG:
+        START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"    
+    else:
+        START_IMG = random.choice(config.START_IMG)
+    media_type , media = get_media_type(START_IMG)
+    return media_type , media
+
+    
+async def get_help_media():     
+    if not config.HELP_IMG:
+        HELP_IMG = "https://i.pinimg.com/564x/81/fd/c2/81fdc237881418f01147ecc367c594f7.jpg"
+    else:
+        HELP_IMG = random.choice(config.HELP_IMG)
+    media_type , media = get_media_type(HELP_IMG)
+    return media_type, media

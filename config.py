@@ -21,34 +21,7 @@ START_IMG = getenv('START_IMG', '').split()
 HELP_IMG = getenv('HELP_IMG', '')
 HANDLERS = getenv("HANDLERS", ". /").split()
 
-def get_media_type(media):
-    mime_type, _ = mimetypes.guess_type(media)
-    print(mime_type)
-    if mime_type:
-        if mime_type.startswith("image"):
-            return "image" , media
-        elif mime_type.startswith("video"):
-            return "video" , media
-    return "unknown" , None
 
-async def get_start_media():
-    global START_IMG
-    if not START_IMG:
-        START_IMG = "https://i.pinimg.com/564x/01/d6/ae/01d6ae16511ce7d7db7aef7844c119ea.jpg"    
-    else:
-        START_IMG = random.choice(START_IMG)
-    media_type , media = get_media_type(START_IMG)
-    return media_type , media
-
-    
-async def get_help_media():
-    global HELP_IMG      
-    if not HELP_IMG:
-        HELP_IMG = "https://i.pinimg.com/564x/81/fd/c2/81fdc237881418f01147ecc367c594f7.jpg"
-    else:
-        HELP_IMG = random.choice(HELP_IMG)
-    media_type , media = get_media_type(HELP_IMG)
-    return media_type, media
 
 if OWNER_ID not in DEV_USERS:
     DEV_USERS.append(OWNER_ID)

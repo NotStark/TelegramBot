@@ -17,3 +17,10 @@ DISAPPROVE_COMMAND : ["disapprove"]
 APPROVED_COMMAND : ["approved"]
 APPROVAL_COMMAND : ["approval"]
 DISAPPROVEALL_COMMAND : ["disapproveall"]
+
+# Ban.py
+BAN_COMMAND : ["ban", "sban", "dban"]
+UNBAN_COMMAND : ["unban"]
+TBAN_COMMAND : ["tban"]
+KICK_COMMAND : ["kick", "dkick", "skick", "punch"]
+PUNCH_COMMAND : ["kickme", "banme"]

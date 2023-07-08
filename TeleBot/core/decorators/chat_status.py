@@ -8,7 +8,7 @@ from pyrogram.errors import ChatWriteForbidden
 from ..functions import is_bot_admin , is_user_admin
 
 
-def admins_stuff(permission: Any = None, bot: bool = False):
+def admins_stuff(permission: Any = None, bot: bool = False , user : bool = True):
     def decorator(func):
         @wraps(func)
         async def wrapper(client, update):

@@ -39,6 +39,7 @@ async def main():
 
     for module_name in ALL_MODULES:
         module = importlib.import_module("TeleBot.modules." + module_name)
+        alt_names =  getattr(module, "__alt_names__", [])
         commands = getattr(module, "__commands__", [])
         CMD_LIST.extend(commands)
 
@@ -46,7 +47,7 @@ async def main():
             if hasattr(module, "__help__") and module.__help__:
                 HELPABLE[module.__mod_name__] = {
                     "help": module.__help__,
-                    "alt_names": getattr(module, "__alt_names__", []).append(
+                    "alt_names": alt_names.append(
                         module.__mod_name__.lower().replace(" ", "_")
                     ),
                 }

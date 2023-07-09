@@ -18,7 +18,7 @@ async def _setrules(client, message,lang):
     chat = await connected(message,user_id,lang,need_admin=True)
     if not chat:
         return
-    elif chat and not is_user_admin(chat.id,user_id,permission="can_change_info"):
+    elif chat and not await is_user_admin(chat.id,user_id,permission="can_change_info"):
         await message.reply(lang.other3.format("can_change_info",chat.title))
         return
     
@@ -44,7 +44,7 @@ async def _rmrules(client, message,lang):
     chat = await connected(message,user_id,lang,need_admin=True)
     if not chat:
         return
-    elif chat and not is_user_admin(chat.id,user_id,permission="can_change_info"):
+    elif chat and not await is_user_admin(chat.id,user_id,permission="can_change_info"):
         await message.reply(lang.other3.format("can_change_info",chat.title))
         return
     check = await is_rules(chat.id)

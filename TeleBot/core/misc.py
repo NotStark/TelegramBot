@@ -24,7 +24,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
                         prefix, x.__mod_name__.lower()
                     ),
                 )
-                for y,x in module_dict.items()
+                for x in module_dict.values()
             ]
         )
     else:
@@ -36,7 +36,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
                         prefix, chat, x.__mod_name__.lower()
                     ),
                 )
-                for y,x in module_dict.items()
+                for x in module_dict.values()
             ]
         )
 

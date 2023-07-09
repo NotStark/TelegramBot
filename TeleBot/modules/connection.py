@@ -93,9 +93,10 @@ async def _connect(client, message,lang):
     if len(message.command) < 2:
         return await message.reply(lang.connect10)
     chat_id = message.command[1]
-    if not chat_id.isdigit():
+    try:
+        chat_id = int(chat_id)
+    except ValueError:
         return await message.reply(lang.connect11)
-    chat_id = int(chat_id)
     try:
         chat = await client.get_chat(chat_id)
     except errors.BadRequest as e:

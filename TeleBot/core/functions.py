@@ -202,3 +202,14 @@ async def until_date(message, time_val,lang):
     until = datetime.now() + timedelta(**{delta_unit: time_amount})
       
     return until,delta_unit
+
+
+
+async def get_help(module_dict , module_name):
+    for key , value in module_dict.items():
+        module_names = []
+        for name in getattr(value,"__alt_names__",[]) + [key]:
+            module_names.append(name.replace(" ","_"))
+        if module_name in module_names:
+            return key
+

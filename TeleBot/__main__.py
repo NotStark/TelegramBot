@@ -19,7 +19,12 @@ from rich.table import Table
 from pyrogram import __version__ as v
 from TeleBot.modules import ALL_MODULES
 from TeleBot.core.custom_filter import command
-from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
+from TeleBot.core.functions import (
+    get_readable_time,
+    get_start_media,
+    get_help_media,
+    get_help,
+)
 from strings import get_command
 from pyrogram.enums import ChatType
 from pyrogram import filters
@@ -28,7 +33,6 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQ
 from TeleBot.mongo.rules_db import get_rules
 from TeleBot.core.button_parser import button_markdown_parser
 from TeleBot.core.misc import paginate_modules
-from TeleBot.mongo.lang_db import get_chat_lang
 
 
 HELPABLE = {}
@@ -96,10 +100,10 @@ async def main():
     await idle()
 
 
-async def send_help(chat_id, text,lang, keyboard=None):
+async def send_help(chat_id, text, lang, keyboard=None):
     media_type, media = await get_start_media()
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE, "help",lang))
+        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE, "help", lang))
     await app.send_photo(
         chat_id, media, caption=text, reply_markup=keyboard
     ) if media_type == "image" else await app.send_video(
@@ -160,7 +164,7 @@ async def _start(client, update, lang):
                     )
                     raise e
             if args[1] == "help":
-                await send_help(chat_id, lang.help1,lang)
+                await send_help(chat_id, lang.help1, lang)
 
         else:
             first_name = update.from_user.first_name
@@ -182,6 +186,7 @@ async def _start(client, update, lang):
 @language
 async def get_help(client, message, lang):
     chat_id = message.chat.id
+
     args = message.text.split(None, 1)
     chat_type = message.chat.type
     media_type, media = await get_help_media()
@@ -206,8 +211,10 @@ async def get_help(client, message, lang):
         )
         return
 
-    elif len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
-        pass
+    elif len(args) >= 2:
+        module_name = args[1].replace(" ","_")
+        
+        
     else:
         pass
 
@@ -218,10 +225,7 @@ async def help_button(client, query, lang):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
         module = mod_match[1]
-        text = (
-            lang.help3.format(module)
-            + HELPABLE[module].__help__
-        )
+        text = lang.help3.format(module) + HELPABLE[module].__help__
         await query.message.edit_caption(
             text,
             reply_markup=InlineKeyboardMarkup(
@@ -229,7 +233,7 @@ async def help_button(client, query, lang):
             ),
         )
     if query.data == "help_back":
-        btns = paginate_modules(HELPABLE, "help",lang)
+        btns = paginate_modules(HELPABLE, "help", lang)
         await query.message.edit_caption(
             lang.help1, reply_markup=InlineKeyboardMarkup(btns)
         )

@@ -184,11 +184,12 @@ async def get_help(_, message):
     chat_id = message.chat.id
     args = message.text.split(None,1)
     chat_type = message.chat.type
+    media_type , media = await get_help_media()
     if chat_type != ChatType.PRIVATE:
         if len(args) >= 2 :
           pass
         await message.reply_photo(
-            photo = config.HELP_IMG,
+            photo = media,
             caption="ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ɪɴ PM ᴛᴏ ɢᴇᴛ ᴛʜᴇ ʟɪsᴛ ᴏғ ᴘᴏssɪʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs.",
             reply_markup=InlineKeyboardMarkup(
                 [

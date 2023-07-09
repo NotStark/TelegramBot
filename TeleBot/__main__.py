@@ -22,13 +22,13 @@ from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
 from strings import get_command
 from pyrogram.enums import ChatType
-from unidecode import unidecode
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.mongo.rules_db import get_rules
 from TeleBot.core.button_parser import button_markdown_parser
 from TeleBot.core.misc import paginate_modules
+from TeleBot.mongo.lang_db import get_chat_lang
 
 
 HELPABLE = {}
@@ -112,12 +112,14 @@ async def send_help(chat_id, text, keyboard=None):
 @app.on_callback_query(
     filters.regex("start_back") 
 )
-async def _start(client, message, lang):
-    print(lang)
+async def _start(client, message):
+    
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
     media_type, media = await get_start_media()
+    lang = await get_chat_lang(chat_id)
+    print(lang)
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
             if args[1].startswith("rules_"):

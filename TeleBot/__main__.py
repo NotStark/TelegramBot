@@ -24,7 +24,7 @@ from strings import get_command
 from pyrogram.enums import ChatType
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
 from TeleBot.mongo.rules_db import get_rules
 from TeleBot.core.button_parser import button_markdown_parser
 from TeleBot.core.misc import paginate_modules
@@ -112,14 +112,13 @@ async def send_help(chat_id, text, keyboard=None):
 @app.on_callback_query(
     filters.regex("start_back") 
 )
-async def _start(client, message):
-    
+@language
+async def _start(client, message,lang):
+    print(lang)
     uptime = await get_readable_time((time.time() - StartTime))
-    chat_id = message.chat.id
     args = message.text.split()
     media_type, media = await get_start_media()
-    lang = await get_chat_lang(chat_id)
-    print(lang)
+    chat_id = message.chat.id
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
             if args[1].startswith("rules_"):

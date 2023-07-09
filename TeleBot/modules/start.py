@@ -24,7 +24,7 @@ async def _start(client, message, strings):
     media_type, media = await get_start_media()
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
-            pass
+            print(args)
         else:
             first_name = message.from_user.first_name
             btns = InlineKeyboardMarkup(

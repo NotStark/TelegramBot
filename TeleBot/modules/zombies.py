@@ -58,7 +58,7 @@ async def _clean_zombies(client,query,lang):
 
 
 __commands__ = ZOMBIE_COMMAND
-__mod_name__ = "𝚉ᴏᴍʙɪᴇꜱ"
+__mod_name__ = "𝚉ᴏᴍʙɪᴇs"
 __alt_names__ = ["zombies","dedusers"]
 
 __help__ = """

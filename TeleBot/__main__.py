@@ -213,7 +213,7 @@ async def get_help(client, message, lang):
 
     elif len(args) >= 2:
         module_name = args[1].replace(" ","_")
-        
+        print(get_help(HELPABLE,module_name))
         
     else:
         pass

@@ -319,13 +319,14 @@ async def _title(client, message, lang):
 async def _botlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
     chat = await connected(message, user_id, lang, need_admin=True)
+    print(chat)
     if chat is None:
         return
     repl = await message.reply(lang.admin36)
     header = lang.admin37.format(chat.title)
     async for m in client.get_chat_members(chat.id, filter=ChatMembersFilter.BOTS):
         header += f"\n◎ {m.user.mention}"
-    await repl.edit({header})
+    await repl.edit(header)
 
 
 @app.on_message(custom_filter.command(SET_STICKERS))

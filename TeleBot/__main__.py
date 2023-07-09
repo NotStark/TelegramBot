@@ -22,6 +22,7 @@ from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
 from strings import get_command
 from pyrogram.enums import ChatType
+from unidecode import unidecode
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -66,7 +67,7 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__] = module
+                HELPABLE[unidecode(module.__mod_name__).lower()] = module
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,
@@ -113,6 +114,7 @@ async def _start(client, message, lang):
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
+    print(HELPABLE)
     media_type, media = await get_start_media()
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:

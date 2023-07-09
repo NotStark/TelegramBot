@@ -222,9 +222,7 @@ async def _help(client, message, lang):
                     [
                         InlineKeyboardButton(
                             text=lang.btn21,
-                            url="https://t.me/{}?start=ghelp:{}".format(
-                                BOT_USERNAME, module_name
-                            ),
+                            url=f"https://t.me/{BOT_USERNAME}?start=ghelp:{module_name}"
                         )
                     ],
                 ],

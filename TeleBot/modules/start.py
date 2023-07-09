@@ -30,7 +30,7 @@ async def _start(client, message, lang):
                 chat_idd = int(args[1].split("_")[1])
                 rules = await get_rules(chat_idd)
                 if not rules:
-                    return await client.send_messsage(chat_id,lang.rules10)
+                    return await client.send_message(chat_id,lang.rules10)
                 chat = await client.get_chat(chat_idd)
                 try:
                     txt, button = await button_markdown_parser(rules)       

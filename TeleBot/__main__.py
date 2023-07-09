@@ -109,8 +109,11 @@ async def send_help(chat_id, text, keyboard=None):
 
 
 @app.on_message(command(START_COMMAND))
-@language
+@app.on_callback_query(
+    filters.regex("start_back") 
+)
 async def _start(client, message, lang):
+    print(lang)
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()

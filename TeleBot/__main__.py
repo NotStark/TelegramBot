@@ -126,7 +126,7 @@ async def _start(client, update, lang):
             ],
             [
                 InlineKeyboardButton(text=lang.btn2, callback_data="explore_cb"),
-                InlineKeyboardButton(text=lang.btn3, callback_data="Friday_stats"),
+                InlineKeyboardButton(text=lang.btn3, callback_data="telebot_stats"),
             ],
             [InlineKeyboardButton(text=lang.btn4, callback_data="help_back")],
         ]

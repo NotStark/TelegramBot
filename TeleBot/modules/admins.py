@@ -327,15 +327,15 @@ async def _botlist(client, message, lang):
     non_admins = []
     async for m in client.get_chat_members(chat.id, filter=ChatMembersFilter.BOTS):
         if m.privileges:
-            admins.append(m)
+            admins.append(m)» 
         else:
             non_admins.append(m)
     txt = "\n🔱 ᴀᴅᴍɪɴs:"
     for bot in admins:
-        txt += f"\n  ◎ {bot.user.mention}"
+        txt += f"\n  ⇛ {bot.user.mention}"
     text += txt
     for bot in non_admins:
-       text +=  f"\n◎ {bot.user.mention}"
+       text +=  f"\n» {bot.user.mention}"
 
     await repl.edit(text)
 

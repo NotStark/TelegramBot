@@ -214,6 +214,7 @@ async def get_help(client, message, lang):
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 async def help_button(client, query):
+    print(query.data)
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
         module = mod_match[1]

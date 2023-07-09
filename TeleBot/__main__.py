@@ -164,7 +164,7 @@ async def _start(client, update, lang):
                         chat_id, lang.rules9.format(chat.title, rules)
                     )
                     raise e
-            elif args[1].startswith("ghelp:"):
+            elif args[1].startswith("ghelp_"):
                 module_name = args[1].split("_",1)[1]
                 mod = await get_help(HELPABLE, module_name)
                 text = lang.help3.format(mod) + HELPABLE[mod].__help__

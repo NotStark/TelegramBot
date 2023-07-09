@@ -9,6 +9,7 @@ from pyrogram.types import (
     InlineKeyboardMarkup,
     InlineKeyboardButton,
 )
+from TeleBot.core.functions import get_readable_time
 from TeleBot.core.decorators.lang import language
 
 
@@ -95,7 +96,7 @@ async def _explorecb(client, query, lang):
         )
     elif data == "telebot_stats":
         first_name = query.from_user.first_name
-        uptime = time.time() - StartTime
+        uptime = await get_readable_time(time.time() - StartTime)
         rem = psutil.virtual_memory().percent
         disk = psutil.disk_usage("/").percent
         process = psutil.Process(os.getpid())

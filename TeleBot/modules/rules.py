@@ -1,5 +1,5 @@
 from TeleBot import app, BOT_USERNAME
-from pyrogram import filters
+from strings import get_command
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.mongo.rules_db import set_rules, is_rules, clear_rules
 from TeleBot.core import custom_filter
@@ -8,9 +8,11 @@ from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 
 
+SETRULES_COMMAND = get_command("SETRULES_COMMAND")
+RMRULES_COMMAND = get_command("RMRULES_COMMAND")
+RULES_COMMAND = get_command("RULES_COMMAND")
 
-
-@app.on_message(custom_filter.command(commands="setrules"))
+@app.on_message(custom_filter.command(commands=SETRULES_COMMAND))
 @language
 @loggable
 async def _setrules(client, message,lang):
@@ -36,7 +38,7 @@ async def _setrules(client, message,lang):
     return lang.rules4.format(rules,message.from_user.mention if message.from_user else 'Anon')
 
 
-@app.on_message(custom_filter.command(commands="rmrules"))
+@app.on_message(custom_filter.command(commands=RMRULES_COMMAND))
 @language
 @loggable
 async def _rmrules(client, message,lang):
@@ -58,7 +60,7 @@ async def _rmrules(client, message,lang):
     return lang.rules8.format(message.from_user.mention if message.from_user else 'Anon')
 
 
-@app.on_message(custom_filter.command(commands="rules"))
+@app.on_message(custom_filter.command(commands=RULES_COMMAND))
 @language
 async def _getrules(client, message,lang):
     user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
@@ -79,5 +81,24 @@ async def _getrules(client, message,lang):
     )
 
 
-__commands__ = ["rmrules", "setrules", "rules"]
+__commands__ = SETRULES_COMMAND + RULES_COMMAND + RMRULES_COMMAND
 __mod_name__ = "𝚁ᴜʟᴇꜱ"
+__alt_names__ = ["rule","rules"]
+
+__help__ = """
+**⸢sᴇᴛ ʀᴜʟᴇs ғᴏʀ ʏᴏᴜ ᴄʜᴀᴛ sᴏ ᴛʜᴀᴛ ᴍᴇᴍʙᴇʀs ᴋɴᴏᴡ ᴡʜᴀᴛ ᴛᴏ ᴅᴏ ᴀɴᴅ ᴡʜᴀᴛ ɴᴏᴛ ᴛᴏ ᴅᴏ ɪɴ ʏᴏᴜʀ ɢʀᴏᴜᴘ!⸥**
+
+「𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦」 :
+═───────◇───────═
+๏ /ʀᴜʟᴇs: ɢᴇᴛ ᴛʜᴇ ʀᴜʟᴇs ғᴏʀ ᴄᴜʀʀᴇɴᴛ ᴄʜᴀᴛ.
+「𝗔𝗗𝗠𝗜𝗡𝗦 𝗢𝗡𝗟𝗬」
+๏ /sᴇᴛʀᴜʟᴇs <ʀᴜʟᴇs>: sᴇᴛ ᴛʜᴇ ʀᴜʟᴇs ғᴏʀ ᴛʜɪs ᴄʜᴀᴛ, ᴀʟsᴏ ᴡᴏʀᴋs ᴀs ᴀ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇssᴀɢᴇ.
+๏ /ᴄʟᴇᴀʀʀᴜʟᴇs or /rmrules: ᴄʟᴇᴀʀ ᴛʜᴇ ʀᴜʟᴇs ғᴏʀ ᴛʜɪs ᴄʜᴀᴛ.
+
+ғᴏʀᴍᴀᴛᴛɪɴɢ:
+๏ cʜᴇᴄᴋ /ᴍᴀʀᴋᴅᴏᴡɴʜᴇʟᴘ ғᴏʀ ʜᴇʟᴘ ʀᴇʟᴀᴛᴇᴅ ᴛᴏ ғᴏʀᴍᴀᴛᴛɪɴɢ
+═───────◇───────═
+"""
+
+
+

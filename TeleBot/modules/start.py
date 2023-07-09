@@ -1,5 +1,4 @@
 import time
-import config
 import re
 from TeleBot import app, StartTime, BOT_NAME, BOT_USERNAME, HELPABLE
 from TeleBot.core.custom_filter import command
@@ -36,13 +35,11 @@ async def _start(client, message, lang):
                     txt, button = await button_markdown_parser(rules)      
                     if len(button) == 0:
                         button = None
-
                     await client.send_message(chat_id,lang.rules9.format(chat.title,txt),reply_markup =button)
                     return
                 except Exception as e: 
                     await client.send_message(chat_id,lang.rules9.format(chat.title,rules))
                     raise e
-
         else:
             first_name = message.from_user.first_name
             btns = InlineKeyboardMarkup(

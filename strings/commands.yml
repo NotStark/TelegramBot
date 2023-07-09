@@ -35,3 +35,8 @@ CONNECT_COMMAND : ["connect"]
 
 # Zombies.py
 ZOMBIE_COMMAND : ["zombie","zombies"]
+
+# Rules.py
+SETRULES_COMMAND : ["setrules"]
+RMRULES_COMMAND : ["rmrules","removerules","clearrules"]
+RULES_COMMAND : ["rules"]

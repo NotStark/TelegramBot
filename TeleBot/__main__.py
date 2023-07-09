@@ -98,11 +98,12 @@ async def main():
 
 
 async def send_help(chat, text , keyboard = None): 
+    media_type , media = await get_start_media()
     if not keyboard:
         keyboard = InlineKeyboardMarkup(await paginate_modules(HELPABLE,"help"))
     await app.send_photo(
         chat_id=chat,
-        photo=config.START_IMG,
+        photo=media,
         caption=text,
         parse_mode=ParseMode.MARKDOWN,      
         reply_markup=keyboard,

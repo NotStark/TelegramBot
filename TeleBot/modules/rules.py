@@ -82,7 +82,7 @@ async def _getrules(client, message,lang):
 
 
 __commands__ = SETRULES_COMMAND + RULES_COMMAND + RMRULES_COMMAND
-__mod_name__ = "𝚁ᴜʟᴇꜱ"
+__mod_name__ = "𝚁ᴜʟᴇs"
 __alt_names__ = ["rule","rules"]
 
 __help__ = """

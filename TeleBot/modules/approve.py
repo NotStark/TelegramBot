@@ -188,7 +188,7 @@ __commands__ = (
     + APPROVAL_COMMAND
     + DISAPPROVEALL_COMMAND
 )
-__mod_name__ = "𝙰ᴘᴘʀᴏᴠᴇ"
+__mod_name__ = "𝙰ᴘᴘʀᴏᴠᴀʟs"
 __alt_names__ = ["approvals", "approve"]
 
 

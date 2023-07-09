@@ -1,6 +1,6 @@
 from typing import Any
 from pyrogram.types import Message
-from TeleBot import app, BOT_ID
+from TeleBot import app
 from pyrogram.enums import ChatType
 from functools import wraps
 from TeleBot.mongo.lang_db import get_chat_lang

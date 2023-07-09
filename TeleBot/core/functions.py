@@ -3,7 +3,7 @@ import config
 import mimetypes
 import random
 from datetime import datetime , timedelta
-from TeleBot import app
+from TeleBot import app, BOT_ID
 from cachetools import TTLCache
 from pyrogram.enums import ChatMembersFilter
 from time import perf_counter

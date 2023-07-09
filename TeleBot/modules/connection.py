@@ -30,7 +30,7 @@ async def _allow_connect(client, message,lang):
     chat = message.chat
     user = message.from_user.mention if message.from_user else 'Anon'
     if len(message.command) < 2:
-        result = is_connection_allowed(chat.id)
+        result = await is_connection_allowed(chat.id)
         if not result:
             await message.reply(
                 lang.connect1

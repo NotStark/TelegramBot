@@ -324,7 +324,7 @@ async def _botlist(client, message, lang):
     repl = await message.reply(lang.admin36)
     header = lang.admin37.format(chat.title)
     async for m in client.get_chat_members(chat.id, filter=ChatMembersFilter.BOTS):
-        header += f"◎ {m.user.mention}\n"
+        header += f"\n◎ {m.user.mention}"
     await repl.edit({header})
 
 

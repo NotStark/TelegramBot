@@ -142,6 +142,7 @@ async def _start(client, update, lang):
     chat_id = update.chat.id
     if update.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
+            print(args)
             if args[1].startswith("rules_"):
                 chat_idd = int(args[1].split("_")[1])
                 rules = await get_rules(chat_idd)

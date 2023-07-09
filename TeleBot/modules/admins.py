@@ -204,7 +204,7 @@ async def _demote(client, message, lang):
         await message.reply(lang.admin8)
         return
     return await demote_func(
-        client, message, user_id, message.from_user.id if message.from_user else None
+        client, message, user_id, message.from_user.id if message.from_user else None , lang
     )
 
 
@@ -218,7 +218,7 @@ async def _demoteCb(client, query, lang):
         await query.answer(lang.other6, show_alert=True)
         return
     await query.message.delete()
-    return await demote_func(client, query.message, user_id, query.from_user)
+    return await demote_func(client, query.message, user_id, query.from_user,lang)
 
 
 @app.on_message(custom_filter.command(GROUP_COMMANDS))

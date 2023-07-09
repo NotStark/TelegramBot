@@ -165,7 +165,7 @@ async def _start(client, update, lang):
                     )
                     raise e
             elif args[1].startswith("ghelp:"):
-                module_name = args[1].split(":")[1]
+                module_name = args[1].split("_",1)[1]
                 mod = await get_help(HELPABLE, module_name)
                 text = lang.help3.format(mod) + HELPABLE[mod].__help__
                 await send_help(
@@ -222,7 +222,7 @@ async def _help(client, message, lang):
                     [
                         InlineKeyboardButton(
                             text=lang.btn21,
-                            url=f"https://t.me/{BOT_USERNAME}?start=ghelp:{module_name}"
+                            url=f"https://t.me/{BOT_USERNAME}?start=ghelp_{module_name}"
                         )
                     ],
                 ],

@@ -1,6 +1,6 @@
 from TeleBot import app, BOT_ID
 from pathlib import Path
-from TeleBot.core import custom_filter 
+from TeleBot.core import custom_filter
 from strings import get_command
 from pyrogram import filters, errors
 from TeleBot.core.decorators.lang import language
@@ -8,7 +8,7 @@ from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
 from TeleBot.core.functions import get_admins, connected
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.decorators.chat_status import admins_stuff
-from TeleBot.core.functions import is_user_admin , is_bot_admin
+from TeleBot.core.functions import is_user_admin, is_bot_admin
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ChatPrivileges
 from pyrogram.enums import ChatMemberStatus, ChatMembersFilter, ChatType
 from pyrogram.raw.functions.channels import SetStickers
@@ -204,7 +204,11 @@ async def _demote(client, message, lang):
         await message.reply(lang.admin8)
         return
     return await demote_func(
-        client, message, user_id, message.from_user.id if message.from_user else None , lang
+        client,
+        message,
+        user_id,
+        message.from_user.id if message.from_user else None,
+        lang,
     )
 
 
@@ -218,7 +222,7 @@ async def _demoteCb(client, query, lang):
         await query.answer(lang.other6, show_alert=True)
         return
     await query.message.delete()
-    return await demote_func(client, query.message, user_id, query.from_user,lang)
+    return await demote_func(client, query.message, user_id, query.from_user, lang)
 
 
 @app.on_message(custom_filter.command(GROUP_COMMANDS))
@@ -334,7 +338,7 @@ async def _botlist(client, message, lang):
         txt += f"\n  ⇛ {bot.user.mention}"
     text += txt
     for bot in non_admins:
-       text +=  f"\n» {bot.user.mention}"
+        text += f"\n» {bot.user.mention}"
 
     await repl.edit(text)
 
@@ -396,7 +400,7 @@ async def _invitelink(client, message, lang):
 @language
 async def _adminlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat = await connected(message, user_id, lang,need_admin=False)
+    chat = await connected(message, user_id, lang, need_admin=False)
     if chat is None:
         return
     repl = await message.reply(lang.admin45)
@@ -406,7 +410,7 @@ async def _adminlist(client, message, lang):
     ):
         if not m.user.is_bot:
             administrators.append(m)
-            
+
     text = lang.admin46.format(chat.title)
     custom_admin_list = {}
     normal_admin_list = []

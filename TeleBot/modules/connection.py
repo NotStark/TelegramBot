@@ -17,6 +17,8 @@ from TeleBot.core.decorators.lang import language
 from  TeleBot.core.functions import remove_markdown
 
 
+# TODO conection True False
+
 ALLOWCONNECT_COMMAND = get_command("ALLOWCONNECT_COMMAND")
 CONNECTION_COMMAND = get_command("CONNECTION_COMMAND")
 DISCONNECT_COMMAND = get_command("DISCONNECT_COMMAND")
@@ -91,6 +93,7 @@ async def help_connect(client, message,lang):
 async def _connect(client, message,lang):
     if message.sender_chat:
         return
+    
     if len(message.command) < 2:
         return await message.reply(lang.connect10)
     chat_id = message.command[1]

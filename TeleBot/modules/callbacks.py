@@ -1,7 +1,6 @@
 import os
 import time
 import psutil
-import strings
 import config
 from pyrogram import filters, __version__ as pyro
 from TeleBot import app, StartTime, BOT_NAME, OWNER_USERNAME
@@ -83,7 +82,7 @@ async def _explorecb(client, query, lang):
                     ],
                     [
                         InlineKeyboardButton(
-                           lang.btn29, url=f"https://github.com/NotStark"
+                            lang.btn29, url=f"https://github.com/NotStark"
                         ),
                     ],
                     [InlineKeyboardButton(lang.btn22, callback_data="start_back")],
@@ -92,7 +91,10 @@ async def _explorecb(client, query, lang):
         )
     elif data == "telebot_tos":
         await query.message.edit_caption(
-            lang.cb5,reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(lang.btn22, callback_data="start_back")]])
+            lang.cb5,
+            reply_markup=InlineKeyboardMarkup(
+                [[InlineKeyboardButton(lang.btn22, callback_data="start_back")]]
+            ),
         )
     elif data == "telebot_stats":
         first_name = query.from_user.first_name

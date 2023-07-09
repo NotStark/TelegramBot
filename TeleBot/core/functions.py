@@ -56,6 +56,7 @@ async def connected(message, user_id: int, lang, need_admin=True):
     if message.chat.type == enums.ChatType.PRIVATE:
         connected_chat = await get_connected_chat(user_id)
         if not connected_chat:
+            await message.reply(lang.other1):
             return None
 
         if need_admin and not await is_user_admin(connected_chat, user_id):

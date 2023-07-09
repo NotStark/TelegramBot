@@ -138,7 +138,7 @@ async def _connectCb(client, query,lang):
             return await query.answer(
                 lang.connect14
             )
-        await connect_chat(user_id, chat.id)
+        await connect_chat(int(user_id), chat_id)
         return await query.message.edit(
             lang.connect15.format(chat.title)
         )
@@ -149,7 +149,7 @@ async def _connectCb(client, query,lang):
                 lang.connect16.format(chat.title),
                 show_alert=True,
             )
-        await connect_chat(user_id, chat.id)
+        await connect_chat(int(user_id), chat.id)
         return await query.message.edit(
             lang.connect17.format(chat.title)
         )

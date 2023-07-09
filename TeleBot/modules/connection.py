@@ -143,7 +143,7 @@ async def _connectCb(client, query,lang):
             lang.connect15.format(chat.title)
         )
     if callback_type == "user":
-        result = is_connection_allowed(chat.id)
+        result = await is_connection_allowed(chat.id)
         if not result:
             await query.answer(
                 lang.connect16.format(chat.title),

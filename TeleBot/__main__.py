@@ -25,8 +25,8 @@ from pyrogram.enums import ChatType
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from ..mongo.rules_db import get_rules
-from ..core.button_parser import button_markdown_parser
+from TeleBot.mongo.rules_db import get_rules
+from TeleBot.core.button_parser import button_markdown_parser
 
 
 

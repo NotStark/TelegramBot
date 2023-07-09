@@ -15,7 +15,7 @@ from TeleBot.core.decorators.log import loggable
 @loggable
 async def _setrules(client, message,lang):
     user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
-    chat = connected(message,user_id,lang,need_admin=True)
+    chat = await connected(message,user_id,lang,need_admin=True)
     if not chat:
         return
     elif chat and not is_user_admin(chat.id,user_id,permission="can_change_info"):
@@ -41,7 +41,7 @@ async def _setrules(client, message,lang):
 @loggable
 async def _rmrules(client, message,lang):
     user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
-    chat = connected(message,user_id,lang,need_admin=True)
+    chat = await connected(message,user_id,lang,need_admin=True)
     if not chat:
         return
     elif chat and not is_user_admin(chat.id,user_id,permission="can_change_info"):
@@ -62,7 +62,7 @@ async def _rmrules(client, message,lang):
 @language
 async def _getrules(client, message,lang):
     user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
-    chat = connected(message,user_id,lang,need_admin=False)
+    chat = await connected(message,user_id,lang,need_admin=False)
     if not chat:
         return
     btn = InlineKeyboardMarkup(

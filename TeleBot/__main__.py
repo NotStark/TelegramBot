@@ -213,8 +213,8 @@ async def get_help(client, message, lang):
 
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
-async def help_button(client, query):
-    print(query.data)
+@language
+async def help_button(client, query,lang):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
         module = mod_match[1]
@@ -228,6 +228,9 @@ async def help_button(client, query):
                 [[InlineKeyboardButton(text="ʙᴀᴄᴋ", callback_data="help_back")]]
             ),
         )
+    if query.data == "help_back":
+        btns = paginate_modules(HELPABLE,"help")
+        await query.message.edit_caption(lang.help2,reply_markup = InlineKeyboardMarkup(btns))
 
 
 if __name__ == "__main__":

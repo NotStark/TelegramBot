@@ -71,7 +71,7 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__.replace(" ","_")] = module
+                HELPABLE[module.__mod_name__.replace(" ", "_")] = module
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,
@@ -163,7 +163,26 @@ async def _start(client, update, lang):
                         chat_id, lang.rules9.format(chat.title, rules)
                     )
                     raise e
-            if args[1] == "help":
+            elif args[1].startswith("ghelp:"):
+                module_name = args[1].split(":")[1]
+                mod = await get_help(HELPABLE, module_name)
+                text = lang.help3.format(mod) + HELPABLE[mod].__help__
+                await send_help(
+                    chat_id,
+                    text,
+                    lang,
+                    keyboard=InlineKeyboardMarkup(
+                        [
+                            [
+                                InlineKeyboardButton(
+                                    text=lang.btn22, callback_data="help_back"
+                                )
+                            ]
+                        ]
+                    ),
+                )
+
+            elif args[1] == "help":
                 await send_help(chat_id, lang.help1, lang)
 
         else:
@@ -192,18 +211,35 @@ async def _help(client, message, lang):
     media_type, media = await get_help_media()
     if chat_type != ChatType.PRIVATE:
         if len(args) >= 2:
-            pass
-        caption = lang.help2
-        btn = InlineKeyboardMarkup(
-            [
+            module_name = args[1].replace(" ", "_")
+            mod = await get_help(HELPABLE, module_name)
+            if not mod:
+                return await message.reply(lang.help4)
+            caption = lang.help5.format(mod)
+            btn = InlineKeyboardMarkup(
                 [
-                    InlineKeyboardButton(
-                        text=lang.btn21,
-                        url="https://t.me/{}?start=help".format(BOT_USERNAME),
-                    )
+                    [
+                        InlineKeyboardButton(
+                            text=lang.btn21,
+                            url="https://t.me/{}?start=ghelp:{}".format(
+                                BOT_USERNAME, module_name
+                            ),
+                        )
+                    ],
                 ],
-            ],
-        )
+            )
+        else:
+            caption = lang.help2
+            btn = InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text=lang.btn21,
+                            url="https://t.me/{}?start=help".format(BOT_USERNAME),
+                        )
+                    ],
+                ],
+            )
         await message.reply_photo(
             media, caption=caption, reply_markup=btn
         ) if media_type == "image" else await message.reply_video(
@@ -212,17 +248,22 @@ async def _help(client, message, lang):
         return
 
     elif len(args) >= 2:
-        module_name = args[1].replace(" ","_")
-        mod = await get_help(HELPABLE,module_name)
+        module_name = args[1].replace(" ", "_")
+        mod = await get_help(HELPABLE, module_name)
         if not mod:
             return await message.reply(lang.help4)
         text = lang.help3.format(mod) + HELPABLE[mod].__help__
-        await send_help(chat_id,text,lang,keyboard=InlineKeyboardMarkup([[InlineKeyboardButton(text=lang.btn22, callback_data="help_back")]]))
-        
+        await send_help(
+            chat_id,
+            text,
+            lang,
+            keyboard=InlineKeyboardMarkup(
+                [[InlineKeyboardButton(text=lang.btn22, callback_data="help_back")]]
+            ),
+        )
 
-        
     else:
-        await send_help(chat_id,lang.help1,lang)
+        await send_help(chat_id, lang.help1, lang)
 
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))

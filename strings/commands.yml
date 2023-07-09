@@ -43,3 +43,6 @@ ZOMBIE_COMMAND : ["zombie","zombies"]
 SETRULES_COMMAND : ["setrules"]
 RMRULES_COMMAND : ["rmrules","removerules","clearrules"]
 RULES_COMMAND : ["rules"]
+
+# Reports.py
+REPORTS_COMMAND : ["reports"]

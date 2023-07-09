@@ -114,7 +114,6 @@ async def _start(client, message, lang):
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
-    print(HELPABLE)
     media_type, media = await get_start_media()
     if message.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:

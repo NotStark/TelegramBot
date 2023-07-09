@@ -14,8 +14,7 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
 
 
 def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
-    for x in module_dict:
-        print(x)
+    
     if not chat:
         modules = sorted(
             [
@@ -25,7 +24,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
                         prefix, x.__mod_name__.lower()
                     ),
                 )
-                for x in module_dict
+                for y,x in module_dict.items()
             ]
         )
     else:
@@ -37,7 +36,7 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
                         prefix, chat, x.__mod_name__.lower()
                     ),
                 )
-                for x in module_dict
+                for y,x in module_dict.items()
             ]
         )
 

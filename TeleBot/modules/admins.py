@@ -322,10 +322,22 @@ async def _botlist(client, message, lang):
     if chat is None:
         return
     repl = await message.reply(lang.admin36)
-    header = lang.admin37.format(chat.title)
+    text = lang.admin37.format(chat.title)
+    admins = []
+    non_admins = []
     async for m in client.get_chat_members(chat.id, filter=ChatMembersFilter.BOTS):
-        header += f"\n◎ {m.user.mention}"
-    await repl.edit(header)
+        if m.privileges:
+            admins.append(m)
+        else:
+            non_admins.append(m)
+    txt = "\n🔱 ᴀᴅᴍɪɴs:"
+    for bot in admins:
+        txt += f"\n  s◎ {bot.user.mention}"
+    text += txt
+    for bot in non_admins:
+        f"\n◎ {bot.user.mention}"
+
+    await repl.edit(text)
 
 
 @app.on_message(custom_filter.command(SET_STICKERS))

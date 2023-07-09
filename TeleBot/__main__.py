@@ -231,7 +231,7 @@ async def help_button(client, query, lang):
     if query.data == "help_back":
         btns = paginate_modules(HELPABLE, "help")
         await query.message.edit_caption(
-            lang.help2, reply_markup=InlineKeyboardMarkup(btns)
+            lang.help1, reply_markup=InlineKeyboardMarkup(btns)
         )
 
 

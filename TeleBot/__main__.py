@@ -21,12 +21,13 @@ from TeleBot.modules import ALL_MODULES
 from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
 from strings import get_command
-from pyrogram.enums import ChatType
+from pyrogram.enums import ChatType,ParseMode
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.mongo.rules_db import get_rules
 from TeleBot.core.button_parser import button_markdown_parser
+from TeleBot.core.misc import paginate_modules
 
 
 
@@ -96,12 +97,21 @@ async def main():
 
 
 
-
+async def send_help(chat, text , keyboard = None): 
+    if not keyboard:
+        keyboard = InlineKeyboardMarkup(await paginate_modules(HELPABLE,"help"))
+    await app.send_photo(
+        chat_id=chat,
+        photo=config.START_IMG,
+        caption=text,
+        parse_mode=ParseMode.MARKDOWN,      
+        reply_markup=keyboard,
+    )
+    return (text, keyboard)
 
 @app.on_message(command(START_COMMAND))
 @language
 async def _start(client, message, lang):
-    print(HELPABLE["𝚁ᴜʟᴇꜱ"].__alt_names__)
     uptime = await get_readable_time((time.time() - StartTime))
     chat_id = message.chat.id
     args = message.text.split()
@@ -129,6 +139,9 @@ async def _start(client, message, lang):
                         chat_id, lang.rules9.format(chat.title, rules)
                     )
                     raise e
+            if args[1] == "help":
+                await send_help(chat_id,lang.help1)
+
         else:
             first_name = message.from_user.first_name
             btns = InlineKeyboardMarkup(
@@ -165,6 +178,38 @@ async def _start(client, message, lang):
             media, caption=caption
         )
 
+
+@app.on_message(filters.command("help"))
+async def get_help(_, message):
+    chat_id = message.chat.id
+    args = message.text.split(None,1)
+    chat_type = message.chat.type
+    if chat_type != ChatType.PRIVATE:
+        if len(args) >= 2 :
+          pass
+        await message.reply_photo(
+            photo = config.HELP_IMG,
+            caption="ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ɪɴ PM ᴛᴏ ɢᴇᴛ ᴛʜᴇ ʟɪsᴛ ᴏғ ᴘᴏssɪʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs.",
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [
+                        InlineKeyboardButton(
+                            text="ʜᴇʟᴘ",
+                            url="https://t.me/{}?start=help".format(
+                                BOT_USERNAME
+                            ),
+                        )
+                    ],
+                    
+                ],
+            ),
+        )
+        return
+
+    elif len(args) >= 2 and any(args[1].lower() == x for x in HELPABLE):
+        pass
+    else:
+        pass
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 async def help_button(client, query):

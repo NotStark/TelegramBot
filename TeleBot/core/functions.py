@@ -155,7 +155,6 @@ async def disable_action(message, command):
 
 def get_media_type(media):
     mime_type, _ = mimetypes.guess_type(media)
-    print(mime_type)
     if mime_type:
         if mime_type.startswith("image"):
             return "image" , media

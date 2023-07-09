@@ -21,14 +21,13 @@ from TeleBot.modules import ALL_MODULES
 from TeleBot.core.custom_filter import command
 from TeleBot.core.functions import get_readable_time, get_start_media, get_help_media
 from strings import get_command
-from pyrogram.enums import ChatType,ParseMode
+from pyrogram.enums import ChatType
 from pyrogram import filters
 from TeleBot.core.decorators.lang import language
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from TeleBot.mongo.rules_db import get_rules
 from TeleBot.core.button_parser import button_markdown_parser
 from TeleBot.core.misc import paginate_modules
-
 
 
 HELPABLE = {}
@@ -96,19 +95,17 @@ async def main():
     await idle()
 
 
-
-async def send_help(chat, text , keyboard = None): 
-    media_type , media = await get_start_media()
+async def send_help(chat_id, text, keyboard=None):
+    media_type, media = await get_start_media()
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE,"help"))
+        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE, "help"))
     await app.send_photo(
-        chat_id=chat,
-        photo=media,
-        caption=text,
-        parse_mode=ParseMode.MARKDOWN,      
-        reply_markup=keyboard,
+        chat_id, media, caption=text, reply_markup=keyboard
+    ) if media_type == "image" else await app.send_video(
+        chat_id, media, caption=text, reply_markup=keyboard
     )
     return (text, keyboard)
+
 
 @app.on_message(command(START_COMMAND))
 @language
@@ -141,7 +138,7 @@ async def _start(client, message, lang):
                     )
                     raise e
             if args[1] == "help":
-                await send_help(chat_id,lang.help1)
+                await send_help(chat_id, lang.help1)
 
         else:
             first_name = message.from_user.first_name
@@ -181,30 +178,30 @@ async def _start(client, message, lang):
 
 
 @app.on_message(filters.command("help"))
-async def get_help(_, message):
+@language
+async def get_help(client, message, lang):
     chat_id = message.chat.id
-    args = message.text.split(None,1)
+    args = message.text.split(None, 1)
     chat_type = message.chat.type
-    media_type , media = await get_help_media()
+    media_type, media = await get_help_media()
     if chat_type != ChatType.PRIVATE:
-        if len(args) >= 2 :
-          pass
-        await message.reply_photo(
-            photo = media,
-            caption="ᴄᴏɴᴛᴀᴄᴛ ᴍᴇ ɪɴ PM ᴛᴏ ɢᴇᴛ ᴛʜᴇ ʟɪsᴛ ᴏғ ᴘᴏssɪʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs.",
-            reply_markup=InlineKeyboardMarkup(
+        if len(args) >= 2:
+            pass
+        caption = lang.help2
+        btn = InlineKeyboardMarkup(
+            [
                 [
-                    [
-                        InlineKeyboardButton(
-                            text="ʜᴇʟᴘ",
-                            url="https://t.me/{}?start=help".format(
-                                BOT_USERNAME
-                            ),
-                        )
-                    ],
-                    
+                    InlineKeyboardButton(
+                        text=lang.btn21,
+                        url="https://t.me/{}?start=help".format(BOT_USERNAME),
+                    )
                 ],
-            ),
+            ],
+        )
+        await message.reply_photo(
+            media, caption=caption, reply_markup=btn
+        ) if media_type == "image" else await message.reply_video(
+            media, caption=caption, reply_markup=btn
         )
         return
 
@@ -212,6 +209,7 @@ async def get_help(_, message):
         pass
     else:
         pass
+
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 async def help_button(client, query):

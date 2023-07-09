@@ -34,7 +34,7 @@ async def _start(client, message, lang):
                 chat = await client.get_chat(chat_idd)
                 try:
                     txt, button = await button_markdown_parser(rules)       
-                    return await client.send_message(chat_id,lang.rules9.format(chat.title,txt),reply_markup = InlineKeyboardMarkup(button))
+                    await client.send_message(chat_id,lang.rules9.format(chat.title,txt),reply_markup = InlineKeyboardMarkup(button))
                 except Exception as e: 
                     await client.send_message(chat_id,lang.rules9.format(chat.title,rules))
                     raise e

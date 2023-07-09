@@ -14,6 +14,7 @@ from TeleBot.core import custom_filter
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.decorators.lang import language
+from  TeleBot.core.functions import remove_markdown
 
 
 ALLOWCONNECT_COMMAND = get_command("ALLOWCONNECT_COMMAND")
@@ -146,9 +147,10 @@ async def _connectCb(client, query,lang):
         result = await is_connection_allowed(chat.id)
         if not result:
             await query.answer(
-                lang.connect16.format(chat.title),
+                await remove_markdown(lang.connect16.format(chat.title)),
                 show_alert=True,
             )
+            return
         await connect_chat(int(user_id), chat.id)
         return await query.message.edit(
             lang.connect17.format(chat.title)

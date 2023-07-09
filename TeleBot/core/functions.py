@@ -13,6 +13,7 @@ from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed
 from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
 from pyrogram.errors import MessageDeleteForbidden
 
+
 async def is_invincible(user_id : int) -> bool:
   INVINCIBLES  = config.SUDO_USERS + config.DEV_USERS 
   return user_id in INVINCIBLES

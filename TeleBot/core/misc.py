@@ -13,7 +13,7 @@ class EqInlineKeyboardButton(InlineKeyboardButton):
         return self.text > other.text
 
 
-def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
+def paginate_modules(module_dict: Dict, prefix,lang, chat=None) -> List:
     
     if not chat:
         modules = sorted(
@@ -47,6 +47,6 @@ def paginate_modules(module_dict: Dict, prefix, chat=None) -> List:
     if calc in (1, 2):
         pairs.append((modules[-1],))
     else:
-        pairs += [[EqInlineKeyboardButton("ɢᴏ ʙᴀᴄᴋ", callback_data="start_back")]]
+        pairs += [[EqInlineKeyboardButton(lang.btn22, callback_data="start_back")]]
 
     return pairs

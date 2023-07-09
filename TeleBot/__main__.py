@@ -96,10 +96,10 @@ async def main():
     await idle()
 
 
-async def send_help(chat_id, text, keyboard=None):
+async def send_help(chat_id, text,lang, keyboard=None):
     media_type, media = await get_start_media()
     if not keyboard:
-        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE, "help"))
+        keyboard = InlineKeyboardMarkup(paginate_modules(HELPABLE, "help",lang))
     await app.send_photo(
         chat_id, media, caption=text, reply_markup=keyboard
     ) if media_type == "image" else await app.send_video(
@@ -160,7 +160,7 @@ async def _start(client, update, lang):
                     )
                     raise e
             if args[1] == "help":
-                await send_help(chat_id, lang.help1)
+                await send_help(chat_id, lang.help1,lang)
 
         else:
             first_name = update.from_user.first_name
@@ -219,17 +219,17 @@ async def help_button(client, query, lang):
     if mod_match:
         module = mod_match[1]
         text = (
-            "» **ᴀᴠᴀɪʟᴀʙʟᴇ ᴄᴏᴍᴍᴀɴᴅs ꜰᴏʀ** **{}** :\n".format(module)
+            lang.help3.format(module)
             + HELPABLE[module].__help__
         )
         await query.message.edit_caption(
             text,
             reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text="ʙᴀᴄᴋ", callback_data="help_back")]]
+                [[InlineKeyboardButton(text=lang.btn22, callback_data="help_back")]]
             ),
         )
     if query.data == "help_back":
-        btns = paginate_modules(HELPABLE, "help")
+        btns = paginate_modules(HELPABLE, "help",lang)
         await query.message.edit_caption(
             lang.help1, reply_markup=InlineKeyboardMarkup(btns)
         )

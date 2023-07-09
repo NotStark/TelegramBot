@@ -70,7 +70,7 @@ async def connected(message, user_id: int, lang, need_admin=True):
 
         return chat
 
-    elif need_admin and not await is_user_admin(user_id):
+    elif need_admin and not await is_user_admin(message.chat.id,user_id):
         await message.reply(lang.admin34)
         return None
 

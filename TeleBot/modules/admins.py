@@ -335,7 +335,7 @@ async def _botlist(client, message, lang):
         txt += f"\n  ◎ {bot.user.mention}"
     text += txt
     for bot in non_admins:
-        f"\n◎ {bot.user.mention}"
+       text +=  f"\n◎ {bot.user.mention}"
 
     await repl.edit(text)
 

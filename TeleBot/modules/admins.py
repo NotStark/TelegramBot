@@ -121,27 +121,27 @@ async def _promotecb(client, query, lang):
         await query.answer(lang.other6, show_alert=True)
         return
     chat = query.message.chat
-    user = await client.get_chat_member(chat.id, int(user_id))
+    member = await client.get_chat_member(chat.id, int(user_id))
     await query.message.delete()
     for statuss in ["normal", "full", "low", "mid"]:
         if statuss == status:
             chat_rights = await get_chat_privileges(client, status, chat.id)
             try:
-                await client.promote_chat_member(chat.id, user.id, chat_rights)
+                await client.promote_chat_member(chat.id, member.user.id, chat_rights)
 
             except errors.BadRequest as err:
                 if err.MESSAGE == "USER_NOT_PARTICIPANT":
                     await query.message.reply(lang.admin5)
                     return
             await client.send_message(
-                user.chat.id,
-                lang.admin6.format(user.user.mention, chat.title, status),
+                chat.id,
+                lang.admin6.format(member.user.mention, chat.title, status),
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
                             InlineKeyboardButton(
                                 text=lang.btn10,
-                                callback_data=f"demote_{user_id}_{from_user_id}_{chat_id}",
+                                callback_data=f"demote_{user_id}_{from_user_id}",
                             )
                         ],
                         [
@@ -152,7 +152,7 @@ async def _promotecb(client, query, lang):
                     ]
                 ),
             )
-    return lang.admin7.format(user.user.mention, from_user.mention)
+    return lang.admin7.format(member.user.mention, from_user.mention)
 
 
 async def demote_func(client, message, user_id, from_user, lang):

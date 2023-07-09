@@ -184,7 +184,7 @@ async def _start(client, update, lang):
 
 @app.on_message(filters.command("help"))
 @language
-async def get_help(client, message, lang):
+async def _help(client, message, lang):
     chat_id = message.chat.id
 
     args = message.text.split(None, 1)

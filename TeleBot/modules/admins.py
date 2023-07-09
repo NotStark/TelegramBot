@@ -332,7 +332,7 @@ async def _botlist(client, message, lang):
             non_admins.append(m)
     txt = "\n🔱 ᴀᴅᴍɪɴs:"
     for bot in admins:
-        txt += f"\n  s◎ {bot.user.mention}"
+        txt += f"\n  ◎ {bot.user.mention}"
     text += txt
     for bot in non_admins:
         f"\n◎ {bot.user.mention}"

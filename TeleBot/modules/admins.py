@@ -385,7 +385,7 @@ async def _invitelink(client, message, lang):
 @language
 async def _adminlist(client, message, lang):
     user_id = message.from_user.id if message.from_user else None
-    chat = await connected(message, user_id, lang)
+    chat = await connected(message, user_id, lang,need_admin=False)
     if chat is None:
         return
     repl = await message.reply(lang.admin45)

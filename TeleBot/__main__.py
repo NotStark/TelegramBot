@@ -109,17 +109,34 @@ async def send_help(chat_id, text, keyboard=None):
 
 
 @app.on_message(command(START_COMMAND))
-@app.on_callback_query(
-    filters.regex("start_back") 
-)
+@app.on_callback_query(filters.regex("start_back"))
 @language
-async def _start(client, message,lang):
-    print(lang)
+async def _start(client, update, lang):
     uptime = await get_readable_time((time.time() - StartTime))
-    args = message.text.split()
+    btns = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text=lang.btn1,
+                    url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
+                ),
+            ],
+            [
+                InlineKeyboardButton(text=lang.btn2, callback_data="explore_cb"),
+                InlineKeyboardButton(text=lang.btn3, callback_data="Friday_stats"),
+            ],
+            [InlineKeyboardButton(text=lang.btn4, callback_data="help_back")],
+        ]
+    )
+    if isinstance(update, CallbackQuery):
+        first_name = update.from_user.first_name
+        caption = lang.start1.format(first_name, BOT_NAME, uptime)
+        return await update.message.edit_caption(caption, reply_markup=btns)
+
+    args = update.text.split()
     media_type, media = await get_start_media()
-    chat_id = message.chat.id
-    if message.chat.type == ChatType.PRIVATE:
+    chat_id = update.chat.id
+    if update.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
             if args[1].startswith("rules_"):
                 chat_idd = int(args[1].split("_")[1])
@@ -146,26 +163,7 @@ async def _start(client, message,lang):
                 await send_help(chat_id, lang.help1)
 
         else:
-            first_name = message.from_user.first_name
-            btns = InlineKeyboardMarkup(
-                [
-                    [
-                        InlineKeyboardButton(
-                            text=lang.btn1,
-                            url=f"https://t.me/{BOT_USERNAME}?startgroup=true",
-                        ),
-                    ],
-                    [
-                        InlineKeyboardButton(
-                            text=lang.btn2, callback_data="explore_cb"
-                        ),
-                        InlineKeyboardButton(
-                            text=lang.btn3, callback_data="Friday_stats"
-                        ),
-                    ],
-                    [InlineKeyboardButton(text=lang.btn4, callback_data="help_back")],
-                ]
-            )
+            first_name = update.from_user.first_name
             caption = lang.start1.format(first_name, BOT_NAME, uptime)
             await app.send_photo(
                 chat_id, media, caption=caption, reply_markup=btns
@@ -175,11 +173,9 @@ async def _start(client, message,lang):
 
     else:
         caption = lang.start2.format(uptime)
-        await message.reply_photo(
+        await update.reply_photo(
             media, caption=caption
-        ) if media_type == "image" else await message.reply_video(
-            media, caption=caption
-        )
+        ) if media_type == "image" else await update.reply_video(media, caption=caption)
 
 
 @app.on_message(filters.command("help"))
@@ -218,7 +214,7 @@ async def get_help(client, message, lang):
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))
 @language
-async def help_button(client, query,lang):
+async def help_button(client, query, lang):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
         module = mod_match[1]
@@ -233,8 +229,10 @@ async def help_button(client, query,lang):
             ),
         )
     if query.data == "help_back":
-        btns = paginate_modules(HELPABLE,"help")
-        await query.message.edit_caption(lang.help2,reply_markup = InlineKeyboardMarkup(btns))
+        btns = paginate_modules(HELPABLE, "help")
+        await query.message.edit_caption(
+            lang.help2, reply_markup=InlineKeyboardMarkup(btns)
+        )
 
 
 if __name__ == "__main__":

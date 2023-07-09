@@ -71,7 +71,7 @@ async def main():
 
         if hasattr(module, "__mod_name__") and module.__mod_name__:
             if hasattr(module, "__help__") and module.__help__:
-                HELPABLE[module.__mod_name__] = module
+                HELPABLE[module.__mod_name__.replace(" ","_")] = module
             if commands:
                 DISABLE_ENABLE_MODULES[module_name] = {
                     "module": module.__mod_name__,
@@ -213,11 +213,16 @@ async def _help(client, message, lang):
 
     elif len(args) >= 2:
         module_name = args[1].replace(" ","_")
-        print(module_name)
-        print(await get_help(HELPABLE,module_name))
+        mod = await get_help(HELPABLE,module_name)
+        if not mod:
+            return await message.reply(lang.help4)
+        text = lang.help3.format(mod) + HELPABLE[mod].__help__
+        await send_help(chat_id,text,lang,keyboard=InlineKeyboardMarkup([[InlineKeyboardButton(text=lang.btn22, callback_data="help_back")]]))
+        
+
         
     else:
-        pass
+        await send_help(chat_id,lang.help1,lang)
 
 
 @app.on_callback_query(filters.regex(r"help_(.*?)"))

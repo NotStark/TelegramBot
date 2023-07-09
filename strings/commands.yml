@@ -1,4 +1,7 @@
+# __main__.py
 START_COMMAND : ['start']
+HELP_COMMAND : ["help"]
+
 
 # Admin.py
 PROMOTE_COMMAND : ["promote"]

@@ -36,7 +36,6 @@ from TeleBot.core.misc import paginate_modules
 
 
 HELPABLE = {}
-START_COMMAND = get_command("START_COMMAND")
 loop = asyncio.get_event_loop()
 
 SUPPORT_SEND_MSG = """
@@ -112,7 +111,7 @@ async def send_help(chat_id, text, lang, keyboard=None):
     return (text, keyboard)
 
 
-@app.on_message(command(START_COMMAND))
+@app.on_message(command(get_command("START_COMMAND")))
 @app.on_callback_query(filters.regex("start_back"))
 @language
 async def _start(client, update, lang):
@@ -142,7 +141,6 @@ async def _start(client, update, lang):
     chat_id = update.chat.id
     if update.chat.type == ChatType.PRIVATE:
         if len(args) >= 2:
-            print(args)
             if args[1].startswith("rules_"):
                 chat_idd = int(args[1].split("_")[1])
                 rules = await get_rules(chat_idd)
@@ -165,7 +163,7 @@ async def _start(client, update, lang):
                     )
                     raise e
             elif args[1].startswith("ghelp_"):
-                module_name = args[1].split("_",1)[1]
+                module_name = args[1].split("_", 1)[1]
                 mod = await get_help(HELPABLE, module_name)
                 text = lang.help3.format(mod) + HELPABLE[mod].__help__
                 await send_help(
@@ -202,11 +200,10 @@ async def _start(client, update, lang):
         ) if media_type == "image" else await update.reply_video(media, caption=caption)
 
 
-@app.on_message(filters.command("help"))
+@app.on_message(command(get_command("HELP_COMMAND")))
 @language
 async def _help(client, message, lang):
     chat_id = message.chat.id
-
     args = message.text.split(None, 1)
     chat_type = message.chat.type
     media_type, media = await get_help_media()
@@ -222,7 +219,7 @@ async def _help(client, message, lang):
                     [
                         InlineKeyboardButton(
                             text=lang.btn21,
-                            url=f"https://t.me/{BOT_USERNAME}?start=ghelp_{module_name}"
+                            url=f"https://t.me/{BOT_USERNAME}?start=ghelp_{module_name}",
                         )
                     ],
                 ],
@@ -288,4 +285,4 @@ async def help_button(client, query, lang):
 if __name__ == "__main__":
     uvloop.install()
     loop.run_until_complete(main())
-    LOG.print("[yellow] stopped client")
+    LOG.print("[yellow] sᴛᴏᴘᴘᴇᴅ ᴄʟɪᴇɴᴛ")

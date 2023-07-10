@@ -53,3 +53,7 @@ REPORT_COMMAND : ["report"]
 PIN_COMMAND : ["pin"]
 UNPIN_COMMAND : ["unpin","unpinall"]
 PINNED_COMMAND : ["pinned"]
+
+# Purge.py
+DEL_COMMAND : ["del","delete"]
+PURGE_COMMAND : ["purge"]

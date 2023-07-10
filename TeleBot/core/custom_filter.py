@@ -72,7 +72,7 @@ def command(commands: Union[str, List[str]],prefixes: Union[str, List[str]] = HA
                     for m in command_re.finditer(without_command)
                 ]
                 if disable :
-                    result = await disable_action(message, command)
+                    result = await disable_action(message, message.command)
                     if result is False:
                         return False
 

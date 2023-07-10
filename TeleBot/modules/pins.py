@@ -2,7 +2,7 @@ from TeleBot import app
 from pyrogram import filters
 from strings import get_command
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from TeleBot.helpers import custom_filter
+from TeleBot.core import custom_filter
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable

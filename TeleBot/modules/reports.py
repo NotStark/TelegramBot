@@ -2,7 +2,6 @@ from TeleBot import app, BOT_ID
 from pyrogram import filters, enums
 from strings import get_command
 from TeleBot.core import custom_filter
-from pyrogram.types import CallBackQuery
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup

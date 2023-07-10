@@ -79,6 +79,7 @@ async def _report(client, message, lang):
     user = message.from_user
     if await is_user_admin(chat.id, user.id):
         await message.reply(lang.report10)
+        return
     if replied:
         reported_user = replied.from_user
         if len(message.command) == 1:

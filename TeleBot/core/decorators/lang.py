@@ -12,7 +12,7 @@ def language(func):
         alert = False if isinstance(update, Message) else True
         language = await get_chat_lang(chat_id)
         try:
-                await func(client, update , language)
+            await func(client, update , language)
         except ChatWriteForbidden:
             await app.leave_chat(chat_id)
         except Exception as e:

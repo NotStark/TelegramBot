@@ -4,7 +4,7 @@ from strings import get_command
 from TeleBot.core import custom_filter
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, ChatPermissions
 from TeleBot.mongo.reports_db import get_report, on_off_reports
 from TeleBot.core.functions import is_user_admin, is_invincible
 
@@ -143,42 +143,37 @@ async def _report(client, message, lang):
         return
 
 
-# @app.on_callback_query(filters.regex(pattern=r"report_(.*)"))
-# @language
-# async def _reportCb(client, query,lang):
-#     data = query.data.split("_")
-#     user_id = int(data[3])
-#     mention = query.from_user.mention
-#     chat_id = int(data[1])
-#     r_type = data[2]
-#     if type == "kick":
-#         try:
-#             await client.ban_chat_member(chat_id,user_id)
-#             await client.unban_chat_member(chat_id,user_id)
-#             await client.send_message(chat_id, f"[{first_name}](tg://user?id={user_id}) ᴡᴀs ᴋɪᴄᴋᴇᴅ ʙʏ {mention}")
-#             await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ᴋɪᴄᴋᴇᴅ")
-#         except Exception as e:
-#            return await _.send_message(query.message.chat.id,f"ᴇʀʀᴏʀ : {e}")
-#     if r_type == "ban":
-#         try:
-#             await client.ban_chat_member(chat_id,user_id)
-#             await client.send_message(chat_id, f"[{first_name}](tg://user?id={user_id}) ᴡᴀs ʙᴀɴɴᴇᴅ ʙʏ {mention}")
-#             await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ʙᴀɴɴᴇᴅ")
-#         except Exception as e:
-#            return await client.send_message(query.message.chat.id,f"ᴇʀʀᴏʀ : {e}")
-#     if r_type == "mute":
-#         try:
-#             await client.restrict_chat_member(chat_id,user_id,ChatPermissions())
-#             await client.send_message(chat_id, f"[{first_name}](tg://user?id={user_id}) ᴡᴀs ʀᴇsᴛʀɪᴄᴛᴇᴅ ʙʏ {mention}")
-#             return await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ʀᴇsᴛʀɪᴄᴛᴇᴅ")
-#         except Exception as e:
-#            return await client.send_message(query.message.chat.id,f"ᴇʀʀᴏʀ : {e}")
-#     if r_type == "delete":
-#         try:
-#             await client.delete_messages(chat_id,user_id)
-#             await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ᴍᴇssᴀɢᴇ")
-#         except Exception as e:
-#            return await _.send_message(query.message.chat.id,f"ᴇʀʀᴏʀ : {e}")
+@app.on_callback_query(filters.regex(pattern=r"report_(.*)"))
+@language
+@loggable
+async def _reportCb(client, query,lang):
+    chat_id , r_type , content = query.data.split("_")[1:]
+    chat_id = int(chat_id)
+    content = int(content)
+    if r_type != "delete":
+        member = await client.get_chat_member(chat_id,content)
+        text = lang.report18
+        if r_type == "kick":
+            await client.ban_chat_member(chat_id,content)
+            await client.unban_chat_member(chat_id,content)
+            await query.answer(lang.report19)
+            await query.message.delete()
+            return text.format(member.user.mention,"ᴋɪᴄᴋᴇᴅ",query.from_user.first_name)
+        if r_type == "ban":
+            await client.ban_chat_member(chat_id,content)
+            await query.answer(lang.report19.replace("ᴋɪᴄᴋᴇᴅ","ʙᴀɴɴᴇᴅ"))
+            await query.message.delete()
+            return text.format(member.user.mention,"ʙᴀɴɴᴇᴅ",query.from_user.first_name)
+        if r_type == "mute":
+            await client.restrict_chat_member(chat_id,content,ChatPermissions())
+            await query.answer(lang.report19.replace("ᴋɪᴄᴋᴇᴅ","ʀᴇsᴛʀɪᴄᴛᴇᴅ"))
+            await query.message.delete()
+            return text.format(member.user.mention,"ʀᴇsᴛʀɪᴄᴛᴇᴅ",query.from_user.first_name)
+    else:
+        await client.delete_messages(chat_id,content)
+        await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ᴍᴇssᴀɢᴇ")
+        await query.message.delete()
+
 
 
 

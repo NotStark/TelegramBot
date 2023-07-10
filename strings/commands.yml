@@ -46,3 +46,4 @@ RULES_COMMAND : ["rules"]
 
 # Reports.py
 REPORTS_COMMAND : ["reports"]
+REPORT_COMMAND : ["report"]

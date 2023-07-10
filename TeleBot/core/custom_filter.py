@@ -41,7 +41,7 @@ from .functions import disable_action
 
 
 
-def command(commands: Union[str, List[str]],prefixes: Union[str, List[str]] = HANDLERS, disable : bool : True, case_sensitive: bool = False):
+def command(commands: Union[str, List[str]],prefixes: Union[str, List[str]] = HANDLERS, disable : bool = True, case_sensitive: bool = False):
     #https://github.com/pyrogram/pyrogram/blob/efac17198b5fcaec1c2628c4bba0c288a4d617d4/pyrogram/filters.py#L750
     
     command_re = re.compile(r"([\"'])(.*?)(?<!\\)\1|(\S+)")

@@ -16,6 +16,7 @@ def command(commands: Union[str, List[str]], prefixes: Union[str, List[str]] = H
         if not text:
             return False
         text = text.lower()
+        print(dir(flt),flt.prefixes)
 
         pattern = r"^(?:{})({})(?:@[^\s]+)?(?:\s|$)".format("|".join(re.escape(prefix) for prefix in prefixes), "|".join(map(re.escape, commands)))
         match = re.search(pattern, text)

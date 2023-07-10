@@ -67,7 +67,7 @@ async def _report(client, message, lang):
     replied = message.reply_to_message
     if await get_report(chat.id) is not True:
         return
-    if message.sender_chat is not None:
+    if message.sender_chat or replied and len(message.command) == 1:
         reported = lang.report8
         async for m in client.get_chat_members(
             chat.id, filter=enums.ChatMembersFilter.ADMINISTRATORS
@@ -82,10 +82,7 @@ async def _report(client, message, lang):
         return
     if replied:
         reported_user = replied.from_user
-        if len(message.command) == 1:
-            await message.reply_text(lang.report11)
-            return
-        elif user.id == reported_user.id:
+        if user.id == reported_user.id:
             await message.reply_text(lang.report12)
             return
         elif reported_user.id == BOT_ID:

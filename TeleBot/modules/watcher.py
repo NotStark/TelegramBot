@@ -1,6 +1,6 @@
 from TeleBot import app
 from TeleBot.mongo.chats_db import add_served_chat
-from TeleBot.mongo.users_db import add_served_user, find_and_update
+from TeleBot.mongo.users_db import add_served_user
 from TeleBot.mongo.blacklist_chat_db import is_blacklisted
 from TeleBot.core.filter_groups import chat_watcher
 from TeleBot.core.decorators.lang import language
@@ -12,7 +12,6 @@ async def _amd(_, message,lang):
     if message.from_user:
         user = message.from_user
         await add_served_user(user.id,user.username)
-        await find_and_update(user.id,user.username)
 
     if str(message.chat.id).startswith("-"):
         if await is_blacklisted(chat.id):

@@ -71,6 +71,7 @@ def command(commands: Union[str, List[str]],prefixes: Union[str, List[str]] = HA
                     re.sub(r"\\([\"'])", r"\1", m.group(2) or m.group(3) or "")
                     for m in command_re.finditer(without_command)
                 ]
+                print(message.command)
                 if disable :
                     result = await disable_action(message, message.command)
                     if result is False:

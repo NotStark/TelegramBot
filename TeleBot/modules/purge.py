@@ -44,8 +44,8 @@ async def _purge(client, message, lang):
     return lang.purge3.format(message.from_user.mention if message.from_user else 'Anon')
 
 async def get_message_ids_to_purge(start_message, end_message) -> List[int]:
-    start_id = start_message.message_id
-    end_id = end_message.message_id
+    start_id = start_message.id
+    end_id = end_message.id
 
     if start_id > end_id:
         return []

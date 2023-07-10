@@ -12,6 +12,7 @@ from TeleBot.core.functions import is_user_admin, is_invincible
 REPORTS_COMMAND = get_command("REPORTS_COMMAND")
 REPORT_COMMAND = get_command("REPORT_COMMAND")
 
+
 @app.on_message(custom_filter.command(REPORTS_COMMAND))
 @language
 @loggable
@@ -132,9 +133,7 @@ async def _report(client, message, lang):
                         await client.send_message(admin.user.id, msg, reply_markup=btn)
                     except Exception:
                         failed += 1
-        await message.reply_text(
-            lang.report16.format(user.mention,failed)
-        )
+        await message.reply_text(lang.report16.format(user.mention, failed))
         return lang.report9.format(user.mention, reported_user.mention, reason)
     else:
         await message.reply(lang.report17)
@@ -144,35 +143,48 @@ async def _report(client, message, lang):
 @app.on_callback_query(filters.regex(pattern=r"report_(.*)"))
 @language
 @loggable
-async def _reportCb(client, query,lang):
-    chat_id , r_type , content = query.data.split("_")[1:]
+async def _reportCb(client, query, lang):
+    chat_id, r_type, content = query.data.split("_")[1:]
     chat_id = int(chat_id)
     content = int(content)
     if r_type != "delete":
-        member = await client.get_chat_member(chat_id,content)
+        permssion = "can_restrict_members"
+        if not await is_user_admin(chat_id, query.from_user.id, permission=permssion):
+            await query.message.edit(
+                lang.other3.format(permssion, (await client.get_chat(chat_id)).title)
+            )
+            return
+        member = await client.get_chat_member(chat_id, content)
         text = lang.report18
         if r_type == "kick":
-            await client.ban_chat_member(chat_id,content)
-            await client.unban_chat_member(chat_id,content)
-            await query.answer(lang.report19)
-            await query.message.delete()
-            return text.format(member.user.mention,"ᴋɪᴄᴋᴇᴅ",query.from_user.first_name)
+            await client.ban_chat_member(chat_id, content)
+            await client.unban_chat_member(chat_id, content)
+            await query.message.edit(lang.report19)
+            return text.format(
+                member.user.mention, "ᴋɪᴄᴋᴇᴅ", query.from_user.first_name
+            )
         if r_type == "ban":
-            await client.ban_chat_member(chat_id,content)
-            await query.answer(lang.report19.replace("ᴋɪᴄᴋᴇᴅ","ʙᴀɴɴᴇᴅ"))
-            await query.message.delete()
-            return text.format(member.user.mention,"ʙᴀɴɴᴇᴅ",query.from_user.first_name)
+            await client.ban_chat_member(chat_id, content)
+            await query.message.edit(lang.report19.replace("ᴋɪᴄᴋᴇᴅ", "ʙᴀɴɴᴇᴅ"))
+            return text.format(
+                member.user.mention, "ʙᴀɴɴᴇᴅ", query.from_user.first_name
+            )
         if r_type == "mute":
-            await client.restrict_chat_member(chat_id,content,ChatPermissions())
-            await query.answer(lang.report19.replace("ᴋɪᴄᴋᴇᴅ","ʀᴇsᴛʀɪᴄᴛᴇᴅ"))
-            await query.message.delete()
-            return text.format(member.user.mention,"ʀᴇsᴛʀɪᴄᴛᴇᴅ",query.from_user.first_name)
+            await client.restrict_chat_member(chat_id, content, ChatPermissions())
+            await query.message.edit(lang.report19.replace("ᴋɪᴄᴋᴇᴅ", "ʀᴇsᴛʀɪᴄᴛᴇᴅ"))
+            return text.format(
+                member.user.mention, "ʀᴇsᴛʀɪᴄᴛᴇᴅ", query.from_user.first_name
+            )
     else:
-        await client.delete_messages(chat_id,content)
-        await query.answer("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ᴍᴇssᴀɢᴇ")
-        await query.message.delete()
-
-
+        permssion = "can_delete_messages"
+        if not await is_user_admin(chat_id, query.from_user.id, permission=permssion):
+            await query.message.edit(
+                lang.other3.format(permssion, (await client.get_chat(chat_id)).title)
+            )
+            return
+        await client.delete_messages(chat_id, content)
+        await query.message.edit("✅ sᴜᴄᴄᴇsғᴜʟʟʏ ᴅᴇʟᴇᴛᴇᴅ ᴍᴇssᴀɢᴇ")
+        return
 
 
 __commands__ = REPORTS_COMMAND + REPORT_COMMAND
@@ -192,5 +204,3 @@ __help__ = """
   • ɪғ ɪɴ ɢʀᴏᴜᴘ, ᴛᴏɢɢʟᴇꜱ ᴛʜᴀᴛ ɢʀᴏᴜᴘꜱ ꜱᴛᴀᴛᴜꜱ
 ═───────◇───────═
 """
-
-

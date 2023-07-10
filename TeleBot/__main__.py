@@ -209,7 +209,7 @@ async def _help(client, message, lang):
     media_type, media = await get_help_media()
     if chat_type != ChatType.PRIVATE:
         if len(args) >= 2:
-            module_name = args[1].replace(" ", "_").lower()
+            module_name = args[1].replace(" ", "_")
             mod = await get_help(HELPABLE, module_name)
             if not mod:
                 return await message.reply(lang.help4)

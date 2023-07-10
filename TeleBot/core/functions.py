@@ -212,6 +212,6 @@ async def get_help(module_dict , module_name):
         module_names = []
         for name in getattr(value,"__alt_names__",[]) + [key]:
             module_names.append(name.replace(" ","_")).lower()
-        if module_name in module_names:
+        if module_name.lower() in module_names:
             return key
 

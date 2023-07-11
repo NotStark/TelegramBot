@@ -48,6 +48,7 @@ async def _pin(client, message, lang):
 @app.on_message(custom_filter.command(commands=PINNED_COMMAND))
 @admins_stuff(bot=False, user=True)
 async def _pinned(client, message, lang):
+    
     chat = await client.get_chat(message.chat.id)
     user = message.from_user if message.from_user else None
     if not chat.pinned_message:
@@ -102,6 +103,7 @@ async def _unpinmsg(client, message, lang):
         )
         return lang.pin4.format(user.mention if user else 'Anon')
     if message.command[0] == "unpinall":
+        # add yes no
         await client.unpin_all_chat_messages(message.chat.id)
         await message.reply_text(
             lang.pin9,
@@ -109,7 +111,7 @@ async def _unpinmsg(client, message, lang):
                 [
                     [
                         InlineKeyboardButton(
-                            lang.btn9, callback_data=f"admin_close_{user_id}"
+                            lang.btn9, callback_data=f"admin_close_{user.id if user else 0}"
                         )
                     ]
                 ]

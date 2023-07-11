@@ -3,21 +3,12 @@ from TeleBot.mongo import db
 chatsdb = db.chats
 
 async def get_served_chats() -> list:
-    chats = chatsdb.find({"chat_id": {"$lt": 0}})
-    if not chats:
-        return []
-    chats_list = []
-    for chat in await chats.to_list(length=None):
-        chats_list.append(chat["chat_id"])
-    return chats_list
-
+    chats = await usersdb.find({"chat_id": {"$lt": 0}}).to_list(length=None)
+    return [chat["chat_id"] for chat in chats]
 
 async def is_served_chat(chat_id: int) -> bool:
     chat = await chatsdb.find_one({"chat_id": chat_id})
-    if not chat:
-        return False
-    return True
-
+     return bool(chat)
 
 async def add_served_chat(chat_id: int):
     is_served = await is_served_chat(chat_id)
@@ -27,7 +18,4 @@ async def add_served_chat(chat_id: int):
 
 
 async def remove_served_chat(chat_id: int):
-    is_served = await is_served_chat(chat_id)
-    if not is_served:
-        return
     return await chatsdb.delete_one({"chat_id": chat_id})

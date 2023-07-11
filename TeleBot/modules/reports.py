@@ -17,7 +17,7 @@ REPORT_COMMAND = get_command("REPORT_COMMAND")
 @language
 @loggable
 async def _reports(client, message, lang):
-    chat = message
+    chat = message.chat
     if chat.type == enums.ChatType.PRIVATE:
         if len(message.command) < 2:
             await message.reply(lang.report1.format(await get_report(chat.id)))

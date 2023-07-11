@@ -57,3 +57,7 @@ PINNED_COMMAND : ["pinned"]
 # Purge.py
 DEL_COMMAND : ["del","delete"]
 PURGE_COMMAND : ["purge"]
+
+# Disable.py
+DISABLE_COMMAND : ["disable","enable","disabledel","list_cmds"]
+MODULE_COMMAND : ["module"]

@@ -12,7 +12,7 @@ from typing import Any
 from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed, disconnect_chat
 from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
 from pyrogram.errors import MessageDeleteForbidden
-
+from TeleBot.mongo.approve_db import is_approved
 
 async def is_invincible(user_id : int) -> bool:
   INVINCIBLES  = config.SUDO_USERS + config.DEV_USERS 
@@ -215,3 +215,13 @@ async def get_help(module_dict , module_name):
         if module_name.lower() in module_names:
             return key
 
+async def prevent_approved(message):
+    ignore = False
+    chat_id = message.chat.id
+    user_id = message.sender_chat.id if message.sender_chat else message.from_user.id
+    if await is_approved(chat_id,user_id):
+        ignore = True
+    if await is_user_admin(chat_id,user_id):
+        ignore = True
+
+    return ignore

@@ -61,3 +61,7 @@ PURGE_COMMAND : ["purge"]
 # Disable.py
 DISABLE_COMMAND : ["disable","enable","disabledel","list_cmds"]
 MODULE_COMMAND : ["module"]
+
+
+# Locks.py
+LOCK_COMMAND : ["locks",'lock','locktypes']

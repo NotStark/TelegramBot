@@ -3,7 +3,13 @@ from pyrogram import filters, enums
 from strings import get_command
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from TeleBot.core.extractions import extract_user_id
-from TeleBot.core.functions import is_invincible, until_date, get_admins, connected
+from TeleBot.core.functions import (
+    is_invincible,
+    until_date,
+    get_admins,
+    connected,
+    time_buttons,
+)
 from TeleBot.core.extractions import extract_user_and_reason
 from TeleBot.core import custom_filter
 from pathlib import Path
@@ -158,35 +164,7 @@ async def _ban(client, message, lang):
         await message.reply(lang.ban5)
         return
     if not reason:
-        btn = InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        lang.btn13,
-                        callback_data=f"tban:5m:{user_id}:{user.id if user else 0}",
-                    ),
-                    InlineKeyboardButton(
-                        lang.btn16,
-                        callback_data=f"tban:6h:{user_id}:{user.id if user else 0}",
-                    ),
-                ],
-                [
-                    InlineKeyboardButton(
-                        lang.btn14,
-                        callback_data=f"tban:3d:{user_id}:{user.id if user else 0}",
-                    ),
-                    InlineKeyboardButton(
-                        lang.btn15,
-                        callback_data=f"tban:1w:{user_id}:{user.id if user else 0}",
-                    ),
-                ],
-                [
-                    InlineKeyboardButton(
-                        lang.btn9, callback_data=f"admin_close_{user.id if user else 0}"
-                    )
-                ],
-            ]
-        )
+        btn = await time_buttons("tban",user_id,user.id if user else 0 , lang)
         await message.reply(lang.other8, reply_markup=btn)
         return
     split_reason = reason.split(None, 1)
@@ -342,18 +320,12 @@ async def _listbans(client, message, lang):
             f.write(txt)
         await message.reply_document(file)
         Path(file).unlink(missing_ok=True)
-       
+
     else:
         await message.reply(txt)
 
 
-__commands__ = (
-    BAN_COMMAND + 
-    UNBAN_COMMAND + 
-    TBAN_COMMAND + 
-    KICK_COMMAND + 
-    PUNCH_COMMAND
-   )
+__commands__ = BAN_COMMAND + UNBAN_COMMAND + TBAN_COMMAND + KICK_COMMAND + PUNCH_COMMAND
 
 __mod_name__ = "𝙱ᴀɴ"
 __alt_names__ = ["ban", "bans", "punch"]

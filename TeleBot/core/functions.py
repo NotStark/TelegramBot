@@ -13,6 +13,7 @@ from TeleBot.mongo.connection_db import get_connected_chat,is_connection_allowed
 from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
 from pyrogram.errors import MessageDeleteForbidden
 from TeleBot.mongo.approve_db import is_approved
+from pyrogram.types import InlineKeyboardMarkup,InlineKeyboardButton
 
 async def is_invincible(user_id : int) -> bool:
   INVINCIBLES  = config.SUDO_USERS + config.DEV_USERS 
@@ -225,3 +226,36 @@ async def prevent_approved(message):
         ignore = True
 
     return ignore
+
+
+
+async def time_buttons(prefix, user_id, from_user_id, lang):
+    buttons = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(
+                lang.btn13,
+                callback_data=f"{prefix}:5m:{user_id}:{from_user_id}"
+            ),
+            InlineKeyboardButton(
+                lang.btn16,
+                callback_data=f"{prefix}:6h:{user_id}:{from_user_id}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                lang.btn14,
+                callback_data=f"{prefix}:3d:{user_id}:{from_user_id}"
+            ),
+            InlineKeyboardButton(
+                lang.btn15,
+                callback_data=f"{prefix}:1w:{user_id}:{from_user_id}"
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                lang.btn9, callback_data=f"admin_close_{from_user_id}"
+            )
+        ],
+    ])
+
+    return buttons

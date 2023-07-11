@@ -65,3 +65,9 @@ MODULE_COMMAND : ["module"]
 
 # Locks.py
 LOCK_COMMAND : ["locks",'lock','locktypes']
+
+
+# Muting.py
+MUTE_COMMAND : ["mute","dmute","smute"]
+UNMUTE_COMMAND : ["unmute"]
+TMUTE_COMMAND : ["tmute"]

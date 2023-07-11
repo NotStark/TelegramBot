@@ -1,0 +1,236 @@
+from TeleBot import app, BOT_ID
+from pyrogram import filters, enums
+from TeleBot.core import custom_filter
+from strings import get_command
+from TeleBot.core.decorators.chat_status import admins_stuff
+from TeleBot.core.decorators.lang import language
+from TeleBot.core.decorators.log import loggable
+from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
+from TeleBot.helpers.functions import get_admins, is_invincible, until_date,time_buttons
+from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
+
+
+MUTE_COMMAND = get_command("MUTE_COMMAND")
+UNMUTE_COMMAND = get_command("UNMUTE_COMMAND")
+TMUTE_COMMAND = get_command("TMUTE_COMMAND")
+
+
+@app.on_message(custom_filter.command(commands=MUTE_COMMAND))
+@admins_stuff("can_restrict_members", bot=True)
+@loggable
+async def _mute(client, message, lang):
+    chat = message.chat
+    user_id = await extract_user_id(message)
+    replied = message.reply_to_message
+    admeme = message.from_user if message.from_user else None
+    if not user_id:
+        await message.reply(lang.admin1)
+        return
+    if user_id == BOT_ID:
+        await message.reply(lang.mute1)
+        return
+
+    if user_id in await get_admins(chat.id):
+        await message.reply(lang.mute2)
+        return
+
+    if await is_invincible(user_id):
+        await message.reply(lang.mute3)
+        return
+
+    member = await client.get_chat_member(chat.id, user_id)
+    txt = lang.mute4.format(member.user.mention, user_id, chat.title)
+
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    lang.mute36,
+                    callback_data=f"unmute_{user_id}_{admeme.id if admeme else 0}",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    lang.btn9, callback_data=f"admin_close_{admeme.id if admeme else 0}"
+                )
+            ],
+        ]
+    )
+    await message.reply(txt, reply_markup=button)
+    if message.command[0] == "mute":
+        await client.restrict_chat_member(
+            chat.id, user_id, ChatPermissions(can_send_message=False)
+        )
+    if message.command[0] == "smute":
+        await message.delete()
+        if replied:
+            await message.reply_to_message.delete()
+        await client.restrict_chat_member(
+            chat.id, user_id, ChatPermissions(can_send_message=False)
+        )
+        return
+    if message.command[0] == "dmute":
+        if replied:
+            await message.reply_to_message.delete()
+        await client.restrict_chat_member(
+            chat.id, user_id, ChatPermissions(can_send_message=False)
+        )
+
+    await message.reply(txt, reply_markup=button)
+    return lang.mute5.format(member.user.mention,admeme.mention if admeme else 'Anon')
+
+
+async def unmute_func(client, message, user_id, from_user,lang):
+    chat = message.chat
+    if not user_id:
+        await message.reply(
+            lang.admin1
+        )
+        return
+    if user_id == BOT_ID:
+        await message.reply(lang.mute6)
+        return
+    member = await client.get_chat_member(chat.id, user_id)
+    if member.status != enums.ChatMemberStatus.RESTRICTED:
+        return await message.reply_text(
+            lang.mute7 
+        )
+    text = lang.mute8.format(member.user.mention,user_id,from_user.mention if from_user else 'Anon')
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    lang.btn9,
+                    callback_data=f"admin_close_{from_user.id if from_user else 0}",
+                )
+            ]
+        ]
+    )
+    await client.unban_chat_member(chat.id, user_id)
+    await message.reply_text(text, reply_markup=button)
+    return lang.mute9.format(member.user.mention,from_user.mention if from_user else 'Anon')
+
+
+@app.on_callback_query(filters.regex("^unmute_"))
+@language
+@loggable
+async def _unbanCb(client, query,lang):
+    from_user_id = int(query.data.split("_")[2])
+    user_id = int(query.data.split("_")[1])
+    from_user = query.from_user
+    if from_user.id != from_user_id:
+        await query.answer(lang.other6, show_alert=True)
+        return
+    await query.message.delete()
+    return await unmute_func(client, query.message, user_id, from_user,lang)
+
+
+@app.on_message(custom_filter.command(commands=UNMUTE_COMMAND))
+@admins_stuff("can_restrict_members", bot=True)
+@loggable
+async def _ban(client, message,lang):
+    user_id = await extract_user_id(message)
+    from_user = message.from_user
+    await unmute_func(client, message, user_id, from_user,lang)
+
+
+@app.on_message(custom_filter.command(commands=TMUTE_COMMAND))
+@admins_stuff("can_restrict_members", bot=True)
+@loggable
+async def _ban(client, message,lang):
+    user_id, reason = await extract_user_and_reason(message)
+    admeme = message.from_user if message.from_user else None
+    chat = message.chat
+    if not user_id:
+        await message.reply_text(
+            "I ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ ʏᴏᴜ'ʀᴇ ᴛᴀʟᴋɪɴɢ ᴀʙᴏᴜᴛ, ʏᴏᴜ'ʀᴇ ɢᴏɪɴɢ ᴛᴏ ɴᴇᴇᴅ ᴛᴏ sᴘᴇᴄɪғʏ ᴀ ᴜsᴇʀ...!"
+        )
+        return
+    if user_id == BOT_ID:
+        return await message.reply("ɪ'ᴍ ɴᴏᴛ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴍʏꜱᴇʟꜰ ꜰᴏᴏʟ")
+    if user_id in await get_admins(chat.id):
+        return await message.reply(
+            "ᴛʜɪꜱ ᴜꜱᴇʀ ɪꜱ ᴀɴ ᴀᴅᴍɪɴɪꜱᴛʀᴀᴛᴏʀ ᴏꜰ ᴛʜɪꜱ ᴄʜᴀᴛ.ɪ ᴄᴀɴ'ᴛ ᴍᴜᴛᴇ ʜɪᴍ.ʙᴜᴛ ʏᴏᴜ ᴄᴀɴ ᴅᴏ ɪᴛ ᴍᴀɴᴜᴀʟʟʏ"
+        )
+    if await is_invincible(user_id):
+        return await message.reply("ꜱᴏʀʀʏ ʙᴜᴛ ɪ ᴄᴀɴ'ᴛ ᴍᴜᴛᴇ ᴍʏ ᴅᴀᴅᴅʏ")
+    if not reason:
+        btn = await time_buttons("tmute",user_id , admeme.id if admeme else 0 , lang)
+        return await message.reply("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
+    split_reason = reason.split(None, 1)
+    time_val = split_reason[0].lower()
+    reason = split_reason[1] if len(split_reason) > 1 else ""
+    until, unit = until_date(message, time_val)
+    if not until:
+        return
+    member = await client.get_chat_member(chat.id, user_id)
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "• ᴜɴᴍᴜᴛᴇ •",
+                    callback_data=f"unmute_{user_id}_{message.from_user.id}",
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    "• ᴄʟᴏsᴇ •", callback_data=f"admin_close_{message.from_user.id}"
+                )
+            ],
+        ]
+    )
+    await client.restrict_chat_member(
+        chat.id, user_id, ChatPermissions(can_send_messages=False), until_date=until
+    )
+    await message.reply_text(
+        f"""
+❕ᴛᴇᴍᴘᴏʀᴀʀʏ ᴍᴜᴛᴇᴅ
+**🌟 ᴄʜᴀᴛ:** {message.chat.title}
+**💥 ᴜsᴇʀ:** {member.user.mention}
+**🚫 ᴍᴜᴛᴇᴅ ғᴏʀ:** {time_val[0]} {unit}    
+    """,
+        reply_markup=button,
+    )
+
+
+@app.on_callback_query(filters.regex("^tmute:"))
+@language
+@loggable
+async def _tbanCb(client, query,lang):
+    value, user_id, from_user_id = query.data.split(":")[1:]
+    from_user = query.from_user
+    chat = query.message.chat
+    if from_user.id != int(from_user_id):
+        return await query.answer("ʏᴏᴜ ᴄᴀɴ'ᴛ ᴘᴇʀꜰʀᴏᴍ ᴛʜɪꜱ ᴀᴄᴛɪᴏɴ 🔴.", show_alert=True)
+    until, unit = await until_date(query.message, value)
+    member = await client.get_chat_member(chat.id, user_id)
+    if not until_date:
+        return
+    button = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    "• ᴜɴᴍᴜᴛᴇ •", callback_data=f"unban_{user_id}_{from_user.id}"
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    "• ᴄʟᴏsᴇ •", callback_data=f"admin_close_{from_user.id}"
+                )
+            ],
+        ]
+    )
+    await client.ban_chat_member(chat.id, user_id, until_date=until)
+    await query.message.edit(
+        f"""
+❕ᴛᴇᴍᴘᴏʀᴀʀʏ ᴍᴜᴛᴇᴅ
+**🌟 ᴄʜᴀᴛ:** {chat.title}
+**💥 ᴜsᴇʀ:** {member.user.mention}
+**🚫 ᴍᴜᴛᴇᴅ ғᴏʀ:** {value[0]} {unit}    
+    """,
+        reply_markup=button,
+    )
+
+
+__commands__ = ["unmute", "mute", "tmute", "dmute", "smute"]
+__mod_name__ = "ᴍᴜᴛᴇ"

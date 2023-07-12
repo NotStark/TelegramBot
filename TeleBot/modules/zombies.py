@@ -25,7 +25,7 @@ async def _zombies(client,message,lang):
     if len(zombies) == 0:
          return await text.edit(lang.zombies2.format(message.chat.title))
     
-    await text.edit(lang.zombies.format(len(zombies),message.chat.title),reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton(lang.btn19, callback_data=f"zombies_clean"),InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{message.from_user.id if message.from_user else 0}")]]))
+    await text.edit(lang.zombies3.format(len(zombies),message.chat.title),reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton(lang.btn19, callback_data=f"zombies_clean"),InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{message.from_user.id if message.from_user else 0}")]]))
     ZOMBIES[chat_id] = zombies
 
 

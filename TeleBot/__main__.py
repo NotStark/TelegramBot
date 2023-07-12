@@ -269,7 +269,7 @@ async def help_button(client, query, lang):
     if mod_match:
         module = mod_match.group(1)
         print(module)
-        text = lang.help3.format(module) + HELPABLE[module].__help__
+        text = lang.help3.format(module) + HELPABLE[module.replace(" "),"_"].__help__
         await query.message.edit_caption(
             text,
             reply_markup=InlineKeyboardMarkup(

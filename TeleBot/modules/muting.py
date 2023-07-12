@@ -6,7 +6,7 @@ from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
-from TeleBot.helpers.functions import get_admins, is_invincible, until_date,time_buttons
+from TeleBot.core.functions import get_admins, is_invincible, until_date,time_buttons
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
 

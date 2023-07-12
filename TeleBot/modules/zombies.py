@@ -50,9 +50,9 @@ async def _clean_zombies(client,query,lang):
         except Exception:
             failed += 1
     end = await get_readable_time((time.time() - start))         
-    await query.message.edit(lang.zombies4.format(sucess,chat.title,end))
+    await query.message.edit(lang.zombies4.format(sucess,chat.title,failed,end))
     ZOMBIES.pop(chat.id)
-    return lang.zombies5.format(sucess,query.from_user.mention)
+    return lang.zombies5.format(sucess,query.from_user.mention,)
 
 
 

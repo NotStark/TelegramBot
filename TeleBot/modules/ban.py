@@ -286,7 +286,7 @@ async def _punch(client, message, lang):
 async def _kickme(client, message, lang):
     user = message.from_user
     chat_id = message.chat.id
-    if user_id in await get_admins(chat_id):
+    if user.id in await get_admins(chat_id):
         await message.reply(lang.other12)
         return
     if message.command[0] == "kickme":
@@ -329,6 +329,7 @@ __commands__ = BAN_COMMAND + UNBAN_COMMAND + TBAN_COMMAND + KICK_COMMAND + PUNCH
 
 __mod_name__ = "𝙱ᴀɴ"
 __alt_names__ = ["ban", "bans", "punch"]
+__sub_mode__ = ["𝙼ᴜᴛɪɴɢ"]
 
 __help__ = """
 **⸢sᴛʀɪᴄᴛ ᴀᴄᴛɪᴏɴs⸥**
@@ -342,6 +343,6 @@ __help__ = """
 ๏ /tban <ᴜsᴇʀʜᴀɴᴅʟᴇ> x(m/h/d) : ʙᴀɴs ᴀ ᴜsᴇʀ ғᴏʀ x ᴛɪᴍᴇ. (ᴠɪᴀ ʜᴀɴᴅʟᴇ, ᴏʀ ʀᴇᴘʟʏ). ᴍ = ᴍɪɴᴜᴛᴇs, ʜ = ʜᴏᴜʀs, ᴅ = ᴅᴀʏs.
 ๏ /listbans : ʟɪsᴛ ᴏғ ʙᴀɴɴᴇᴅ ᴜsᴇʀs ɪɴ ᴀ ᴄʜᴀᴛ.
 ๏ /unban <ᴜsᴇʀʜᴀɴᴅʟᴇ> :  ᴜɴʙᴀɴs a user. (ᴠɪᴀ ʜᴀɴᴅʟᴇ, ᴏʀ ʀᴇᴘʟʏ)
-๏ /punch or /kick <ᴜsᴇʀʜᴀɴᴅʟᴇ> :  Punches a user out of the group, (ᴠɪᴀ ʜᴀɴᴅʟᴇ, ᴏʀ ʀᴇᴘʟʏ) 
+๏ /punch or /kick <ᴜsᴇʀʜᴀɴᴅʟᴇ> :  ᴘᴜɴᴄʜᴇs ᴀ ᴜsᴇʀ ᴏᴜᴛ ᴏғ ᴛʜᴇ ɢʀᴏᴜᴘ, (ᴠɪᴀ ʜᴀɴᴅʟᴇ, ᴏʀ ʀᴇᴘʟʏ) 
 ═───────◇───────═
 """

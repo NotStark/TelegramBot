@@ -267,7 +267,7 @@ async def _help(client, message, lang):
 async def help_button(client, query, lang):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
-        module = mod_match[1]
+        module = mod_match.group(1)
         text = lang.help3.format(module) + HELPABLE[module].__help__
         await query.message.edit_caption(
             text,

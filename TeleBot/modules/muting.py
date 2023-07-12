@@ -137,26 +137,30 @@ async def _ban(client, message,lang):
 @app.on_message(custom_filter.command(commands=TMUTE_COMMAND))
 @admins_stuff("can_restrict_members", bot=True)
 @loggable
-async def _ban(client, message,lang):
+async def _tmute(client, message,lang):
     user_id, reason = await extract_user_and_reason(message)
-    admeme = message.from_user if message.from_user else None
+    admeme = message.from_user
     chat = message.chat
     if not user_id:
         await message.reply_text(
-            "I ᴅᴏɴ'ᴛ ᴋɴᴏᴡ ᴡʜᴏ ʏᴏᴜ'ʀᴇ ᴛᴀʟᴋɪɴɢ ᴀʙᴏᴜᴛ, ʏᴏᴜ'ʀᴇ ɢᴏɪɴɢ ᴛᴏ ɴᴇᴇᴅ ᴛᴏ sᴘᴇᴄɪғʏ ᴀ ᴜsᴇʀ...!"
+            lang.admin1
         )
         return
     if user_id == BOT_ID:
-        return await message.reply("ɪ'ᴍ ɴᴏᴛ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴍʏꜱᴇʟꜰ ꜰᴏᴏʟ")
+        await message.reply(lang.mute1)
+        return
     if user_id in await get_admins(chat.id):
-        return await message.reply(
-            "ᴛʜɪꜱ ᴜꜱᴇʀ ɪꜱ ᴀɴ ᴀᴅᴍɪɴɪꜱᴛʀᴀᴛᴏʀ ᴏꜰ ᴛʜɪꜱ ᴄʜᴀᴛ.ɪ ᴄᴀɴ'ᴛ ᴍᴜᴛᴇ ʜɪᴍ.ʙᴜᴛ ʏᴏᴜ ᴄᴀɴ ᴅᴏ ɪᴛ ᴍᴀɴᴜᴀʟʟʏ"
+        await message.reply(
+            lang.mute2
         )
+        return
     if await is_invincible(user_id):
-        return await message.reply("ꜱᴏʀʀʏ ʙᴜᴛ ɪ ᴄᴀɴ'ᴛ ᴍᴜᴛᴇ ᴍʏ ᴅᴀᴅᴅʏ")
+        await message.reply(lang.mute3)
+        return
     if not reason:
         btn = await time_buttons("tmute",user_id , admeme.id if admeme else 0 , lang)
-        return await message.reply("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
+        await message.reply(lang.other8, reply_markup=btn)
+        return
     split_reason = reason.split(None, 1)
     time_val = split_reason[0].lower()
     reason = split_reason[1] if len(split_reason) > 1 else ""
@@ -168,13 +172,13 @@ async def _ban(client, message,lang):
         [
             [
                 InlineKeyboardButton(
-                    "• ᴜɴᴍᴜᴛᴇ •",
-                    callback_data=f"unmute_{user_id}_{message.from_user.id}",
+                    lang.btn36,
+                    callback_data=f"unmute_{user_id}_{admeme.id if admeme else 0}",
                 )
             ],
             [
                 InlineKeyboardButton(
-                    "• ᴄʟᴏsᴇ •", callback_data=f"admin_close_{message.from_user.id}"
+                    lang.btn9, callback_data=f"admin_close_{admeme.id if admeme else 0}"
                 )
             ],
         ]
@@ -185,12 +189,13 @@ async def _ban(client, message,lang):
     await message.reply_text(
         f"""
 ❕ᴛᴇᴍᴘᴏʀᴀʀʏ ᴍᴜᴛᴇᴅ
-**🌟 ᴄʜᴀᴛ:** {message.chat.title}
+**🌟 ᴄʜᴀᴛ:** {chat.title}
 **💥 ᴜsᴇʀ:** {member.user.mention}
 **🚫 ᴍᴜᴛᴇᴅ ғᴏʀ:** {time_val[0]} {unit}    
     """,
         reply_markup=button,
     )
+    return lang.mute10.format(member.user.mention , admeme.mention if admeme else 'Anon',f'{time_val[0]} {unit}',reason)
 
 
 @app.on_callback_query(filters.regex("^tmute:"))
@@ -201,7 +206,8 @@ async def _tbanCb(client, query,lang):
     from_user = query.from_user
     chat = query.message.chat
     if from_user.id != int(from_user_id):
-        return await query.answer("ʏᴏᴜ ᴄᴀɴ'ᴛ ᴘᴇʀꜰʀᴏᴍ ᴛʜɪꜱ ᴀᴄᴛɪᴏɴ 🔴.", show_alert=True)
+        await query.answer(lang.other6, show_alert=True)
+        return
     until, unit = await until_date(query.message, value)
     member = await client.get_chat_member(chat.id, user_id)
     if not until_date:
@@ -210,12 +216,12 @@ async def _tbanCb(client, query,lang):
         [
             [
                 InlineKeyboardButton(
-                    "• ᴜɴᴍᴜᴛᴇ •", callback_data=f"unban_{user_id}_{from_user.id}"
+                    lang.btn36, callback_data=f"unban_{user_id}_{from_user.id}"
                 )
             ],
             [
                 InlineKeyboardButton(
-                    "• ᴄʟᴏsᴇ •", callback_data=f"admin_close_{from_user.id}"
+                    lang.btn9, callback_data=f"admin_close_{from_user.id}"
                 )
             ],
         ]
@@ -230,7 +236,23 @@ async def _tbanCb(client, query,lang):
     """,
         reply_markup=button,
     )
+    return lang.mute10.format(member.user.mention , from_user.mention,f'{value[0]} {unit}',None)
 
 
-__commands__ = ["unmute", "mute", "tmute", "dmute", "smute"]
-__mod_name__ = "ᴍᴜᴛᴇ"
+__commands__ = MUTE_COMMAND + UNMUTE_COMMAND + TMUTE_COMMAND
+__mod_name__ = "𝙼ᴜᴛɪɴɢ"
+__alt_names__ = ["mute"]
+__sub_mode__ = ["𝙱ᴀɴ"]
+
+__help__ = """
+**⸢sᴏғᴛ ᴀᴄᴛɪᴏɴs⸥**
+
+「𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦」 :
+═───────◇───────═
+「𝗔𝗗𝗠𝗜𝗡𝗦 𝗢𝗡𝗟𝗬」
+๏ /mute | /dmute <ᴜsᴇʀʜᴀɴᴅʟᴇ> : sɪʟᴇɴᴄᴇs ᴀ ᴜsᴇʀ. ᴄᴀɴ ᴀʟsᴏ ʙᴇ ᴜsᴇᴅ ᴀs ᴀ ʀᴇᴘʟʏ, ᴍᴜᴛɪɴɢ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴜsᴇʀ.
+๏ /tmute <userhandle> x(m/h/d) : ᴍᴜᴛᴇs a ᴜsᴇʀ ғᴏʀ x ᴛɪᴍᴇ. (ᴠɪᴀ ʜᴀɴᴅʟᴇ, ᴏʀ ʀᴇᴘʟʏ). m = ᴍɪɴᴜᴛᴇs, h = ʜᴏᴜʀs, ᴅ = ᴅᴀʏs.
+๏ /unmute <userhandle> : ᴜɴᴍᴜᴛᴇs ᴀ ᴜsᴇʀ. ᴄᴀɴ ᴀʟsᴏ ʙᴇ ᴜsᴇᴅ ᴀs ᴀ ʀᴇᴘʟʏ, ᴍᴜᴛɪɴɢ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴜsᴇʀ. 
+═───────◇───────═
+"""
+__mod_name__ = "𝙱ᴀɴs"

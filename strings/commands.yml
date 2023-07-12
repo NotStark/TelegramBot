@@ -88,3 +88,9 @@ RMALLFILTERS_COMMAND : ["removeallfilters"]
 
 # Log_channel.py
 LOGCHANNEL_COMMAND : ["setlog","unsetlog","logchannel"]
+
+# Blacklist.py
+ADDBLACKLIST_COMMAND : ["addblacklist"]
+UNBLACKLIST_COMMAND : ["unblacklist"]
+BLACKLISTMODE_COMMAND : ["blacklistmode"]
+BLACKLISTS_COMMAND : ["blacklists"]

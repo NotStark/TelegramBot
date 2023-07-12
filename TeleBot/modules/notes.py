@@ -70,7 +70,7 @@ async def _clear(client, message, lang):
 async def _save(client, message,lang):
     user = message.from_user
     chat = await connected(
-        message, user.id if user else message.sender_chat.id, lang, need_admin=True
+        message, user.id if user else message.sender_chat.id, lang, need_admin=False
     )
     if not chat:
         return
@@ -158,3 +158,29 @@ async def _getnote(client, message,lang):
         await send_note_message(message, note_name, chat_id)
     else:
         await message.reply(lang.note14)
+
+
+__commands__ = SAVE_COMMAND + CLEAR_COMMAND + NOTES_COMMAND + RMALLNOTES_COMMAND
+__mod_name__ = "𝙽ᴏᴛᴇs"
+
+
+__help__ = """
+**⸢ᴍᴀᴋᴇ ɴᴏᴛᴇs⸥**
+
+「𝗖𝗢𝗠𝗠𝗔𝗡𝗗𝗦」 
+═───────◇───────═
+๏ /get <notename>: ɢᴇᴛ ᴛʜᴇ ɴᴏᴛᴇ ᴡɪᴛʜ this ɴᴏᴛᴇɴᴀᴍᴇ.
+๏ #<notename>*:* same as /get.
+๏ /notes or /saved: ʟɪsᴛ ᴀʟʟ sᴀᴠᴇᴅ ɴᴏᴛᴇs ɪɴ ᴛʜɪs ᴄʜᴀᴛ.
+
+「𝗔𝗗𝗠𝗜𝗡𝗦 𝗢𝗡𝗟𝗬」
+๏ /save <notename> <notedata>: ꜱᴀᴠᴇꜱ ɴᴏᴛᴇᴅᴀᴛᴀ ᴀꜱ ᴀ ɴᴏᴛᴇ ᴡɪᴛʜ ɴᴀᴍᴇ ɴᴏᴛᴇɴᴀᴍᴇ
+๏ /clear <notename>: ᴄʟᴇᴀʀ ɴᴏᴛᴇ ᴡɪᴛʜ ᴛʜɪꜱ ɴᴀᴍᴇ
+
+「𝗢𝗪𝗡𝗘𝗥 𝗢𝗡𝗟𝗬」
+๏ /removeallnotes: ʀᴇᴍᴏᴠᴇꜱ ᴀʟʟ ɴᴏᴛᴇꜱ ғʀᴏᴍ ᴛʜᴇ ɢʀᴏᴜᴘ
+ɴᴏᴛᴇ: ɴᴏᴛᴇꜱ ᴀʟꜱᴏ ꜱᴜᴘᴘᴏʀᴛ ᴍᴀʀᴋᴅᴏᴡɴ formatters like: {first}, {last} ᴇᴛᴄ.. ᴀɴᴅ ʙᴜᴛᴛᴏɴꜱ.
+
+๏ ᴄʜᴇᴄᴋ /markdownhelp ᴛᴏ ᴋɴᴏᴡ ᴍᴏʀᴇ!
+═───────◇───────═
+"""

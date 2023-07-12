@@ -39,18 +39,19 @@ async def add_blacklist_command(client, message, lang):
     to_blacklist = list(
         {trigger.strip().lower() for trigger in text.split() if trigger.strip()}
     )
-    if is_blacklisted(to_blacklist):
-        await message.reply_text("Retard?! That Word is already blacklisted!")
-        return
-    await add_blacklist(chat.id, to_blacklist)
-    if len(to_blacklist) == 1:
-        return await message.reply(
-            f"ᴀᴅᴅᴇᴅ '{to_blacklist[0]}' ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ɪɴ ᴄʜᴀᴛ: {chat.title}"
-        )
-    text = "ᴀᴅᴅᴇᴅ ᴛʜᴇ ꜰᴏʟʟᴏᴡɪɴɢ ᴡᴏʀᴅꜱ ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ:\n"
-    for word in to_blacklist:
-        text += f"‣ {word}\n"
-    await message.reply(text)
+    print(to_blacklist)
+    # if is_blacklisted(to_blacklist):
+    #     await message.reply_text("Retard?! That Word is already blacklisted!")
+    #     return
+    # await add_blacklist(chat.id, to_blacklist)
+    # if len(to_blacklist) == 1:
+    #     return await message.reply(
+    #         f"ᴀᴅᴅᴇᴅ '{to_blacklist[0]}' ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ɪɴ ᴄʜᴀᴛ: {chat.title}"
+    #     )
+    # text = "ᴀᴅᴅᴇᴅ ᴛʜᴇ ꜰᴏʟʟᴏᴡɪɴɢ ᴡᴏʀᴅꜱ ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ:\n"
+    # for word in to_blacklist:
+    #     text += f"‣ {word}\n"
+    # await message.reply(text)
 
 
 # @app.on_message(custom_filter.command(commands=UNBLACKLIST_COMMAND))

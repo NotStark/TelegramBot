@@ -64,7 +64,7 @@ async def delete_messages_in_batches(client, chat_id, message_ids):
         await client.delete_messages(chat_id=chat_id, message_ids=batch, revoke=True)
 
 
-__commands__ = []
+__commands__ = DEL_COMMAND + PURGE_COMMAND
 __mod_name__ = "𝙿ᴜʀɢᴇ"
 __alt_names__ = ["purges","purging"]
 

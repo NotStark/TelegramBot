@@ -71,3 +71,10 @@ LOCK_COMMAND : ["locks",'lock','locktypes']
 MUTE_COMMAND : ["mute","dmute","smute"]
 UNMUTE_COMMAND : ["unmute"]
 TMUTE_COMMAND : ["tmute"]
+
+# Notes.py
+SAVE_COMMAND : ["save"]
+CLEAR_COMMAND : ["clear"]
+NOTES_COMMAND : ["notes", "saved"]
+RMALLNOTES_COMMAND : ["removeallnotes"]
+GET_COMMAND : ["get"]

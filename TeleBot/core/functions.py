@@ -14,6 +14,8 @@ from TeleBot.mongo.disable_db import get_disabled_commands, get_disable_delete
 from pyrogram.errors import MessageDeleteForbidden
 from TeleBot.mongo.approve_db import is_approved
 from pyrogram.types import InlineKeyboardMarkup,InlineKeyboardButton
+from .button_parser import button_markdown_parser
+from TeleBot.mongo.notes_db import get_note_data
 
 async def is_invincible(user_id : int) -> bool:
   INVINCIBLES  = config.SUDO_USERS + config.DEV_USERS 
@@ -259,3 +261,113 @@ async def time_buttons(prefix, user_id, from_user_id, lang):
     ])
 
     return buttons
+
+
+
+async def fillings(message, user, text):
+    user_id = user.id
+    first_name = user.first_name
+    last_name = user.last_name or ''
+    full_name = f'{first_name} {last_name}'
+    username = user.username
+    mention = user.mention
+    chat_title = message.chat.title
+
+    try:
+        to_return = text.format(
+            id=user_id,
+            first=first_name,
+            fullname=full_name,
+            username=username,
+            mention=mention,
+            chatname=chat_title
+        )
+    except Exception as e:
+        to_return = text
+
+    return to_return
+
+
+
+
+
+
+async def get_note_tpye(message):
+    data_type = None
+    content = None
+    text = ""
+
+    if message.reply_to_message:
+        if message.reply_to_message.text:
+            text = message.reply_to_message.text
+            data_type = 0
+        elif message.reply_to_message.sticker:
+            content = message.reply_to_message.sticker.file_id
+            data_type = 1
+        elif message.reply_to_message.animation:
+            content = message.reply_to_message.animation.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 2
+        elif message.reply_to_message.document:
+            content = message.reply_to_message.document.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 3
+        elif message.reply_to_message.photo:
+            content = message.reply_to_message.photo.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 4
+        elif message.reply_to_message.audio:
+            content = message.reply_to_message.audio.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 5
+        elif message.reply_to_message.voice:
+            content = message.reply_to_message.voice.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 6
+        elif message.reply_to_message.video:
+            content = message.reply_to_message.video.file_id
+            text = message.reply_to_message.caption or ""
+            data_type = 7
+        elif message.reply_to_message.video_note:
+            content = message.reply_to_message.video_note.file_id
+            data_type = 8
+
+    if len(message.command) >= 3:
+        note_name = message.command[1].lower()
+        text = " ".join(message.command[2:])
+    else:
+        note_name = message.command[1].lower()
+
+    return note_name, content, text, data_type
+
+
+async def send_note_message(message, note_name, chat_id):
+    content, text, data_type = await get_note_data(chat_id,note_name)
+    filled_text = await fillings(message,message.from_user, text)
+    filled_text , buttons = await button_markdown_parser(filled_text)
+    if len(buttons) > 0:
+        reply_markup = InlineKeyboardMarkup(buttons)
+    else : 
+        reply_markup = None
+    try:
+        if data_type == 0:
+            await message.reply_text(filled_text,reply_markup = None)
+        elif data_type == 1:
+            await message.reply_sticker(content, reply_markup=reply_markup)
+        elif data_type == 2:
+            await message.reply_animation(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 3:
+            await message.reply_document(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 4:
+            await message.reply_photo(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 5:
+            await message.reply_audio(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 6:
+            await message.reply_voice(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 7:
+            await message.reply_video(content, reply_markup=reply_markup, caption=text)
+        elif data_type == 8:
+            await message.reply_video_note(content, reply_markup=reply_markup)
+    except Exception as e:
+        await message.reply(f"ᴛʜɪꜱ ɴᴏᴛᴇ ᴄᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ꜱᴇɴᴛ, ᴀꜱ ɪᴛ ɪꜱ ɪɴᴄᴏʀʀᴇᴄᴛʟʏ ꜰᴏʀᴍᴀᴛᴛᴇᴅ. ᴀꜱᴋ ɪɴ @{config.SUPPORT_CHAT} ɪꜰ ʏᴏᴜ ᴄᴀɴ'ᴛ ꜰɪɢᴜʀᴇ ᴏᴜᴛ ᴡʜʏ\n\n‣ ᴇʀʀᴏʀ : {str(e)}")
+

@@ -7,12 +7,18 @@ blacklistdb = db.blacklist
 
 async def add_blacklist(chat_id: int, words: List[str]):
     chat = await blacklistdb.find_one({"chat_id": chat_id})
+    failed = []
     if chat:
         l = chat['words']
-        l.extend(words)
+        for x in words:
+            if x not in l:
+                l.appen(x)
+            else:
+                failed.append(x)
         await blacklistdb.update_one({"chat_id": chat_id}, {"$set": {"words": l}})
-        return
+        return failed
     await blacklistdb.insert_one({"chat_id": chat_id, 'words': words, 'mode': {'mode' : 1 , 'until' : None}})
+    return failed
 
 
 async def rm_blacklist(chat_id: int, words: List[str]) -> int:

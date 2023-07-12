@@ -13,7 +13,6 @@ from TeleBot.mongo.blacklist_db import (
 )
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
-from TeleBot.core.decorators.log import loggable
 from TeleBot.core.functions import connected
 from TeleBot.core import custom_filter
 
@@ -24,48 +23,52 @@ BLACKLISTS_COMMAND = get_command("BLACKLISTS_COMMAND")
 
 
 @app.on_message(custom_filter.command(commands=ADDBLACKLIST_COMMAND))
-@language
-@loggable
+@admins_stuff(user=True,bot=False)
 async def add_blacklist_command(client, message, lang):
     user = message.from_user
-    chat = await connected(
-        message, user.id if user else message.sender_chat.id, lang, need_admin=True
-    )
-    if not chat:
-        return
+    chat = message.chat
     if len(message.command) < 2:
-        return await message.reply(lang.blacklist1)
+        await message.reply(lang.blacklist1)
+        return
     text = message.text.split(maxsplit=1)[1]
     to_blacklist = list(
         {trigger.strip().lower() for trigger in text.split() if trigger.strip()}
     )
-    print(to_blacklist)
-    # if is_blacklisted(to_blacklist):
-    #     await message.reply_text("Retard?! That Word is already blacklisted!")
-    #     return
-    # await add_blacklist(chat.id, to_blacklist)
-    # if len(to_blacklist) == 1:
-    #     return await message.reply(
-    #         f"ᴀᴅᴅᴇᴅ '{to_blacklist[0]}' ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ɪɴ ᴄʜᴀᴛ: {chat.title}"
-    #     )
-    # text = "ᴀᴅᴅᴇᴅ ᴛʜᴇ ꜰᴏʟʟᴏᴡɪɴɢ ᴡᴏʀᴅꜱ ᴛᴏ ᴛʜᴇ ʙʟᴀᴄᴋʟɪꜱᴛ:\n"
-    # for word in to_blacklist:
-    #     text += f"‣ {word}\n"
-    # await message.reply(text)
+    if len(to_blacklist) == 1:
+        if is_blacklisted(to_blacklist[0]):
+            await message.reply_text(lang.blacklist2)
+            return
+        await add_blacklist(chat.id, to_blacklist)
+        await message.reply(
+            lang.blacklist3.format(to_blacklist[0],chat.title)
+        )
+        return
+    failed = await add_blacklist(chat.id, to_blacklist)
+    
+    text = lang.blacklist4
+    for word in to_blacklist:
+        if word not in failed:
+            text += f"‣ {word}\n"
+    text += lang.blacklist5
+    for word in failed:
+        text +=  f"‣ {word}\n"
+    text += lang.blacklist6
+    await message.reply(text)
+    return
 
 
-# @app.on_message(custom_filter.command(commands=UNBLACKLIST_COMMAND))
-# @is_user_admin()
-# async def unblacklist_command(client, message):
-#     chat = message.chat
-#     if len(message.command) < 2:
-#         return await message.reply("ᴛᴇʟʟ ᴍᴇ ᴡʜɪᴄʜ ᴡᴏʀᴅꜱ ʏᴏᴜ ᴡᴏᴜʟᴅ ʟɪᴋᴇ ᴛᴏ ʀᴇᴍᴏᴠᴇ ɪɴ ʙʟᴀᴄᴋʟɪꜱᴛ")
-#     text = message.text.split(maxsplit=1)[1]
-#     to_unblacklist = list({trigger.strip().lower() for trigger in text.split() if trigger.strip()})
-#     sucess = await rm_blacklist(chat.id, to_unblacklist)
-#     if sucess == 0:
-#         return await message.reply("ɴᴏɴᴇ ᴏꜰ ᴛʜᴇꜱᴇ ᴡᴏʀᴅꜱ ᴀʀᴇ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ")
-#     return await message.reply(f"ʀᴇᴍᴏᴠᴇᴅ {sucess} ᴡᴏʀᴅꜱ ꜰʀᴏᴍ ʙʟᴀᴄᴋʟɪꜱᴛ")
+@app.on_message(custom_filter.command(commands=UNBLACKLIST_COMMAND))
+@admins_stuff(user=True,bot=False)
+async def unblacklist_command(client, message,lang):
+    chat = message.chat
+    if len(message.command) < 2:
+        return await message.reply(lang.blacklist7)
+    text = message.text.split(maxsplit=1)[1]
+    to_unblacklist = list({trigger.strip().lower() for trigger in text.split() if trigger.strip()})
+    sucess = await rm_blacklist(chat.id, to_unblacklist)
+    if sucess == 0:
+        return await message.reply(lang.blacklist8)
+    return await message.reply(lang.blacklist9.format(sucess))
 
 
 # @app.on_message(custom_filter.command(commands=BLACKLISTMODE_COMMAND))

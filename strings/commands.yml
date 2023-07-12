@@ -85,3 +85,6 @@ FILTER_COMMAND : ["filter"]
 STOP_COMMAND : ["stop"]
 FILTERS_COMMAND : ["filters"]
 RMALLFILTERS_COMMAND : ["removeallfilters"]
+
+# Log_channel.py
+LOGCHANNEL_COMMAND : ["setlog","unsetlog","logchannel"]

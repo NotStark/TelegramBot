@@ -11,7 +11,7 @@ from TeleBot.mongo.filters_db import (
 from strings import get_command
 from TeleBot.core.functions import get_filter_type
 from pyrogram import filters
-from pyrogram.types import  InlineKeyboardMarkup
+from pyrogram.types import InlineKeyboardMarkup
 from pyrogram.enums import ChatMemberStatus
 from TeleBot.core.filter_groups import filters_watcher
 from TeleBot.core.button_parser import button_markdown_parser

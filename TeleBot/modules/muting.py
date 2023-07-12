@@ -240,7 +240,7 @@ async def _tbanCb(client, query,lang):
 
 
 __commands__ = MUTE_COMMAND + UNMUTE_COMMAND + TMUTE_COMMAND
-__mod_name__ = "𝙼ᴜᴛ ɪɴɢ"
+__mod_name__ = "𝙼ᴜᴛɪɴɢ"
 __alt_names__ = ["mute"]
 __sub_mode__ = ["𝙱ᴀɴ"]
 

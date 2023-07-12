@@ -267,14 +267,21 @@ async def _help(client, message, lang):
 async def help_button(client, query, lang):
     mod_match = re.match(r"help_module\((.+?)\)", query.data)
     if mod_match:
-        module = mod_match.group(1)
-        print(module)
-        text = lang.help3.format(module) + HELPABLE[module.replace(" ","_")].__help__
+        module_name = mod_match.group(1)
+        module = HELPABLE[module_name.replace(" ","_")]
+        text = lang.help3.format(module_name) + module.__help__
+        buttons = []
+        sub_btns = []
+        for sub_mod in getattr(module,"__sub_mode__",[]):
+            mod = await get_help(HELPABLE,sub_mod)
+            if mod:
+                mod = HELPABLE[mod]
+                sub_btns.append(InlineKeyboardButton(mod.__mod_name__,callback_data = f"help_module({mod.__mod_name__.lower()})"))
+        buttons.append(sub_btns)
+        buttons.append([InlineKeyboardButton(text=lang.btn22, callback_data="help_back")])
         await query.message.edit_caption(
             text,
-            reply_markup=InlineKeyboardMarkup(
-                [[InlineKeyboardButton(text=lang.btn22, callback_data="help_back")]]
-            ),
+            reply_markup=InlineKeyboardMarkup(buttons)
         )
     if query.data == "help_back":
         btns = paginate_modules(HELPABLE, "help", lang)

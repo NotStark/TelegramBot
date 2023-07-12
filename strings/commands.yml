@@ -78,3 +78,10 @@ CLEAR_COMMAND : ["clear"]
 NOTES_COMMAND : ["notes", "saved"]
 RMALLNOTES_COMMAND : ["removeallnotes"]
 GET_COMMAND : ["get"]
+
+
+# Filters.py
+FILTER_COMMAND : ["filter"]
+STOP_COMMAND : ["stop"]
+FILTERS_COMMAND : ["filters"]
+RMALLFILTERS_COMMAND : ["removeallfilters"]

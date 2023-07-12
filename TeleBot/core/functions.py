@@ -378,3 +378,66 @@ async def send_note_message(message, note_name, chat_id):
         await message.reply(
             f"ᴛʜɪꜱ ɴᴏᴛᴇ ᴄᴏᴜʟᴅ ɴᴏᴛ ʙᴇ ꜱᴇɴᴛ, ᴀꜱ ɪᴛ ɪꜱ ɪɴᴄᴏʀʀᴇᴄᴛʟʏ ꜰᴏʀᴍᴀᴛᴛᴇᴅ. ᴀꜱᴋ ɪɴ @{config.SUPPORT_CHAT} ɪꜰ ʏᴏᴜ ᴄᴀɴ'ᴛ ꜰɪɢᴜʀᴇ ᴏᴜᴛ ᴡʜʏ\n\n‣ ᴇʀʀᴏʀ : {str(e)}"
         )
+
+
+async def get_filter_type(message):
+    if not message.reply_to_message:
+        if message.text and len(message.text.split()) >= 3:
+            content = None
+            text = message.text.split(None, 2)[2]
+            data_type = 0
+        else:
+            text = None
+            data_type = None
+            content = None
+    else:
+        reply_message = message.reply_to_message
+
+        if reply_message.text and len(message.text.split()) >= 2:
+            content = None
+            text = reply_message.text
+            data_type = 0
+        elif reply_message.sticker:
+            content = reply_message.sticker.file_id
+            text = None
+            data_type = 1
+        elif reply_message.document:
+            content = reply_message.document.file_id
+            text = reply_message.caption
+            data_type = 2
+        elif reply_message.photo:
+            content = reply_message.photo.file_id
+            text = reply_message.caption
+            data_type = 3
+        elif reply_message.audio:
+            content = reply_message.audio.file_id
+            text = reply_message.caption
+            data_type = 4
+        elif reply_message.voice:
+            content = reply_message.voice.file_id
+            text = reply_message.caption
+            data_type = 5
+        elif reply_message.video:
+            content = reply_message.video.file_id
+            text = reply_message.caption
+            data_type = 6
+        elif reply_message.video_note:
+            content = reply_message.video_note.file_id
+            text = None
+            data_type = 7
+        elif reply_message.animation:
+            content = reply_message.animation.file_id
+            text = reply_message.caption
+            data_type = 8
+        else:
+            text = None
+            data_type = None
+            content = None
+
+    if len(message.command) >= 3:
+        filter_name = message.text.split(maxsplit=2)[1].lower()
+        text = message.text.split(maxsplit=2)[2]
+    else:
+        filter_name = message.command[1].lower()
+
+    return filter_name, text, data_type, content

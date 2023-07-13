@@ -240,36 +240,6 @@ async def prevent_approved(message):
     return ignore
 
 
-async def time_buttons(prefix, user_id, from_user_id, lang):
-    buttons = InlineKeyboardMarkup(
-        [
-            [
-                InlineKeyboardButton(
-                    lang.btn13, callback_data=f"{prefix}:5m:{user_id}:{from_user_id}"
-                ),
-                InlineKeyboardButton(
-                    lang.btn16, callback_data=f"{prefix}:6h:{user_id}:{from_user_id}"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    lang.btn14, callback_data=f"{prefix}:3d:{user_id}:{from_user_id}"
-                ),
-                InlineKeyboardButton(
-                    lang.btn15, callback_data=f"{prefix}:1w:{user_id}:{from_user_id}"
-                ),
-            ],
-            [
-                InlineKeyboardButton(
-                    lang.btn9, callback_data=f"admin_close_{from_user_id}"
-                )
-            ],
-        ]
-    )
-
-    return buttons
-
-
 async def fillings(message, user, text):
     user_id = user.id
     first_name = user.first_name
@@ -443,50 +413,76 @@ async def get_filter_type(message):
     return filter_name, text, data_type, content
 
 
-async def get_buttons(message, user_id, callback, get_mode, get_emoji, lang):
+async def get_buttons(message, user_id, prefix, get_mode, get_emoji, lang):
     chat_id = message.chat.id
     mode, until = await get_mode(chat_id)
     emoji = await get_emoji(chat_id, mode)
     buttons = [
         [
             InlineKeyboardButton(
-                f"ᴅᴇʟᴇᴛᴇ {emoji if mode == 1 else ''}",
-                callback_data=f"{callback}_1_{user_id}",
+                f"{lang.btn39} {emoji if mode == 1 else ''}",
+                callback_data=f"{prefix}_1_{user_id}",
             ),
             InlineKeyboardButton(
                 f"ᴡᴀʀɴ {emoji if mode == 2 else ''}",
-                callback_data=f"{callback}_2_{user_id}",
+                callback_data=f"{prefix}_2_{user_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                f"ᴍᴜᴛᴇ {emoji if mode == 3 else ''}",
-                callback_data=f"{callback}_3_{user_id}",
+                f"{lang.btn40} {emoji if mode == 3 else ''}",
+                callback_data=f"{prefix}_3_{user_id}",
             ),
             InlineKeyboardButton(
-                f"ᴋɪᴄᴋ {emoji if mode == 4 else ''}",
-                callback_data=f"{callback}_4_{user_id}",
+                f"{lang.btn30[1:]} {emoji if mode == 4 else ''}",
+                callback_data=f"{prefix}_4_{user_id}",
             ),
         ],
         [
             InlineKeyboardButton(
-                f"ʙᴀɴ {emoji if mode == 5 else ''}",
-                callback_data=f"{callback}_5_{user_id}",
+                f"{lang.btn31[1:]} {emoji if mode == 5 else ''}",
+                callback_data=f"{prefix}_5_{user_id}",
             ),
             InlineKeyboardButton(
-                f"ᴛʙᴀɴ {emoji if mode == 6 else ''}",
-                callback_data=f"{callback}_6_{user_id}",
+                f"{lang.btn41} {emoji if mode == 6 else ''}",
+                callback_data=f"{prefix}_6_{user_id}",
             ),
         ],
         [
-            InlineKeyboardButton("ᴛᴍᴜᴛᴇ", callback_data=f"admin_close_{user_id}"),
             InlineKeyboardButton(
-                f"ᴅɪꜱᴀʙʟᴇ {emoji if mode == 0 else ''}",
-                callback_data=f"{callback}_0_{user_id}",
+                f"{lang.btn42} {emoji if mode == 7 else ''}",
+                callback_data=f"{prefix}_6_{user_id}",
+            ),
+            InlineKeyboardButton(
+                f"{lang.btn43} {emoji if mode == 0 else ''}",
+                callback_data=f"{prefix}_0_{user_id}",
             ),
         ],
-        [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data=f"admin_close_{user_id}")],
+        [InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{user_id}")],
     ]
     return buttons
 
 
+async def get_time_buttons(user_id: int, prefix: str , lang : dict):
+    btn = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    lang.btn13, callback_data=f"{prefix}_until=5m_{user_id}"
+                ),
+                InlineKeyboardButton(
+                    lang.btn16, callback_data=f"{prefix}_until=6h_{user_id}"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    lang.btn14, callback_data=f"{prefix}_until=3d_{user_id}"
+                ),
+                InlineKeyboardButton(
+                    lang.btn15, callback_data=f"{prefix}_until=1w_{user_id}"
+                ),
+            ],
+            [InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{user_id}")],
+        ]
+    )
+    return btn

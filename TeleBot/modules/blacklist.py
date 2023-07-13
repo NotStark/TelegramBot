@@ -15,6 +15,7 @@ from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.functions import  get_buttons
 from TeleBot.core import custom_filter
+from pyrogram.types import InlineKeyboardMarkup
 
 ADDBLACKLIST_COMMAND = get_command("ADDBLACKLIST_COMMAND")
 UNBLACKLIST_COMMAND = get_command("UNBLACKLIST_COMMAND")
@@ -73,8 +74,8 @@ async def unblacklist_command(client, message,lang):
 
 
 @app.on_message(custom_filter.command(commands=BLACKLISTMODE_COMMAND))
-@is_user_admin()
-async def unblacklist_command(client, message):
+@admins_stuff(user=True,bot=False)
+async def unblacklist_command(client, message, lang):
     '''
     0 : off
     1 : del
@@ -85,53 +86,53 @@ async def unblacklist_command(client, message):
     6 : tban
     7: tmute
     '''
-    user_id = message.from_user.id
+    user_id = message.from_user.id if message.from_user else 0
     buttons = await get_buttons(message,user_id,callback="blacklistmode",get_mode = get_blacklist_mode,get_emoji = get_emoji)
-    await message.reply("ᴄʜᴏᴏꜱᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ᴍᴏᴅᴇ ꜰʀᴏᴍ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴꜱ",reply_markup=InlineKeyboardMarkup(buttons))
+    await message.reply(lang.blacklist10,reply_markup=InlineKeyboardMarkup(buttons))
 
 
-# @app.on_callback_query(filters.regex("^blacklistmode_"))
-# async def blmodeCb(client,query):
-#     mode,user_id = query.data.split("_")[1:]
-#     from_user = query.from_user
-#     chat_id = query.message.chat.id
-#     if from_user.id != int(user_id):
-#        return await query.answer("ʏᴏᴜ ᴄᴀɴ'ᴛ ᴘᴇʀꜰʀᴏᴍ ᴛʜɪꜱ ᴀᴄᴛɪᴏɴ 🔴.",show_alert=True)
+@app.on_callback_query(filters.regex("^blacklistmode_"))
+async def blmodeCb(client,query):
+    mode,user_id = query.data.split("_")[1:]
+    from_user = query.from_user
+    chat_id = query.message.chat.id
+    if from_user.id != int(user_id):
+       return await query.answer("ʏᴏᴜ ᴄᴀɴ'ᴛ ᴘᴇʀꜰʀᴏᴍ ᴛʜɪꜱ ᴀᴄᴛɪᴏɴ 🔴.",show_alert=True)
 
-#     if mode.startswith("until="):
-#         until = mode.split("=")[1]
-#         await set_blacklist_mode(chat_id,(6,until))
-#         return await query.message.edit(f"ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ʙᴀɴ ᴛʜᴀᴛ ᴜꜱᴇʀ ᴡʜᴏ ꜱᴇɴᴅꜱ ʙʟᴀᴄᴋɪʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ ꜰᴏʀ {until}")
+    if mode.startswith("until="):
+        until = mode.split("=")[1]
+        await set_blacklist_mode(chat_id,(6,until))
+        return await query.message.edit(f"ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ʙᴀɴ ᴛʜᴀᴛ ᴜꜱᴇʀ ᴡʜᴏ ꜱᴇɴᴅꜱ ʙʟᴀᴄᴋɪʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ ꜰᴏʀ {until}")
 
-#     txt = None
-#     if mode == "0":
-#         await set_blacklist_mode(chat_id,(0,0))
-#         txt = "ᴅɪꜱᴀʙʟᴇᴅ ʙʟᴀᴄᴋʟɪꜱᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ᴏꜰ ᴛʜɪꜱ ᴄʜᴀᴛ"
-#     if mode == '1':
-#         await set_blacklist_mode(chat_id,(1,0))
-#         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴅᴇʟᴇᴛᴇ ᴛʜᴀᴛ ᴍᴇꜱꜱᴀɢᴇ ᴡʜɪᴄʜ ᴄᴏɴᴛᴀɪɴꜱ ʙʟᴀᴄᴋʟɪꜱᴛ ᴡᴏʀᴅꜱ"
-#     if mode == '2':
-#         await set_blacklist_mode(chat_id,(2,0))
-#         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴅᴇʟᴇᴛᴇ ᴛʜᴀᴛ ᴍᴇꜱꜱᴀɢᴇ ᴡʜɪᴄʜ ᴄᴏɴᴛᴀɪɴꜱ ʙʟᴀᴄᴋʟɪꜱᴛ ᴡᴏʀᴅꜱ"
-#     if mode == '3':
-#         await set_blacklist_mode(chat_id,(3,0))
-#         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
-#     if mode == '4':
-#         await set_blacklist_mode(chat_id,(4,0))
-#         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
-#     if mode == '5':
-#         await set_blacklist_mode(chat_id,(5,0))
-#         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
-#     if mode == '6':
-#         btn = await get_time_buttons(user_id,"blacklistmode")
-#         await query.message.edit("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
-#         return
-#     await query.answer(txt,show_alert=True)
-#     btns = await get_buttons(query.message,user_id,callback="blacklistmode",get_mode = get_blacklist_mode,get_emoji = get_emoji)
-#     try:
-#         await query.message.edit_reply_markup(InlineKeyboardMarkup(btns))
-#     except:
-#         pass
+    txt = None
+    if mode == "0":
+        await set_blacklist_mode(chat_id,(0,0))
+        txt = "ᴅɪꜱᴀʙʟᴇᴅ ʙʟᴀᴄᴋʟɪꜱᴛ ᴏᴘᴇʀᴀᴛɪᴏɴ ᴏꜰ ᴛʜɪꜱ ᴄʜᴀᴛ"
+    if mode == '1':
+        await set_blacklist_mode(chat_id,(1,0))
+        txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴅᴇʟᴇᴛᴇ ᴛʜᴀᴛ ᴍᴇꜱꜱᴀɢᴇ ᴡʜɪᴄʜ ᴄᴏɴᴛᴀɪɴꜱ ʙʟᴀᴄᴋʟɪꜱᴛ ᴡᴏʀᴅꜱ"
+    if mode == '2':
+        await set_blacklist_mode(chat_id,(2,0))
+        txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴅᴇʟᴇᴛᴇ ᴛʜᴀᴛ ᴍᴇꜱꜱᴀɢᴇ ᴡʜɪᴄʜ ᴄᴏɴᴛᴀɪɴꜱ ʙʟᴀᴄᴋʟɪꜱᴛ ᴡᴏʀᴅꜱ"
+    if mode == '3':
+        await set_blacklist_mode(chat_id,(3,0))
+        txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
+    if mode == '4':
+        await set_blacklist_mode(chat_id,(4,0))
+        txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
+    if mode == '5':
+        await set_blacklist_mode(chat_id,(5,0))
+        txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
+    if mode == '6':
+        btn = await get_time_buttons(user_id,"blacklistmode")
+        await query.message.edit("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
+        return
+    await query.answer(txt,show_alert=True)
+    btns = await get_buttons(query.message,user_id,callback="blacklistmode",get_mode = get_blacklist_mode,get_emoji = get_emoji)
+    try:
+        await query.message.edit_reply_markup(InlineKeyboardMarkup(btns))
+    except:
+        pass
 
 
 # @app.on_message(custom_filter.command(commands=BLACKLISTS_COMMAND))

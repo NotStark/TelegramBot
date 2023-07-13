@@ -7,8 +7,7 @@ from TeleBot.core.functions import (
     is_invincible,
     until_date,
     get_admins,
-    connected,
-    time_buttons,
+    connected
 )
 from TeleBot.core.extractions import extract_user_and_reason
 from TeleBot.core import custom_filter
@@ -24,6 +23,36 @@ TBAN_COMMAND = get_command("TBAN_COMMAND")
 KICK_COMMAND = get_command("KICK_COMMAND")
 PUNCH_COMMAND = get_command("PUNCH_COMMAND")
 LISTBAN_COMMAND = get_command("LISTBAN_COMMAND")
+
+
+async def time_buttons(prefix, user_id, from_user_id, lang):
+    buttons = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    lang.btn13, callback_data=f"{prefix}:5m:{user_id}:{from_user_id}"
+                ),
+                InlineKeyboardButton(
+                    lang.btn16, callback_data=f"{prefix}:6h:{user_id}:{from_user_id}"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    lang.btn14, callback_data=f"{prefix}:3d:{user_id}:{from_user_id}"
+                ),
+                InlineKeyboardButton(
+                    lang.btn15, callback_data=f"{prefix}:1w:{user_id}:{from_user_id}"
+                ),
+            ],
+            [
+                InlineKeyboardButton(
+                    lang.btn9, callback_data=f"admin_close_{from_user_id}"
+                )
+            ],
+        ]
+    )
+
+    return buttons
 
 
 @app.on_message(custom_filter.command(commands=BAN_COMMAND))

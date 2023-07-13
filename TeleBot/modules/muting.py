@@ -2,11 +2,12 @@ from TeleBot import app, BOT_ID
 from pyrogram import filters, enums
 from TeleBot.core import custom_filter
 from strings import get_command
+from .ban import time_buttons
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
-from TeleBot.core.functions import get_admins, is_invincible, until_date,time_buttons
+from TeleBot.core.functions import get_admins, is_invincible, until_date
 from pyrogram.types import ChatPermissions, InlineKeyboardButton, InlineKeyboardMarkup
 
 
@@ -77,25 +78,23 @@ async def _mute(client, message, lang):
         )
 
     await message.reply(txt, reply_markup=button)
-    return lang.mute5.format(member.user.mention,admeme.mention if admeme else 'Anon')
+    return lang.mute5.format(member.user.mention, admeme.mention if admeme else "Anon")
 
 
-async def unmute_func(client, message, user_id, from_user,lang):
+async def unmute_func(client, message, user_id, from_user, lang):
     chat = message.chat
     if not user_id:
-        await message.reply(
-            lang.admin1
-        )
+        await message.reply(lang.admin1)
         return
     if user_id == BOT_ID:
         await message.reply(lang.mute6)
         return
     member = await client.get_chat_member(chat.id, user_id)
     if member.status != enums.ChatMemberStatus.RESTRICTED:
-        return await message.reply_text(
-            lang.mute7 
-        )
-    text = lang.mute8.format(member.user.mention,user_id,from_user.mention if from_user else 'Anon')
+        return await message.reply_text(lang.mute7)
+    text = lang.mute8.format(
+        member.user.mention, user_id, from_user.mention if from_user else "Anon"
+    )
     button = InlineKeyboardMarkup(
         [
             [
@@ -108,13 +107,15 @@ async def unmute_func(client, message, user_id, from_user,lang):
     )
     await client.unban_chat_member(chat.id, user_id)
     await message.reply_text(text, reply_markup=button)
-    return lang.mute9.format(member.user.mention,from_user.mention if from_user else 'Anon')
+    return lang.mute9.format(
+        member.user.mention, from_user.mention if from_user else "Anon"
+    )
 
 
 @app.on_callback_query(filters.regex("^unmute_"))
 @language
 @loggable
-async def _unbanCb(client, query,lang):
+async def _unbanCb(client, query, lang):
     from_user_id = int(query.data.split("_")[2])
     user_id = int(query.data.split("_")[1])
     from_user = query.from_user
@@ -122,43 +123,39 @@ async def _unbanCb(client, query,lang):
         await query.answer(lang.other6, show_alert=True)
         return
     await query.message.delete()
-    return await unmute_func(client, query.message, user_id, from_user,lang)
+    return await unmute_func(client, query.message, user_id, from_user, lang)
 
 
 @app.on_message(custom_filter.command(commands=UNMUTE_COMMAND))
 @admins_stuff("can_restrict_members", bot=True)
 @loggable
-async def _ban(client, message,lang):
+async def _ban(client, message, lang):
     user_id = await extract_user_id(message)
     from_user = message.from_user
-    await unmute_func(client, message, user_id, from_user,lang)
+    await unmute_func(client, message, user_id, from_user, lang)
 
 
 @app.on_message(custom_filter.command(commands=TMUTE_COMMAND))
 @admins_stuff("can_restrict_members", bot=True)
 @loggable
-async def _tmute(client, message,lang):
+async def _tmute(client, message, lang):
     user_id, reason = await extract_user_and_reason(message)
     admeme = message.from_user
     chat = message.chat
     if not user_id:
-        await message.reply_text(
-            lang.admin1
-        )
+        await message.reply_text(lang.admin1)
         return
     if user_id == BOT_ID:
         await message.reply(lang.mute1)
         return
     if user_id in await get_admins(chat.id):
-        await message.reply(
-            lang.mute2
-        )
+        await message.reply(lang.mute2)
         return
     if await is_invincible(user_id):
         await message.reply(lang.mute3)
         return
     if not reason:
-        btn = await time_buttons("tmute",user_id , admeme.id if admeme else 0 , lang)
+        btn = await time_buttons("tmute", user_id, admeme.id if admeme else 0, lang)
         await message.reply(lang.other8, reply_markup=btn)
         return
     split_reason = reason.split(None, 1)
@@ -195,13 +192,18 @@ async def _tmute(client, message,lang):
     """,
         reply_markup=button,
     )
-    return lang.mute10.format(member.user.mention , admeme.mention if admeme else 'Anon',f'{time_val[0]} {unit}',reason)
+    return lang.mute10.format(
+        member.user.mention,
+        admeme.mention if admeme else "Anon",
+        f"{time_val[0]} {unit}",
+        reason,
+    )
 
 
 @app.on_callback_query(filters.regex("^tmute:"))
 @language
 @loggable
-async def _tbanCb(client, query,lang):
+async def _tbanCb(client, query, lang):
     value, user_id, from_user_id = query.data.split(":")[1:]
     from_user = query.from_user
     chat = query.message.chat
@@ -236,7 +238,9 @@ async def _tbanCb(client, query,lang):
     """,
         reply_markup=button,
     )
-    return lang.mute10.format(member.user.mention , from_user.mention,f'{value[0]} {unit}',None)
+    return lang.mute10.format(
+        member.user.mention, from_user.mention, f"{value[0]} {unit}", None
+    )
 
 
 __commands__ = MUTE_COMMAND + UNMUTE_COMMAND + TMUTE_COMMAND
@@ -255,4 +259,3 @@ __help__ = """
 ๏ /unmute <userhandle> : ᴜɴᴍᴜᴛᴇs ᴀ ᴜsᴇʀ. ᴄᴀɴ ᴀʟsᴏ ʙᴇ ᴜsᴇᴅ ᴀs ᴀ ʀᴇᴘʟʏ, ᴍᴜᴛɪɴɢ ᴛʜᴇ ʀᴇᴘʟɪᴇᴅ ᴛᴏ ᴜsᴇʀ. 
 ═───────◇───────═
 """
-

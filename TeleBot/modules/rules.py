@@ -34,7 +34,7 @@ async def _setrules(client, message,lang):
     rules = message.text.split(None, 1)[1]
     await set_rules(chat.id, rules)
     await message.reply_text(lang.rules3.format(chat.title))
-    return lang.rules4.format(rules,message.from_user.mention if message.from_user else 'Anon')
+    return lang.rules4.format(rules,message.from_user.mention if message.from_user else 'Anon',chat.title)
 
 
 @app.on_message(custom_filter.command(commands=RMRULES_COMMAND))

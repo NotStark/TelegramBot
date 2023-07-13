@@ -424,7 +424,7 @@ async def get_buttons(message, user_id, prefix, get_mode, get_emoji, lang):
                 callback_data=f"{prefix}_1_{user_id}",
             ),
             InlineKeyboardButton(
-                f"ᴡᴀʀɴ {emoji if mode == 2 else ''}",
+                f"{lang.btn44} {emoji if mode == 2 else ''}",
                 callback_data=f"{prefix}_2_{user_id}",
             ),
         ],
@@ -451,7 +451,7 @@ async def get_buttons(message, user_id, prefix, get_mode, get_emoji, lang):
         [
             InlineKeyboardButton(
                 f"{lang.btn42} {emoji if mode == 7 else ''}",
-                callback_data=f"{prefix}_6_{user_id}",
+                callback_data=f"{prefix}_7_{user_id}",
             ),
             InlineKeyboardButton(
                 f"{lang.btn43} {emoji if mode == 0 else ''}",

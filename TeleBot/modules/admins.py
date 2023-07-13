@@ -1,11 +1,11 @@
-from TeleBot import app, BOT_ID
+from TeleBot import app, BOT_ID , LOG
 from pathlib import Path
 from TeleBot.core import custom_filter
 from strings import get_command
 from pyrogram import filters, errors
 from TeleBot.core.decorators.lang import language
 from TeleBot.core.extractions import extract_user_id, extract_user_and_reason
-from TeleBot.core.functions import get_admins, connected
+from TeleBot.core.functions import get_admins, connected , admin_cache
 from TeleBot.core.decorators.log import loggable
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.functions import is_user_admin, is_bot_admin
@@ -454,6 +454,12 @@ async def _adminlist(client, message, lang):
     except errors.BadRequest:
         return
 
+@app.on_chat_member_updated()
+async def updating_cache(client, cmu):
+        chat = cmu.chat
+        if cmu.old_chat_member and cmu.old_chat_member.promoted_by:
+            admin_cache[chat.id] = [member.user.id async for member in client.get_chat_members(chat.id, filter=ChatMembersFilter.ADMINISTRATORS) ]
+            LOG.print(f"[bold green]Updated admin cache for {chat.id} [{chat.title}]")
 
 __commands__ = (
     PROMOTE_COMMAND

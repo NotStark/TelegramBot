@@ -25,7 +25,7 @@ async def _zombies(client,message,lang):
     if len(zombies) == 0:
          return await text.edit(lang.zombies2.format(message.chat.title))
     
-    await text.edit(lang.zombies.format(len(zombies),message.chat.title),reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton(lang.btn19, callback_data=f"zombies_clean"),InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{message.from_user.id if message.from_user else 0}")]]))
+    await text.edit(lang.zombies3.format(len(zombies),message.chat.title),reply_markup = InlineKeyboardMarkup([[InlineKeyboardButton(lang.btn19, callback_data=f"zombies_clean"),InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{message.from_user.id if message.from_user else 0}")]]))
     ZOMBIES[chat_id] = zombies
 
 
@@ -50,9 +50,9 @@ async def _clean_zombies(client,query,lang):
         except Exception:
             failed += 1
     end = await get_readable_time((time.time() - start))         
-    await query.message.edit(lang.zombies4.format(sucess,chat.title,end))
+    await query.message.edit(lang.zombies4.format(sucess,chat.title,failed,end))
     ZOMBIES.pop(chat.id)
-    return lang.zombies5.format(sucess,query.from_user.mention)
+    return lang.zombies5.format(sucess,query.from_user.mention,)
 
 
 

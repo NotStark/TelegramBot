@@ -12,7 +12,7 @@ def loggable(func):
             message =  update.message if isinstance(update,CallbackQuery) else update
             chat = message.chat
             if result:
-                result += f"\n\n**ᴇᴠᴇɴ ꜱᴛᴀᴍᴘ** : {datetime.datetime.utcnow().strftime('%H:%M - %d-%m-%Y')}"
+                result += f"\n\n**ᴇᴠᴇɴᴛ ꜱᴛᴀᴍᴘ** : {datetime.datetime.utcnow().strftime('%H:%M - %d-%m-%Y')}"
                 btn = InlineKeyboardMarkup([[InlineKeyboardButton("• ʟɪɴᴋ •",url = message.link)]])
                 channel = await get_log_channel(chat.id)
                 if channel:

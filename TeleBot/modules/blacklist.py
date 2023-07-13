@@ -13,7 +13,7 @@ from TeleBot.mongo.blacklist_db import (
 )
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
-from TeleBot.core.functions import connected
+from TeleBot.core.functions import  get_buttons
 from TeleBot.core import custom_filter
 
 ADDBLACKLIST_COMMAND = get_command("ADDBLACKLIST_COMMAND")
@@ -71,21 +71,23 @@ async def unblacklist_command(client, message,lang):
     return await message.reply(lang.blacklist9.format(sucess))
 
 
-# @app.on_message(custom_filter.command(commands=BLACKLISTMODE_COMMAND))
-# @is_user_admin()
-# async def unblacklist_command(client, message):
-#     '''
-#     0 : off
-#     1 : del
-#     2 : warn
-#     3 : mute
-#     4 : kick
-#     5 : ban
-#     6 : tban
-#     '''
-#     user_id = message.from_user.id
-#     buttons = await get_buttons(message,user_id,callback="blacklistmode",get_mode = get_blacklist_mode,get_emoji = get_emoji)
-#     await message.reply("ᴄʜᴏᴏꜱᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ᴍᴏᴅᴇ ꜰʀᴏᴍ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴꜱ",reply_markup=InlineKeyboardMarkup(buttons))
+
+@app.on_message(custom_filter.command(commands=BLACKLISTMODE_COMMAND))
+@is_user_admin()
+async def unblacklist_command(client, message):
+    '''
+    0 : off
+    1 : del
+    2 : warn
+    3 : mute
+    4 : kick
+    5 : ban
+    6 : tban
+    7: tmute
+    '''
+    user_id = message.from_user.id
+    buttons = await get_buttons(message,user_id,callback="blacklistmode",get_mode = get_blacklist_mode,get_emoji = get_emoji)
+    await message.reply("ᴄʜᴏᴏꜱᴇ ʙʟᴀᴄᴋʟɪꜱᴛ ᴍᴏᴅᴇ ꜰʀᴏᴍ ʙᴇʟᴏᴡ ʙᴜᴛᴛᴏɴꜱ",reply_markup=InlineKeyboardMarkup(buttons))
 
 
 # @app.on_callback_query(filters.regex("^blacklistmode_"))

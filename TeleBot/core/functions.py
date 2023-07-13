@@ -441,3 +441,52 @@ async def get_filter_type(message):
         filter_name = message.command[1].lower()
 
     return filter_name, text, data_type, content
+
+
+async def get_buttons(message, user_id, callback, get_mode, get_emoji, lang):
+    chat_id = message.chat.id
+    mode, until = await get_mode(chat_id)
+    emoji = await get_emoji(chat_id, mode)
+    buttons = [
+        [
+            InlineKeyboardButton(
+                f"ᴅᴇʟᴇᴛᴇ {emoji if mode == 1 else ''}",
+                callback_data=f"{callback}_1_{user_id}",
+            ),
+            InlineKeyboardButton(
+                f"ᴡᴀʀɴ {emoji if mode == 2 else ''}",
+                callback_data=f"{callback}_2_{user_id}",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                f"ᴍᴜᴛᴇ {emoji if mode == 3 else ''}",
+                callback_data=f"{callback}_3_{user_id}",
+            ),
+            InlineKeyboardButton(
+                f"ᴋɪᴄᴋ {emoji if mode == 4 else ''}",
+                callback_data=f"{callback}_4_{user_id}",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                f"ʙᴀɴ {emoji if mode == 5 else ''}",
+                callback_data=f"{callback}_5_{user_id}",
+            ),
+            InlineKeyboardButton(
+                f"ᴛʙᴀɴ {emoji if mode == 6 else ''}",
+                callback_data=f"{callback}_6_{user_id}",
+            ),
+        ],
+        [
+            InlineKeyboardButton("ᴛᴍᴜᴛᴇ", callback_data=f"admin_close_{user_id}"),
+            InlineKeyboardButton(
+                f"ᴅɪꜱᴀʙʟᴇ {emoji if mode == 0 else ''}",
+                callback_data=f"{callback}_0_{user_id}",
+            ),
+        ],
+        [InlineKeyboardButton("ᴄʟᴏꜱᴇ", callback_data=f"admin_close_{user_id}")],
+    ]
+    return buttons
+
+

@@ -60,21 +60,21 @@ async def _mute(client, message, lang):
     await message.reply(txt, reply_markup=button)
     if message.command[0] == "mute":
         await client.restrict_chat_member(
-            chat.id, user_id, ChatPermissions(can_send_message=False)
+            chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
     if message.command[0] == "smute":
         await message.delete()
         if replied:
             await message.reply_to_message.delete()
         await client.restrict_chat_member(
-            chat.id, user_id, ChatPermissions(can_send_message=False)
+            chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
         return
     if message.command[0] == "dmute":
         if replied:
             await message.reply_to_message.delete()
         await client.restrict_chat_member(
-            chat.id, user_id, ChatPermissions(can_send_message=False)
+            chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
 
     await message.reply(txt, reply_markup=button)

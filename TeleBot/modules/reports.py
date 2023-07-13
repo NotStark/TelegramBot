@@ -25,10 +25,10 @@ async def _reports(client, message, lang):
         arg = message.command[1].lower()
         if arg in ("on", "yes"):
             status = True
-            await message.reply(lang.report2)
+            await message.reply(lang.report3)
         if arg in ("no", "off"):
             status = False
-            await message.reply(lang.report3)
+            await message.reply(lang.report2)
         await on_off_reports(chat.id, status)
         return
     permission = "can_change_info"

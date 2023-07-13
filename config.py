@@ -18,7 +18,7 @@ SUDO_USERS = list(map(int, getenv("SUDO_USERS", "0").split()))
 ARQ_API_KEY = getenv('ARQ_API_KEY', 'QXVXTN-JORXPR-DVQAYY-VCTDAC-ARQ')
 DONATION_LINK = getenv('DONATION_LINK', 'https://t.me/TheStark')
 START_IMG = getenv('START_IMG', '').split()
-HELP_IMG = getenv('HELP_IMG', '')
+HELP_IMG = getenv('HELP_IMG', '').split()
 HANDLERS = getenv("HANDLERS", ". /").split()
 
 

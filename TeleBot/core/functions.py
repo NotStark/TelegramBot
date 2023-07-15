@@ -464,26 +464,29 @@ async def get_buttons(message, user_id, prefix, get_mode, get_emoji, lang):
     return buttons
 
 
-async def get_time_buttons(user_id: int, prefix: str , lang : dict):
+async def get_time_buttons(user_id: int, prefix: str, lang: dict, mode: str):
     btn = InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    lang.btn13, callback_data=f"{prefix}_until=5m_{user_id}"
+                    lang.btn13, callback_data=f"{prefix}_until=5m&mode={mode}_{user_id}"
                 ),
                 InlineKeyboardButton(
-                    lang.btn16, callback_data=f"{prefix}_until=6h_{user_id}"
+                    lang.btn16, callback_data=f"{prefix}_until=6h&mode={mode}_{user_id}"
                 ),
             ],
             [
                 InlineKeyboardButton(
-                    lang.btn14, callback_data=f"{prefix}_until=3d_{user_id}"
+                    lang.btn14, callback_data=f"{prefix}_until=3d&mode={mode}_{user_id}"
                 ),
                 InlineKeyboardButton(
-                    lang.btn15, callback_data=f"{prefix}_until=1w_{user_id}"
+                    lang.btn15, callback_data=f"{prefix}_until=1w&mode={mode}_{user_id}"
                 ),
             ],
             [InlineKeyboardButton(lang.btn9, callback_data=f"admin_close_{user_id}")],
         ]
     )
     return btn
+
+
+

@@ -71,3 +71,12 @@ async def get_blacklist(chat_id: int) -> List[str]:
 
 async def un_blacklistall(chat_id: int) -> None:
     await blacklistdb.delete_one({"chat_id": chat_id})
+
+
+async def get_time_emoji(chat_id , until , mode_id):
+    mode, until = await get_blacklist_mode(chat_id)
+    if mode and mode == mode_id and until == until:
+        return "✅"
+    else :
+        return ""
+

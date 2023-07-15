@@ -13,7 +13,7 @@ from TeleBot.mongo.blacklist_db import (
 )
 from TeleBot.core.decorators.chat_status import admins_stuff
 from TeleBot.core.decorators.lang import language
-from TeleBot.core.functions import  get_buttons
+from TeleBot.core.functions import  get_buttons , get_time_buttons
 from TeleBot.core import custom_filter
 from pyrogram.types import InlineKeyboardMarkup
 
@@ -124,6 +124,10 @@ async def blmodeCb(client,query):
         await set_blacklist_mode(chat_id,(5,0))
         txt = "ᴀʟʀɪɢʜᴛ ᴀᴍ ɢᴏɴɴᴀ ᴍᴜᴛᴇ ᴛʜᴏꜱᴇ ᴜꜱᴇʀꜱ ᴡʜᴏ ꜱᴇɴᴅꜱ ᴀɴʏ ʙʟᴀᴄᴋʟɪꜱᴛᴇᴅ ᴡᴏʀᴅ"
     if mode == '6':
+        btn = await get_time_buttons(user_id,"blacklistmode")
+        await query.message.edit("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
+        return
+    if mode == '7':
         btn = await get_time_buttons(user_id,"blacklistmode")
         await query.message.edit("**ᴄʜᴏᴏsᴇ ᴠᴀʟᴜᴇ**", reply_markup=btn)
         return

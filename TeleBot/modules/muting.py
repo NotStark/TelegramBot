@@ -23,7 +23,7 @@ async def _mute(client, message, lang):
     chat = message.chat
     user_id = await extract_user_id(message)
     replied = message.reply_to_message
-    admeme = message.from_user if message.from_user else None
+    admeme = message.from_user 
     if not user_id:
         await message.reply(lang.admin1)
         return
@@ -41,12 +41,11 @@ async def _mute(client, message, lang):
 
     member = await client.get_chat_member(chat.id, user_id)
     txt = lang.mute4.format(member.user.mention, user_id, chat.title)
-
     button = InlineKeyboardMarkup(
         [
             [
                 InlineKeyboardButton(
-                    lang.mute36,
+                    lang.btn36,
                     callback_data=f"unmute_{user_id}_{admeme.id if admeme else 0}",
                 )
             ],
@@ -62,7 +61,7 @@ async def _mute(client, message, lang):
         await client.restrict_chat_member(
             chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
-    if message.command[0] == "smute":
+    elif message.command[0] == "smute":
         await message.delete()
         if replied:
             await message.reply_to_message.delete()
@@ -70,7 +69,7 @@ async def _mute(client, message, lang):
             chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
         return
-    if message.command[0] == "dmute":
+    elif message.command[0] == "dmute":
         if replied:
             await message.reply_to_message.delete()
         await client.restrict_chat_member(
@@ -132,7 +131,7 @@ async def _unbanCb(client, query, lang):
 async def _ban(client, message, lang):
     user_id = await extract_user_id(message)
     from_user = message.from_user
-    await unmute_func(client, message, user_id, from_user, lang)
+    return await unmute_func(client, message, user_id, from_user, lang)
 
 
 @app.on_message(custom_filter.command(commands=TMUTE_COMMAND))
@@ -161,7 +160,7 @@ async def _tmute(client, message, lang):
     split_reason = reason.split(None, 1)
     time_val = split_reason[0].lower()
     reason = split_reason[1] if len(split_reason) > 1 else ""
-    until, unit = until_date(message, time_val)
+    until, unit = until_date(message, time_val,lang)
     if not until:
         return
     member = await client.get_chat_member(chat.id, user_id)

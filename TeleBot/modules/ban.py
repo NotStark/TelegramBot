@@ -223,7 +223,7 @@ async def _ban(client, message, lang):
             ]
         ),
     )
-    return lang.bann13.format(
+    return lang.ban13.format(
         member.user.mention, user.mention if user else "Anon", time_val
     )
 

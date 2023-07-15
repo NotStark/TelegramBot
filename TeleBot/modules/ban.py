@@ -177,7 +177,7 @@ async def _unban(client, message, lang):
 @admins_stuff("can_restrict_members", bot=True)
 @loggable
 async def _ban(client, message, lang):
-    user = message.from_user if message.from_user else None
+    user = message.from_user 
     user_id, reason = await extract_user_and_reason(message)
     chat = message.chat
     if not user_id:
@@ -200,7 +200,6 @@ async def _ban(client, message, lang):
     time_val = split_reason[0].lower()
     reason = split_reason[1] if len(split_reason) > 1 else ""
     until , unit = await until_date(message, time_val, lang)
-    
     if not until:
         return
     member = await client.get_chat_member(chat.id, user_id)
@@ -213,12 +212,12 @@ async def _ban(client, message, lang):
                 [
                     InlineKeyboardButton(
                         lang.btn12,
-                        callback_data=f"unban_{user_id}_{message.from_user.id}",
+                        callback_data=f"unban_{user_id}_{user.id if user else 0}",
                     )
                 ],
                 [
                     InlineKeyboardButton(
-                        lang.btn9, callback_data=f"admin_close_{message.from_user.id}"
+                        lang.btn9, callback_data=f"admin_close_{user.id if user else 0}"
                     )
                 ],
             ]

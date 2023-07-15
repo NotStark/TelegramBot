@@ -199,7 +199,7 @@ async def _ban(client, message, lang):
     split_reason = reason.split(None, 1)
     time_val = split_reason[0].lower()
     reason = split_reason[1] if len(split_reason) > 1 else ""
-    x = until_date(message, time_val, lang)
+    x = await until_date(message, time_val, lang)
     print(x)
     
     # if not until:

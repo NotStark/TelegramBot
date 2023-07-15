@@ -56,7 +56,7 @@ async def _mute(client, message, lang):
             ],
         ]
     )
-    await message.reply(txt, reply_markup=button)
+
     if message.command[0] == "mute":
         await client.restrict_chat_member(
             chat.id, user_id, ChatPermissions(can_send_messages=False)
@@ -75,9 +75,10 @@ async def _mute(client, message, lang):
         await client.restrict_chat_member(
             chat.id, user_id, ChatPermissions(can_send_messages=False)
         )
-
+    
     await message.reply(txt, reply_markup=button)
     return lang.mute5.format(member.user.mention, admeme.mention if admeme else "Anon")
+
 
 
 async def unmute_func(client, message, user_id, from_user, lang):

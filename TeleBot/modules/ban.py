@@ -170,7 +170,7 @@ async def _unban(client, message, lang):
         return lang.ban11.format(user, channel_title, channel_id)
     user_id = await extract_user_id(message)
     from_user = message.from_user
-    return await unban_func(client, message, user_id, from_user)
+    return await unban_func(client, message, user_id, from_user,lang)
 
 
 @app.on_message(custom_filter.command(commands=TBAN_COMMAND))

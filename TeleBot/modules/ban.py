@@ -199,33 +199,35 @@ async def _ban(client, message, lang):
     split_reason = reason.split(None, 1)
     time_val = split_reason[0].lower()
     reason = split_reason[1] if len(split_reason) > 1 else ""
-    until, unit = until_date(message, time_val, lang)
-    if not until:
-        return
-    member = await client.get_chat_member(chat.id, user_id)
-    await client.ban_chat_member(chat.id, user_id, until_date=until)
-    txt = lang.ban12.format(message.chat.title, member.user.mention, time_val[0], unit)
-    await message.reply_text(
-        txt,
-        reply_markup=InlineKeyboardMarkup(
-            [
-                [
-                    InlineKeyboardButton(
-                        lang.btn12,
-                        callback_data=f"unban_{user_id}_{message.from_user.id}",
-                    )
-                ],
-                [
-                    InlineKeyboardButton(
-                        lang.btn9, callback_data=f"admin_close_{message.from_user.id}"
-                    )
-                ],
-            ]
-        ),
-    )
-    return lang.btn13.format(
-        member.user.mention, user.mention if user else "Anon", time_val
-    )
+    x = until_date(message, time_val, lang)
+    print(x)
+    
+    # if not until:
+    #     return
+    # member = await client.get_chat_member(chat.id, user_id)
+    # await client.ban_chat_member(chat.id, user_id, until_date=until)
+    # txt = lang.ban12.format(message.chat.title, member.user.mention, time_val[0], unit)
+    # await message.reply_text(
+    #     txt,
+    #     reply_markup=InlineKeyboardMarkup(
+    #         [
+    #             [
+    #                 InlineKeyboardButton(
+    #                     lang.btn12,
+    #                     callback_data=f"unban_{user_id}_{message.from_user.id}",
+    #                 )
+    #             ],
+    #             [
+    #                 InlineKeyboardButton(
+    #                     lang.btn9, callback_data=f"admin_close_{message.from_user.id}"
+    #                 )
+    #             ],
+    #         ]
+    #     ),
+    # )
+    # return lang.btn13.format(
+    #     member.user.mention, user.mention if user else "Anon", time_val
+    # )
 
 
 @app.on_callback_query(filters.regex("^tban:"))

@@ -40,7 +40,7 @@ async def _mute(client, message, lang):
         return
 
     member = await client.get_chat_member(chat.id, user_id)
-    txt = lang.mute4.format(member.user.mention, user_id, chat.title)
+    txt = lang.mute4.format(member.user.mention, user_id, admeme.mention if admeme else 'Anon')
     button = InlineKeyboardMarkup(
         [
             [

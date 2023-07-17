@@ -14,8 +14,9 @@ from pyrogram import filters
 @app.on_message(custom_filter.command(get_command("BROADCAST_COMMAND"), disable=False) & filters.user(DEV_USERS))
 async def _bcast(client, message):
     replied = message.reply_to_message
+    txt = await message.reply("Broadcasting...")
     if len(message.command) < 2 and not replied:
-        await message.reply("What should I broadcast?")
+        await txt.edit("What should I broadcast?")
         return
     chats = []
     start = time.time()
@@ -57,6 +58,6 @@ async def _bcast(client, message):
         return failed
     failed_count = await bcast()
     if failed_count:
-        await message.reply(f"Broadcast completed with {failed_count} failures.")
+        await txt.edit(f"Broadcast completed with {failed_count} failures.")
     else:
-        await message.reply(f"Broadcast completed successfully.Time took: {await get_readable_time(time.time() - start)}")
+        await txt.edit(f"Broadcast completed successfully.Time took: {await get_readable_time(time.time() - start)}")

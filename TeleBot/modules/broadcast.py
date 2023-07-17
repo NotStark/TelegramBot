@@ -14,7 +14,7 @@ from pyrogram import filters
 @app.on_message(custom_filter.command(get_command("BROADCAST_COMMAND"), disable=False) & filters.user(DEV_USERS))
 async def _bcast(client, message):
     replied = message.reply_to_message
-    if len(message.command) < 2 or not replied:
+    if len(message.command) < 2 and not replied:
         await message.reply("What should I broadcast?")
         return
     args = message.text.split(message.command[0])

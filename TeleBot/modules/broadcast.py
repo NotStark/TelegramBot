@@ -20,16 +20,24 @@ async def _bcast(client, message):
         return
     chats = []
     start = time.time()
-    pin = '-pin' in message.text
+    pin = False
     pin_loud = '-loud' in message.text
-
-     
+    text = message.text
     if '-c' in message.text:
         chats.extend(await get_served_chats())
+        text = text.replace('-c','')
     elif '-u' in message.text:
         chats.extend(await get_served_users())
+        text = text.replace('-u','')
     else:
         chats.extend(await get_served_chats() + await get_served_users())
+    if '-pin' in text:
+        pin = True
+        text = text.replace("-pin","")
+    elif '-loud' in text:
+        pin_loud = True
+        text = text.replace("-loud","")
+        
     
     async def bcast():
         failed = 0
@@ -38,7 +46,7 @@ async def _bcast(client, message):
                 if replied:
                     msg = await client.forward_messages(chat, message.chat.id, replied.id)
                 else:
-                    await client.send_message(chat, message.text.split(maxsplit = 1)[1])
+                    await client.send_message(chat, text.replace(message.command[0],''))
                 if pin_loud:
                     try:
                         await msg.pin(disable_notification=False)

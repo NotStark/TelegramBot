@@ -23,6 +23,7 @@ async def _bcast(client, message):
     pin = '-pin' in message.text
     pin_loud = '-loud' in message.text
 
+     
     if '-c' in message.text:
         chats.extend(await get_served_chats())
     elif '-u' in message.text:

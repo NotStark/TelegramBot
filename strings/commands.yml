@@ -91,7 +91,7 @@ LOGCHANNEL_COMMAND : ["setlog","unsetlog","logchannel"]
 
 # Blacklist.py
 ADDBLACKLIST_COMMAND 
-    - addblacklist
+    - "addblacklist"
 
 UNBLACKLIST_COMMAND : ["unblacklist"]
 BLACKLISTMODE_COMMAND : ["blacklistmode"]

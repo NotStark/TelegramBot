@@ -17,15 +17,14 @@ async def _bcast(client, message):
     if len(message.command) < 2 and not replied:
         await message.reply("What should I broadcast?")
         return
-    args = message.text.split(message.command[0])
     chats = []
     start = time.time()
-    pin = '-pin' in args
-    pin_loud = '-loud' in args
+    pin = '-pin' in message.text
+    pin_loud = '-loud' in message.text
 
-    if '-c' in args:
+    if '-c' in message.text:
         chats.extend(await get_served_chats())
-    elif '-u' in args:
+    elif '-u' in message,text:
         chats.extend(await get_served_users())
     else:
         chats.extend(await get_served_chats() + await get_served_users())
@@ -37,7 +36,7 @@ async def _bcast(client, message):
                 if replied:
                     msg = await client.forward_messages(chat, message.chat.id, replied.id)
                 else:
-                    await client.send_message(chat, " ".join(args))
+                    await client.send_message(chat, message.text.split(maxsplit = 1)[1])
                 if pin_loud:
                     try:
                         await msg.pin(disable_notification=False)

@@ -18,18 +18,18 @@ async def _bcast(client, message):
         await message.reply("What should I broadcast?")
         return
     args = message.text.split(message.command[0])
-    chats = set()
+    chats = []
     start = time.time()
     pin = '-pin' in args
     pin_loud = '-loud' in args
 
     if '-c' in args:
-        chats.update(set(await get_served_chats()))
+        chats.extend(set(await get_served_chats()))
     elif '-u' in args:
-        chats.update(set(await get_served_users()))
+        chats.extend(set(await get_served_users()))
     else:
         chatss = asyncio.gather(get_served_chats(), get_served_users())
-        chats.update(set(await chatss))
+        chats.extend(set(await chatss))
     
     async def bcast():
         failed = 0

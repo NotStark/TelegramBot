@@ -26,11 +26,9 @@ async def _bcast(client, message):
     if '-c' in args:
         chats.extend(await get_served_chats())
     elif '-u' in args:
-        chats.extend(set(await get_served_users()))
+        chats.extend(await get_served_users())
     else:
-        chatss = asyncio.gather(get_served_chats(), get_served_users())
-        print(chatss)
-        chats.extend(await chatss)
+        chats.extend(await get_served_chats() + await get_served_users())
     
     async def bcast():
         failed = 0

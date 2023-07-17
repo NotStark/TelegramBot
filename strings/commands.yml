@@ -90,12 +90,11 @@ RMALLFILTERS_COMMAND : ["removeallfilters"]
 LOGCHANNEL_COMMAND : ["setlog","unsetlog","logchannel"]
 
 # Blacklist.py
-ADDBLACKLIST_COMMAND 
-    - "addblacklist"
-
+ADDBLACKLIST_COMMAND : ["addblacklist"]
 UNBLACKLIST_COMMAND : ["unblacklist"]
 BLACKLISTMODE_COMMAND : ["blacklistmode"]
 BLACKLISTS_COMMAND : ["blacklists"]
 
 
-# Broad
+# Broadcast.py
+BROADCAST_COMMAND : ['bcast','broadcast']

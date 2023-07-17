@@ -1,4 +1,4 @@
-from TeleBot.mongo.chats_db import get_served_chats
+from TeleBot.mongo.chats_db import get_served_chats , remove_served_chat
 from TeleBot.mongo.users_db import get_served_users
 from TeleBot.core.functions import get_readable_time
 from TeleBot import app
@@ -53,6 +53,7 @@ async def _bcast(client, message):
                 await asyncio.sleep(e.x) 
             except ChatWriteForbidden:
                 await client.leave_chat(chat)
+                await remove_served_chat(chat)
                 failed += 1
             except Exception:
                 failed += 1

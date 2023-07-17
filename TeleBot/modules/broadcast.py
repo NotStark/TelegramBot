@@ -24,7 +24,7 @@ async def _bcast(client, message):
 
     if '-c' in message.text:
         chats.extend(await get_served_chats())
-    elif '-u' in message,text:
+    elif '-u' in message.text:
         chats.extend(await get_served_users())
     else:
         chats.extend(await get_served_chats() + await get_served_users())

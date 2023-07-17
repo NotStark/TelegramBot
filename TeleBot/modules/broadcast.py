@@ -23,14 +23,14 @@ async def _bcast(client, message):
     pin = '-pin' in args
     pin_loud = '-loud' in args
 
-    if '-all' in args:
-        chatss = asyncio.gather(get_served_chats(), get_served_users())
-        chats.update(set(await chatss))
-    elif '-c' in args:
+    if '-c' in args:
         chats.update(set(await get_served_chats()))
     elif '-u' in args:
         chats.update(set(await get_served_users()))
-
+    else:
+        chatss = asyncio.gather(get_served_chats(), get_served_users())
+        chats.update(set(await chatss))
+    
     async def bcast():
         failed = 0
         for chat in chats:

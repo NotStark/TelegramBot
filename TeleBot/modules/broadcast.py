@@ -6,4 +6,4 @@ from TeleBot.core import custom_filter
 from pyrogram import filters
 
 
-@app.on_message(filters.command(""))
+# @app.on_message(filters.command(""))

@@ -3,7 +3,7 @@ from TeleBot.mongo import db
 chatsdb = db.chats
 
 async def get_served_chats() -> list:
-    chats = await usersdb.find({"chat_id": {"$lt": 0}}).to_list(length=None)
+    chats = await chatsdb.find({"chat_id": {"$lt": 0}}).to_list(length=None)
     return [chat["chat_id"] for chat in chats]
 
 async def is_served_chat(chat_id: int) -> bool:

@@ -8,7 +8,6 @@ import subprocess
 from pyrogram import Client
 from rich.table import Table
 from rich.console import Console 
-from Python_ARQ import ARQ
 from pyrogram.enums import ParseMode
 
 

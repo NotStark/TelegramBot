@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Optional
 from pyrogram.types import Message
 from TeleBot import app
 from pyrogram.enums import ChatType
@@ -8,7 +8,7 @@ from pyrogram.errors import ChatWriteForbidden
 from ..functions import is_bot_admin , is_user_admin
 
 
-def admins_stuff(permission: Any = None, bot: bool = False , user : bool = True):
+def admins_stuff(permission: Optional[str] = None, bot: bool = False , user : bool = True):
     def decorator(func):
         @wraps(func)
         async def wrapper(client, update):

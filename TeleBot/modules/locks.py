@@ -123,7 +123,7 @@ async def _lock_watcher(client, message):
                 if entities.type == MessageEntityType.URL and 'url' in locks:
                     await message.delete()  
     except Exception as e:
-       pass
+       return
 
 __commands__ = LOCK_COMMAND
 __mod_name__ = "𝙻ᴏᴄᴋꜱ"
